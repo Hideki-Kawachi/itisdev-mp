@@ -44,6 +44,6 @@ const ItemSchema = new mongoose.Schema({
   },
 });
 
-const ItemCategory = mongoose.models.ItemCategory || mongoose.model("ItemCategory", ItemSchema);
+const Item = mongoose.models.Item || mongoose.model("Item", ItemSchema);
 
-export default ItemCategory;
+export default Item;
