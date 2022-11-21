@@ -488,6 +488,13 @@ svg{
     background-color: map-get($colors-neutral, 100);
     color: map-get($colors-neutral, 500);
   }
+
+  &#item-category-filter{
+    background-color: map-get($colors-neutral, 100);
+    color: map-get($colors-neutral, 500);
+    width: 450px;
+    margin-left: 27px;
+  }
 }
 
 .sort-container{
@@ -560,8 +567,6 @@ svg{
 }
 .form-item{
   grid-column: span 1;
-
-
 }
 
 .form-item-buttons{
@@ -632,3 +637,22 @@ hr{
 a {
   text-decoration: none;
 }
+
+// ITEMS CSS
+
+
+.item-table-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  padding-top: 30px;
+  
+  .item-table-left-container{
+    display: flex;
+
+  }
+  
+}
+
