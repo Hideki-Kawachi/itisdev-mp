@@ -1,10 +1,10 @@
 import React from 'react'
 
-function TempCategoryFilter({filter, setFilter, placeholder}) {
+function TempCategoryFilter({filter, setFilter, placeholder, identifier}) {
   return (
     <select
         className="sort-dropdown"
-        id="item-category-filter"
+        id={identifier}
         defaultValue={"0000"}
         onChange={(e) => setFilter(e.target.value)}
     >

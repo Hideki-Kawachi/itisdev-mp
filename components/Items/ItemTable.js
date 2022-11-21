@@ -54,7 +54,7 @@ export const ItemTable = () => {
                 <span className="form-item">
                     <label className="form-labels">Item Category:</label>
                     <br />
-                    <TempCategoryFilter />
+                    <TempCategoryFilter identifier="item-category-filter" />
                 </span>
 
                 <span className="form-item" id="search-item-code-container">
@@ -67,7 +67,7 @@ export const ItemTable = () => {
                 <button className="green-button-container add-button">
                     {" "}
                     <Link href="items/additem">Add Item + </Link>
-            </button>{" "}
+                </button>{" "}
             </span>
 
         </div>
