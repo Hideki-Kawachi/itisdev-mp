@@ -1,5 +1,5 @@
 import {useState} from "react";
-
+import Link from "next/link";
 
 function tab() {
   const [toggleState, setToggleState] = useState(1);
@@ -15,7 +15,7 @@ function tab() {
           className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
           onClick={() => toggleTab(1)}
         >
-          Add Inventory
+          <Link href="inventory/addinventory">Add Record </Link>
         </button>
         <button
           className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
