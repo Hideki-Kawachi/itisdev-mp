@@ -5,22 +5,14 @@ export default async (req, res) => {
 	await dbConnect();
 
 	const userInfo = req.body;
-	var invalidUserID = false;
 
-	User.find({ userID: userInfo.userID }, null, (err, result) => {
-		if (err) {
-			console.log(err);
-			invalidUserID = true;
-		} else if (result.length > 0) {
-			console.log("User id already present");
-			invalidUserID = true;
-		}
-	});
+	let invalidUserID = await User.findOne({ userID: userInfo.userID });
 
-	if (invalidUserID) {
-		res.json("User ID " + userInfo.userID + " is already taken");
+	if (invalidUserID != null) {
+		console.log("INVALID");
+		res.json("invalid");
 	} else {
 		await User.create(userInfo);
-		res.json("User ID " + userInfo.userID + " created");
+		res.json("created");
 	}
 };
