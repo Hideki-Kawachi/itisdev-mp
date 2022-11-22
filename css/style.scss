@@ -686,10 +686,11 @@ a {
   align-content: center;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 10px;
 
   &.item-modal-header {
     padding: 0 5px;
-    margin-bottom: 10px;
+    
   }
 
   &.item-table-header {
@@ -702,6 +703,7 @@ a {
 
   &.item-label-with-buttons {
     padding-right: 2%;
+    justify-content: left;
   }
 }
 
@@ -727,11 +729,16 @@ a {
   
   &.item-add-option-button {
     display: inline;
-    background-color: map-get($colors-neutral, 500);
+    background-color: transparent;
+    color: map-get($colors-neutral, 500);
+    font-size: 20px;
     height: 20px;
     width: 20px;
+    transform: scale(-1, 1);
+    text-decoration: underline;
+    margin-left: 15px;
   }
-
+  
   &.item-info-option-button {
     display: inline;
     background-color: black;

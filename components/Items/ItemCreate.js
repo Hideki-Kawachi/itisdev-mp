@@ -23,7 +23,7 @@ function ItemCreate({trigger, setTrigger}) {
                     <div className="item-input">
                         <div className="item-header item-label-with-buttons">
                             <label htmlFor="categoryID">Item Category: <label className="required"> * </label></label>
-                            <button className="item-icon-button item-add-option-button " onClick={() => setTrigger(!trigger)}>+</button>
+                            <button className="item-icon-button item-add-option-button " onClick={() => setTrigger(!trigger)}>✎</button>
                         </div>
                         <TempCategoryFilter identifier="user-create-role"></TempCategoryFilter>
                     </div>
