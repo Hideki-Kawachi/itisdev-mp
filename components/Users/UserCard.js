@@ -22,10 +22,12 @@ function UserCard({
 				<span style={{ fontSize: "18px", fontWeight: 300 }}>{roleName}</span>
 			</div>
 			<div className="buttons-container">
-				<ToggleSwitch
-					disabled={isDisabled}
-					setDisabled={setIsDisabled}
-				></ToggleSwitch>
+				{
+					<ToggleSwitch
+						disabled={isDisabled}
+						setDisabled={setIsDisabled}
+					></ToggleSwitch>
+				}
 
 				<svg
 					className="edit-button"

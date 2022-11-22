@@ -2,20 +2,41 @@ import React, { useEffect, useState } from "react";
 import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
 
-function UserCreate({ roles, setShow }) {
-	const [employeeID, setEmployeeID] = useState("");
+function UserEdit({ roles, userID, setShow }) {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [password, setPassword] = useState("");
-	const [roleID, setRoleID] = useState("0000");
+	const [roleID, setRoleID] = useState("");
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [error, setError] = useState(false);
-	const [employeeIDError, setEmployeeIDError] = useState("");
-	const currentUserID = "00000001";
+	const currentUserID = "00000000";
+
+	useEffect(() => {
+		console.log("EDITING:", userID);
+		fetch("/api/findUser/" + userID, {
+			method: "GET",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				console.log("RECEIVED DATA:", data);
+				setFirstName(data.firstName);
+				setLastName(data.lastName);
+				setPassword(data.password);
+				setRoleID(data.roleID);
+				setIsDisabled(data.disabled);
+			});
+	}, [userID]);
+
+	function cancelForm() {
+		setShow("button");
+	}
 
 	function submitForm() {
 		if (
-			employeeID.length != 8 ||
 			firstName.length == 0 ||
 			lastName.length == 0 ||
 			password.length == 0 ||
@@ -24,7 +45,7 @@ function UserCreate({ roles, setShow }) {
 			setError(true);
 		} else {
 			let userData = {
-				userID: employeeID,
+				userID: userID,
 				firstName: firstName,
 				lastName: lastName,
 				password: password,
@@ -33,46 +54,6 @@ function UserCreate({ roles, setShow }) {
 				creationDate: new Date(),
 				disabled: isDisabled,
 			};
-
-			fetch("/api/createUser", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(userData),
-			})
-				.then((res) => res.json())
-				.then((data) => {
-					if (data == "created") {
-						console.log("SUCCESS");
-						setError(false);
-						window.location.reload();
-					} else {
-						setError(true);
-						setEmployeeIDError(data);
-					}
-				});
-		}
-	}
-
-	function cancelForm() {
-		setShow("button");
-	}
-
-	function showEmployeeIDError() {
-		if (error) {
-			//employee ID is empty
-			if (employeeID.length == 0) {
-				return <span className="user-create-error">Input Employee ID</span>;
-			}
-			//employee ID is too short
-			else if (employeeID.length != 8) {
-				return (
-					<span className="user-create-error">
-						Employee ID must be 8 numbers long
-					</span>
-				);
-			}
 		}
 	}
 
@@ -94,28 +75,15 @@ function UserCreate({ roles, setShow }) {
 						</svg>
 					</button>
 				</div>
-				<label htmlFor="employeeID">
-					Employee ID: <span className="required-mark">*</span>
-				</label>
-				<input
-					type="Number"
-					id="employeeID"
-					onChange={(e) => setEmployeeID(e.target.value)}
-				></input>
-				{showEmployeeIDError()}
-				{employeeIDError == employeeID && employeeID.length > 0 ? (
-					<span className="user-create-error">
-						Employee ID has already been used
-					</span>
-				) : (
-					<></>
-				)}
+				<label htmlFor="employeeID">Employee ID:</label>
+				<input type="Number" id="employeeID" value={userID} disabled></input>
 				<label htmlFor="firstName">
 					First Name: <span className="required-mark">*</span>
 				</label>
 				<input
 					type="text"
 					id="firstName"
+					value={firstName}
 					onChange={(e) => setFirstName(e.target.value)}
 				></input>
 				{error && firstName.length == 0 ? (
@@ -129,6 +97,7 @@ function UserCreate({ roles, setShow }) {
 				<input
 					type="text"
 					id="lastName"
+					value={lastName}
 					onChange={(e) => setLastName(e.target.value)}
 				></input>
 				{error && lastName.length == 0 ? (
@@ -142,6 +111,7 @@ function UserCreate({ roles, setShow }) {
 				<input
 					type="password"
 					id="password"
+					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				></input>
 				{error && password.length == 0 ? (
@@ -155,7 +125,7 @@ function UserCreate({ roles, setShow }) {
 				<select
 					className="sort-dropdown"
 					id="user-create-role"
-					defaultValue={"0000"}
+					defaultValue={roleID}
 					onChange={(e) => setRoleID(e.target.value)}
 				>
 					{roles.map((role) => (
@@ -189,4 +159,4 @@ function UserCreate({ roles, setShow }) {
 	);
 }
 
-export default UserCreate;
+export default UserEdit;
