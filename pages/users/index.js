@@ -84,7 +84,7 @@ function Users({ userData, roleData }) {
 				<p>EDITING</p>
 			</>
 		),
-		create: <UserCreate roles={roles}></UserCreate>,
+		create: <UserCreate roles={roles} setShow={setRightShow}></UserCreate>,
 		button: (
 			<BasicButton
 				label={"Create User"}
