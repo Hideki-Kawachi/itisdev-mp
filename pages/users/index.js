@@ -5,6 +5,7 @@ import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import UserCard from "../../components/Users/UserCard";
 import UserCreate from "../../components/Users/UserCreate";
+import UserEdit from "../../components/Users/UserEdit";
 import dbConnect from "../../lib/dbConnect";
 import Role from "../../models/RoleSchema";
 import User from "../../models/UserSchema";
@@ -57,10 +58,6 @@ function Users({ userData, roleData }) {
 	const [userShow, setUserShow] = useState(users);
 
 	useEffect(() => {
-		console.log("Currently editing:", isEditing);
-	}, [isEditing]);
-
-	useEffect(() => {
 		getSearch(search);
 	}, [filter]);
 
@@ -78,11 +75,19 @@ function Users({ userData, roleData }) {
 		setUserShow(tempList);
 	}
 
+	useEffect(() => {
+		if (isEditing.length > 0) {
+			setRightShow("edit");
+		}
+	}, [isEditing]);
+
 	const rightContainerShow = {
 		edit: (
-			<>
-				<p>EDITING</p>
-			</>
+			<UserEdit
+				roles={roles}
+				userID={isEditing}
+				setShow={setRightShow}
+			></UserEdit>
 		),
 		create: <UserCreate roles={roles} setShow={setRightShow}></UserCreate>,
 		button: (
@@ -90,6 +95,7 @@ function Users({ userData, roleData }) {
 				label={"Create User"}
 				color={"green"}
 				clickFunction={() => setRightShow("create")}
+				type={"button"}
 			></BasicButton>
 		),
 	};

@@ -6,7 +6,7 @@ export default async (req, res) => {
 
 	const userInfo = req.body;
 
-	let invalidUserID = await User.findOne({ userID: userInfo.userID });
+	let invalidUserID = await User.findOneAndUpdate({ userID: userInfo.userID });
 
 	if (invalidUserID != null) {
 		console.log("INVALID");

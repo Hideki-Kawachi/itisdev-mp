@@ -116,7 +116,6 @@ svg{
 .main-navbar-container{
   position:fixed;
   top: 0;
-  min-height: 100vh;
   height: 100%;
   width: 100px;
   background-color: map-get($colors-primary, 500);
@@ -327,8 +326,8 @@ svg{
     .user-list-container{
       display: flex;
       flex-direction: column;
-      padding-top: 50px;
-      height: calc(100vh - 260px);
+      margin-top: 30px;
+      max-height: calc(100vh - 150px);
       width: calc(50vw - 100px);
       min-width: 500px;
       overflow-y: scroll;
