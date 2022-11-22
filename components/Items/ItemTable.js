@@ -49,7 +49,7 @@ export const ItemTable = () => {
 
 	return (
     <>
-        <div className="item-table-header">
+        <div className="item-header item-table-header">
             <span className="item-table-left-container">
                 <span className="form-item">
                     <label className="form-labels">Item Category:</label>

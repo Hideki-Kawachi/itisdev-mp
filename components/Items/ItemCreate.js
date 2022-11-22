@@ -3,18 +3,29 @@ import React, {useState} from 'react'
 import ToggleSwitch from '../ToggleSwitch'
 import TempCategoryFilter from './Temp/TempCategoryFilter'
 
-function ItemCreate() {
+function ItemCreate({trigger, setTrigger}) {
     const [isDisabled, setIsDisabled] = useState(false);
+
+    const [details, setDetails] = useState({
+        brand: "",
+        partNum: "",
+        initialQty: 0,
+    })
+    const [detailsArray, setDetailsArray] = useState([])
+
   return (
     <>
-        <form className="item-add-main-container">
+        <form className="item-column-container" id="item-add-main-container">
             <h1>IDENTIFICATION</h1>
 
             <div id="add-item-form-identification">
                 <div className="form-container">
                     <div className="item-input">
-                        <label htmlFor="categoryID">Item Category: <label className="required"> * </label></label>
-                        <TempCategoryFilter identifier="item-add-category-dropdown"></TempCategoryFilter>
+                        <div className="item-header item-label-with-buttons">
+                            <label htmlFor="categoryID">Item Category: <label className="required"> * </label></label>
+                            <button className="item-icon-button item-add-option-button " onClick={() => setTrigger(!trigger)}>+</button>
+                        </div>
+                        <TempCategoryFilter identifier="user-create-role"></TempCategoryFilter>
                     </div>
                     <div className="item-input">
                         <label htmlFor="itemID">Item Code: <label className="required"> * </label></label>
