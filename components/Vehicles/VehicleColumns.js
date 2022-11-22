@@ -13,11 +13,11 @@ export const COLUMNS = [
   },
   {
     Header: "Vehicle Type",
-    accessor: "vehicleType",
+    accessor: "vehicleTypeID",
   },
   {
     Header: "Brand",
-    accessor: "Brand",
+    accessor: "brandID",
   },
   {
     Header: "Insurance Expiry",
