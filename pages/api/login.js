@@ -5,6 +5,7 @@ dbConnect();
 
 export default async function handler(req, res) {
 	const { userID, password } = req.body;
+    // console.log(req.body);
 	const user = await User.findOne({ userID, password });
 	if (!user) {
 		return res.json({ status: "Not able to find the user" });

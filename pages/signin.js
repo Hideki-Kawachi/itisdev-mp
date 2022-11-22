@@ -16,33 +16,31 @@ function SignIn() {
 					</div>
 					<div className="input-container">Milaor Trading Corporation</div>
 				</h1>
-				<form>
-					<form className="signin-form" action="/api/login" method="post">
-						<div className="input-container">
-							<div className="label-cont">Employee ID:</div>
-							<input
-								type="userID"
-								name="userID"
-								placeholder="Enter Employee ID"
-							></input>
-						</div>
-						<div className="input-container">
-							<div className="label-cont">Password:</div>
-							<input
-								type="password"
-								name="password"
-								placeholder="Enter Password"
-							></input>
-						</div>
-						<div className="input-container">
-							<input
-								className="green-button-container login-size"
-								type="submit"
-								value="Login"
-							/>
-						</div>
-					</form>
-				</form>
+                <form className="signin-form" action="/api/login" method="post">
+                    <div className="input-container">
+                        <div className="label-cont">Employee ID:</div>
+                        <input
+                            type="userID"
+                            name="userID"
+                            placeholder="Enter Employee ID"
+                        ></input>
+                    </div>
+                    <div className="input-container">
+                        <div className="label-cont">Password:</div>
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter Password"
+                        ></input>
+                    </div>
+                    <div className="input-container">
+                        <input
+                            className="green-button-container login-size"
+                            type="submit"
+                            value="Login"
+                        />
+                    </div>
+                </form>
 			</div>
 		</>
 	);
