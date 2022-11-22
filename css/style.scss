@@ -567,6 +567,14 @@ svg{
 }
 .form-item{
   grid-column: span 1;
+
+  select {
+    width: 420px;
+    font-size: 25px;
+    border-radius: 5px;
+    padding: 8px;
+    border: 2px solid map-get($colors-neutral, 500);
+  }
 }
 
 .form-item-buttons{
@@ -582,6 +590,7 @@ svg{
   margin-left: 35px;
   margin-top: 10px;
 }
+
 .page-buttons{
  font-size: 18px;
   margin: auto;
@@ -689,6 +698,14 @@ a {
     background-color: map-get($colors-neutral, 500);
     height: 20px;
     width: 20px;
+  }
+
+  &.item-info-option-button {
+    display: inline;
+    background-color: black;
+    height: 20px;
+    width: 20px;
+    font-weight: bold;
     
   }
 }
@@ -788,6 +805,25 @@ a {
     }
   }
 
-} 
+
+}
+
+.vehicle-icon-button {
+
+  cursor: pointer;
+  color: map-get($colors-neutral, 500);
+  font-size: 20px;
+  background-color: transparent;
+  border: transparent;
+
+  
+  &.vehicle-add-option-button {
+    transform: scale(-1, 1);
+    text-decoration: underline;
+    display: inline;
+    height: 20px;
+    width: 20px;
+  }
+}
 
 

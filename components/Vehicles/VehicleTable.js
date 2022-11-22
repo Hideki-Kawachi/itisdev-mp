@@ -6,9 +6,9 @@ import {
 	useFilters,
 	usePagination,
 } from "react-table";
-import V_MOCK_DATA from "./V_MOCK_DATA.json";
-import { COLUMNS } from "./columns";
-import GlobalFilter from "./GlobalFilter";
+import V_MOCK_DATA from "../V_MOCK_DATA.json";
+import { COLUMNS } from "./VehicleColumns";
+import GlobalFilter from "../GlobalFilter";
 import Link from "next/link";
 
 export const BasicTable = () => {

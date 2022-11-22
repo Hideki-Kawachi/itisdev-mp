@@ -3,7 +3,7 @@ import Link from "next/link";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import Dropdown from "../../components/Dropdown";
-import BasicTable from "../../components/BasicTable";
+import BasicTable from "../../components/Vehicles/VehicleTable";
 
 function Vehicles() {
 	return (

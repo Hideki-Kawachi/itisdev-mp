@@ -1,4 +1,4 @@
-import { GlobalFilter } from './GlobalFilter'
+import { GlobalFilter } from '../GlobalFilter'
 
 export const COLUMNS = [
   {

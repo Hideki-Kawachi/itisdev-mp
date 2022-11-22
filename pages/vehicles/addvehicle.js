@@ -35,8 +35,15 @@ function AddVehicle() {
             <label className="form-labels">
               Vehicle Type: <label className="required"> * </label>{" "}
             </label>{" "}
+            <button
+              className="vehicle-icon-button vehicle-add-option-button "
+              onClick={() => setTrigger(!trigger)}
+            >
+              {" "}
+              ✎{" "}
+            </button>
             <br />
-            <input
+            <select
               type="text"
               className="form-fields"
               placeholder="Select Vehicle Type"
@@ -44,7 +51,14 @@ function AddVehicle() {
           </div>
           <div class="form-item form-toggle">
             {" "}
-            Status:
+            Status:{" "}
+            <button
+              className="item-icon-button item-info-option-button "
+              onClick={() => setTrigger(!trigger)}
+            >
+              {" "}
+              i{" "}
+            </button>
             <br />
             <ToggleSwitch
               disabled={isDisabled}
@@ -60,8 +74,15 @@ function AddVehicle() {
             <label className="form-labels">
               Brand: <label className="required"> * </label>{" "}
             </label>{" "}
+            <button
+              className="vehicle-icon-button vehicle-add-option-button "
+              onClick={() => setTrigger(!trigger)}
+            >
+              {" "}
+              ✎{" "}
+            </button>
             <br />
-            <input className="form-fields" placeholder="Select Brand" />
+            <select className="form-fields" />
           </div>
 
           <div className="form-item">
@@ -80,12 +101,15 @@ function AddVehicle() {
             <label className="form-labels">
               Transmission Type: <label className="required"> * </label>{" "}
             </label>{" "}
+            <button
+              className="vehicle-icon-button vehicle-add-option-button "
+              onClick={() => setTrigger(!trigger)}
+            >
+              {" "}
+              ✎{" "}
+            </button>
             <br />
-            <input
-              type="text"
-              className="form-fields"
-              placeholder="Select Transmission Type"
-            />
+            <select className="form-fields" />
           </div>
         </div>
 
@@ -110,12 +134,15 @@ function AddVehicle() {
             <label className="form-labels">
               Engine Type: <label className="required"> * </label>{" "}
             </label>{" "}
+            <button
+              className="vehicle-icon-button vehicle-add-option-button "
+              onClick={() => setTrigger(!trigger)}
+            >
+              {" "}
+              ✎{" "}
+            </button>
             <br />
-            <input
-              type="text"
-              className="form-fields"
-              placeholder="Select Engine Type"
-            />
+            <select className="form-fields" />
           </div>
 
           <div className="form-item">
@@ -142,7 +169,7 @@ function AddVehicle() {
             <input
               type="text"
               className="form-fields"
-              placeholder="Enter Inusrance Amount"
+              placeholder="Enter Insurance Amount"
             />
           </div>
 
@@ -157,18 +184,6 @@ function AddVehicle() {
               placeholder="Enter Insurance Expiry Date"
             />
           </div>
-
-          <div className="form-item">
-            <label className="form-labels">
-              GPS Provider Name: <label className="required"> * </label>{" "}
-            </label>{" "}
-            <br />
-            <input
-              type="text"
-              className="form-fields"
-              placeholder="Select GPS Provider Name"
-            />
-          </div>
         </div>
         <br />
         <hr />
@@ -177,21 +192,30 @@ function AddVehicle() {
             <label className="form-labels">
               GPS Provider Name: <label className="required"> * </label>{" "}
             </label>{" "}
+            <button
+              className="vehicle-icon-button vehicle-add-option-button "
+              onClick={() => setTrigger(!trigger)}
+            >
+              {" "}
+              ✎{" "}
+            </button>
             <br />
-            <input
-              type="text"
-              className="form-fields"
-              placeholder="Select GPS Provider Name"
-            />
+            <select className="form-fields" />
           </div>
 
           <div className="form-item">
             <label className="form-labels">
               Fuel Level Sensor Name: <label className="required"> * </label>{" "}
             </label>{" "}
+            <button
+              className="vehicle-icon-button vehicle-add-option-button "
+              onClick={() => setTrigger(!trigger)}
+            >
+              {" "}
+              ✎{" "}
+            </button>
             <br />
-            <input
-              type="text"
+            <select
               className="form-fields"
               placeholder="Select Fuel Level Sensor Name"
             />
