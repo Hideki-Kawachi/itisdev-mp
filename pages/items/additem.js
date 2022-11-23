@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import { Router, useRouter } from "next/router";
 
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
@@ -10,7 +9,6 @@ import AddItemCategory from '../../components/Items/CategoryCreate';
 import ItemTable from '../../components/Items/ItemTable'
 
 function Items() {
-    const router = useRouter();
 
     const [categoryPopupOn, setCategoryPopupOn] = useState(false)
     const [brandPopupOn, setBrandPopupOn] = useState(false)

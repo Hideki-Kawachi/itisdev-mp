@@ -701,11 +701,12 @@ a {
       display: flex;
     }
   }
+}
 
-  &.item-label-with-buttons {
-    padding-right: 2%;
-    justify-content: left;
-  }
+.item-label-with-buttons {
+  padding-right: 2%;
+  justify-content: left;
+  margin-bottom: 10px;
 }
 
 .item-column-container {
@@ -737,7 +738,7 @@ a {
     width: 20px;
     transform: scale(-1, 1);
     text-decoration: underline;
-    margin-left: 15px;
+    margin-left: 10px;
   }
   
   &.item-info-option-button {
@@ -764,7 +765,7 @@ a {
   margin-bottom: 20px;
 
   label {
-    margin: 0;
+    margin: 0 0 10px 0;
   }
 
   select {
@@ -845,7 +846,19 @@ a {
     }
   }
 
+  .details-right-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: map-get($colors-neutral, 400)
+    
+  }
+}
 
+.item-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2%;
 }
 
 .vehicle-icon-button {
@@ -865,7 +878,6 @@ a {
     width: 20px;
   }
 }
-
 
 .login-error{
   color: map-get($colors-red,200);

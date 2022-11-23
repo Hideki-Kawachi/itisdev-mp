@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import Link from "next/link";
 
 import ToggleSwitch from '../ToggleSwitch'
 import TempCategoryFilter from './Temp/TempCategoryFilter'
@@ -21,7 +22,7 @@ function ItemCreate({trigger, setTrigger}) {
             <div id="add-item-form-identification">
                 <div className="form-container">
                     <div className="item-input">
-                        <div className="item-header item-label-with-buttons">
+                        <div className="item-label-with-buttons">
                             <label htmlFor="categoryID">Item Category: <label className="required"> * </label></label>
                             <button className="item-icon-button item-add-option-button " onClick={() => setTrigger(!trigger)}>✎</button>
                         </div>
@@ -114,10 +115,27 @@ function ItemCreate({trigger, setTrigger}) {
                         Add 
                     </button>
                 </div>
+
+                <div className="details-right-container">
+                    { detailsArray.length == 0 ? (
+                        <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
+                    ) : (
+                        <h1>Insert table here</h1>
+                    )}
+                </div>
+            </div>
+
+            <div className="item-footer">
+                <Link href="/items">
+                    <button className="gray-button-container">Cancel</button>
+                </Link>
+                
+                <Link href="/items">
+                    <button className="green-button-container">Save</button>
+                </Link>
+                
             </div>
         </form>
-
-
     </>
   )
 }
