@@ -2,12 +2,15 @@ import React, {useState} from "react";
 import Link from "next/link";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
-import Dropdown from "../../components/Dropdown";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import BasicButton from "../../components/BasicButton";
+import vCatTable from "../../components/Vehicles/vCategoryList";
 
 function AddVehicle() {
-  	const [isDisabled, setIsDisabled] = useState(false);
+
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [categoryPopupOn, setCategoryPopupOn] = useState(false);
+  
   return (
     <>
       <Header
@@ -37,7 +40,7 @@ function AddVehicle() {
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
-              onClick={() => setTrigger(!trigger)}
+              onClick={() => setCategoryPopupOn(true)}
             >
               {" "}
               ✎{" "}
@@ -237,6 +240,10 @@ function AddVehicle() {
             ></BasicButton>
           </span>
         </div>
+        <vCatTable
+          trigger={categoryPopupOn}
+          setTrigger={setCategoryPopupOn}
+        >test</vCatTable>
       </div>
     </>
   );
