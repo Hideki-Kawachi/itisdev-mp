@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import BasicButton from "../../components/BasicButton";
-import vCatTable from "../../components/Vehicles/vCategoryList";
+import VCatTable from "../../components/Vehicles/vCategoryList";
 import VehicleCreate from "../../components/Vehicles/VehicleCreate";
 import AddVehicleCategory from "../../components/Vehicles/vCategoryCreate";
 
@@ -26,9 +26,7 @@ function AddVehicle({ trigger, setTrigger }) {
         {categoryPopupOn ? (
           <>
             <div className="item-modal-bg">
-              <AddVehicleCategory
-                trigger={categoryPopupOn}
-                setTrigger={setCategoryPopupOn}
+              <VCatTable
               />
             </div>
             <VehicleCreate

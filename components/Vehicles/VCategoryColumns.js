@@ -2,8 +2,13 @@ import { GlobalFilter } from "../GlobalFilter";
 
 export const VCAT_COLUMNS = [
   {
+    Header: " ",
+    accessor: "row",
+    Filter: GlobalFilter,
+  },
+  {
     Header: "Name",
-    accessor: "plateNum",
+    accessor: "name",
     Filter: GlobalFilter,
   },
 ];

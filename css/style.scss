@@ -501,6 +501,14 @@ svg{
   margin-left: 35px;
 }
 
+.search-bar-modal{
+  font-size: 25px;
+  border-radius: 10px;
+  padding: 8px;
+  width: 400px;
+  margin: auto;
+}
+
 .sort-dropdown{
   background-color: map-get($colors-primary, 500);
   font-size: 25px;
@@ -555,11 +563,30 @@ svg{
   }
 }
 
+.add-button-modal{
+    width: 80%;
+    margin: auto;
+}
+#ctable {
+  border-collapse: collapse;
+  width: 95%;
+  margin: auto;
+  font-size: 18px;
+  border-radius:6px;
+}
+
+#ctable td, #ctable th {
+  border: 1px solid #312F30;
+  padding: 8px;
+  
+}
+
 #btable {
   border-collapse: collapse;
   width: 95%;
   margin: auto;
   font-size: 18px;
+  
 }
 
 #btable td, #btable th {
@@ -626,8 +653,13 @@ svg{
 
 .page-buttons{
  font-size: 18px;
+ margin: auto;
+ display: inline-block;
+}
+
+.navigate-page-group{
   margin: auto;
-  align-items: center;
+  margin-bottom: 10px;
 }
 .form-toggle{
  margin-top: 10px;
@@ -884,4 +916,20 @@ a {
   font-size: 18px;
   display: flex;
   flex-direction: column;
+}
+
+.page-input{
+  border-radius: 5px;
+  size: 30;
+}
+
+.navigate-page{
+  font-size: 25px;
+  background-color: transparent;
+  border: transparent;
+  text-align: center;
+
+  &.navigate-page:hover:enabled{
+    opacity: 30%;
+  }
 }

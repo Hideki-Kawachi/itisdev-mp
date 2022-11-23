@@ -13,7 +13,7 @@ export const GlobalFilter = ({filter, setFilter}) => {
       <input
         type="search"
         className="search-bar"
-        placeholder="Search Plate Number"
+        placeholder="Search"
         value = {value || ""}
         onChange={(e) => {
           setValue(e.target.value)

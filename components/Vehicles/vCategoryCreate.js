@@ -2,12 +2,13 @@ import React, { useState } from "react";
 
 import ToggleSwitch from "../ToggleSwitch";
 
-function AddVehicleCategory({ trigger, setTrigger }) {
+function AddVehicleCategory() {
   const [isDisabled, setIsDisabled] = useState(false);
 
   return (
     <>
       <div className="item-modal">
+        
         <div className="item-header item-modal-header">
           <div className="item-column-container">
             <h1>VEHICLE CATEGORY</h1>
