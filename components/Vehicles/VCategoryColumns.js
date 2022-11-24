@@ -4,7 +4,7 @@ export const VCAT_COLUMNS = [
   {
     Header: " ",
     accessor: "row",
-    Filter: GlobalFilter,
+    disableGlobalFilter: true,
   },
   {
     Header: "Name",

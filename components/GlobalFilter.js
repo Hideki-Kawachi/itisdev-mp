@@ -5,19 +5,16 @@ export const GlobalFilter = ({filter, setFilter}) => {
 
   const [value, setValue] = useState(filter)
 
-  const onChange = useAsyncDebounce(value => {
-    setFilter(value || undefined)
-  }, 1000)
+
   return (
     <span>
       <input
         type="search"
         className="search-bar"
         placeholder="Search"
-        value = {value || ""}
+        value = {filter || ""}
         onChange={(e) => {
-          setValue(e.target.value)
-          onChange(e.target.value)
+          setFilter(e.target.value) 
         }}
       />
     </span>
