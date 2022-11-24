@@ -10,7 +10,7 @@ function AddVehicleCategory({ trigger, setTrigger }) {
       <div className="item-modal">
         <div className="item-header item-modal-header">
           <div className="item-column-container">
-            <h1>VEHICLE CATEGORY</h1>
+            <h1>VEHICLE TYPES</h1>
             <h2>ADD OPTION</h2>
           </div>
           <button

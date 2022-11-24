@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import Modal from "react-modal";
 import {
   useTable,
   useSortBy,
@@ -9,11 +10,13 @@ import {
 import VCAT_MOCK_DATA from "../VCAT_MOCK_DATA.json";
 import { VCAT_COLUMNS } from "./VCategoryColumns";
 import GlobalFilter from "../GlobalFilter";
+import AddVehicleCategory from "./vCategoryCreate";
 import Link from "next/link";
 
 function VCatTable({ trigger, setTrigger }) {
   const columns = useMemo(() => VCAT_COLUMNS, []);
   const data = useMemo(() => VCAT_MOCK_DATA, []);
+  const [vAddOpen, setvAddOpen] = useState(false);
 
   const {
     getTableProps,
@@ -34,6 +37,7 @@ function VCatTable({ trigger, setTrigger }) {
     {
       columns,
       data,
+      initialState: { pageSize: 5 },
     },
 
     useGlobalFilter,
@@ -53,7 +57,9 @@ function VCatTable({ trigger, setTrigger }) {
           </div>
           <button
             className="item-icon-button item-x-button"
-            onClick={() => setTrigger(!trigger)}
+            onClick={() => {
+              setTrigger(false);
+            }}
           >
             X
           </button>
@@ -156,10 +162,20 @@ function VCatTable({ trigger, setTrigger }) {
             </button>
           </div>
         </div>
-        <button className="add-button add-button-modal">
+        <button
+          className="add-button add-button-modal"
+          onClick={() => {setvAddOpen(true)}}
+        >
           {" "}
-          <Link href="vehicles/addvehicle"> + Add Option </Link>
+          + Add Option
         </button>{" "}
+        <Modal isOpen={vAddOpen} className="modal">
+          {" "}
+          <AddVehicleCategory
+            trigger={vAddOpen}
+            setTrigger={setvAddOpen}
+          />{" "}
+        </Modal>
       </div>
     </>
   );

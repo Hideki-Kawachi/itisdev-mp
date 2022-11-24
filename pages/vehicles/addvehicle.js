@@ -11,7 +11,6 @@ import AddVehicleCategory from "../../components/Vehicles/vCategoryCreate";
 
 function AddVehicle() {
   const router = useRouter();
-  const [categoryPopupOn, setCategoryPopupOn] = useState(false);
 
   return (
     <>
@@ -23,27 +22,10 @@ function AddVehicle() {
       <NavBar></NavBar>
       <br />
       <div id="main-container">
-        {categoryPopupOn ? (
           <>
-            <div className="item-modal-bg">
-              <VCatTable
-                trigger={categoryPopupOn}
-                setTrigger={setCategoryPopupOn}
-              />
-            </div>
             <VehicleCreate
-              trigger={categoryPopupOn}
-              setTrigger={setCategoryPopupOn}
             />
           </>
-        ) : (
-          <div id="main-container-bg">
-            <VehicleCreate
-              trigger={categoryPopupOn}
-              setTrigger={setCategoryPopupOn}
-            />
-          </div>
-        )}
       </div>
     </>
   );

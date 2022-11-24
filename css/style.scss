@@ -811,7 +811,10 @@ a {
     width: 350px;
   }
 }
-
+.modal{
+  background-color: transparent;
+    transform: translate(20%, -5%);
+}
 .item-modal-bg {
   position: fixed; 
   z-index: 1; 

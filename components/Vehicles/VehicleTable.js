@@ -28,12 +28,14 @@ export const BasicTable = () => {
 		pageOptions,
 		pageCount,
 		prepareRow,
+    setPageSize,
 		state,
 		setGlobalFilter,
 	} = useTable(
 		{
 			columns,
 			data,
+
 		},
 
 		useGlobalFilter,
