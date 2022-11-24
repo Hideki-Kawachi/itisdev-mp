@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import BasicButton from "../../components/BasicButton";
-import vCatTable from "./vCategoryList";
 
 
 
