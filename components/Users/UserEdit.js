@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
+import Modal from "react-modal";
+
+Modal.setAppElement("#main-container");
 
 function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 	const [firstName, setFirstName] = useState("");
@@ -9,6 +12,7 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 	const [roleID, setRoleID] = useState("");
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [error, setError] = useState(false);
+	const [modalOpen, setModalOpen] = useState(false);
 	const currentUserID = "00000000";
 
 	useEffect(() => {
@@ -30,6 +34,24 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 				setIsDisabled(data.disabled);
 			});
 	}, [userID]);
+
+	function deleteUser() {
+		fetch("/api/deleteUser", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ userID: userID }),
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				setModalOpen(false);
+				setNotifResult(data);
+				if (data != "User Deletion Failed") {
+					setTimeout(() => window.location.reload(), 800);
+				}
+			});
+	}
 
 	function cancelForm() {
 		setShow("button");
@@ -63,10 +85,8 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 			})
 				.then((res) => res.json())
 				.then((data) => {
-					if (data == "No Fields Edited") {
-						setNotifResult(data);
-					} else {
-						setNotifResult(data);
+					setNotifResult(data);
+					if (data != "No Fields Edited") {
 						setTimeout(() => window.location.reload(), 800);
 					}
 				});
@@ -79,6 +99,39 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 
 	return (
 		<>
+			<Modal isOpen={modalOpen} className="item-modal-bg">
+				<div className="user-modal-container">
+					<div className="user-modal-exit-button-container">
+						<button
+							className="user-modal-exit-button"
+							onClick={() => setModalOpen(false)}
+						>
+							X
+						</button>
+					</div>
+
+					<div className="user-modal-text-container">
+						<span>Are you sure you want to delete user</span>
+						<span>
+							{firstName} {lastName} ?
+						</span>
+					</div>
+					<div className="user-modal-button-container">
+						<BasicButton
+							label={"No"}
+							color={"gray"}
+							type={"button"}
+							clickFunction={() => setModalOpen(false)}
+						></BasicButton>
+						<BasicButton
+							label={"Yes"}
+							color={"red"}
+							type={"button"}
+							clickFunction={deleteUser}
+						></BasicButton>
+					</div>
+				</div>
+			</Modal>
 			<form className="user-create-main-container">
 				<div className="user-create-top-container">
 					<h1>EDIT USER</h1>
@@ -168,7 +221,6 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 					disabled={isDisabled}
 					setDisabled={setIsDisabled}
 				></ToggleSwitch>
-
 				<div className="user-create-button-container">
 					<BasicButton
 						label={"Save"}
@@ -176,12 +228,20 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 						type={"button"}
 						clickFunction={submitForm}
 					></BasicButton>
-					<BasicButton
-						label={"Cancel"}
-						color={"gray"}
-						type={"reset"}
-						clickFunction={cancelForm}
-					></BasicButton>
+					<div className="horizontal-container">
+						<BasicButton
+							label={"Delete"}
+							color={"red"}
+							type={"button"}
+							clickFunction={() => setModalOpen(true)}
+						></BasicButton>
+						<BasicButton
+							label={"Cancel"}
+							color={"gray"}
+							type={"reset"}
+							clickFunction={cancelForm}
+						></BasicButton>
+					</div>
 				</div>
 			</form>
 		</>

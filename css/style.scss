@@ -204,6 +204,7 @@ svg{
     }
   }
 
+
   #user-container{
     float:right;
     margin: auto;
@@ -285,7 +286,6 @@ svg{
   border-radius: 15px;
   background-color: map-get($colors-neutral, 400);
   min-height: 60px;
-  margin-left: 10px;
   min-width: 150px;
   display: inline;
   justify-content: center;
@@ -324,15 +324,66 @@ svg{
   left: calc(50% - 150px);
   width: 400px;
   height: 80px;
-  border: 2px solid ;
   border-radius: 15px;
   padding: 10px;
   background-color: map-get($colors-neutral, 100);
   border: 4px solid map-get($colors-neutral, 500);
-  border-radius: 15px;
   z-index: 100;
 }
 
+.user-modal-container{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border: 5px solid black;
+  width: 600px;
+  height: 300px;
+  position: fixed;
+  top: calc(50% - 215px);
+  left: calc(50% - 315px);
+  border-radius: 15px;
+  padding: 30px;
+  background-color: map-get($colors-neutral, 100);
+  border: 4px solid map-get($colors-neutral, 500);
+  border-radius: 15px;
+  z-index: 100;
+
+  .user-modal-exit-button-container{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .user-modal-exit-button {
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    color: map-get($colors-neutral, 100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: map-get($colors-red, 200);
+    height: 35px;
+    width: 35px;
+  }
+
+  .user-modal-text-container{
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .user-modal-button-container{
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: auto;
+  }
+}
 
 .user-main-container{
   display: flex;
@@ -406,6 +457,12 @@ svg{
     flex-direction: column;
     gap: 25px;
     align-items: flex-end;
+
+    .horizontal-container{
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
   }
 }
 
