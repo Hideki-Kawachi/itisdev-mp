@@ -56,6 +56,7 @@ function Users({ userData, roleData }) {
 	const [rightShow, setRightShow] = useState("button");
 	const [isEditing, setIsEditing] = useState("");
 	const [userShow, setUserShow] = useState(users);
+	const [notifResult, setNotifResult] = useState("");
 
 	useEffect(() => {
 		getSearch(search);
@@ -81,12 +82,21 @@ function Users({ userData, roleData }) {
 		}
 	}, [isEditing]);
 
+	useEffect(() => {
+		if (notifResult.length > 0) {
+			console.log("result is:", notifResult);
+			setTimeout(() => setNotifResult(""), 3000);
+		}
+	}, [notifResult]);
+
 	const rightContainerShow = {
 		edit: (
 			<UserEdit
 				roles={roles}
 				userID={isEditing}
 				setShow={setRightShow}
+				setEditing={setIsEditing}
+				setNotifResult={setNotifResult}
 			></UserEdit>
 		),
 		create: <UserCreate roles={roles} setShow={setRightShow}></UserCreate>,
@@ -100,11 +110,24 @@ function Users({ userData, roleData }) {
 		),
 	};
 
+	function showResult() {
+		if (notifResult.length > 0) {
+			return (
+				<div className="top-notification-container">
+					<span>{notifResult}</span>
+				</div>
+			);
+		} else {
+			return <></>;
+		}
+	}
+
 	return (
 		<>
 			<Header page={"USERS"} subPage={"HOME"} user={"Example N. Name"}></Header>
 			<NavBar></NavBar>
 			<div id="main-container">
+				{showResult()}
 				<div className="user-main-container">
 					<div className="user-left-container">
 						<input

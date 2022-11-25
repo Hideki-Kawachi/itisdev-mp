@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
 
-function UserEdit({ roles, userID, setShow }) {
+function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [password, setPassword] = useState("");
@@ -33,6 +33,7 @@ function UserEdit({ roles, userID, setShow }) {
 
 	function cancelForm() {
 		setShow("button");
+		setEditing("");
 	}
 
 	function submitForm() {
@@ -50,18 +51,37 @@ function UserEdit({ roles, userID, setShow }) {
 				lastName: lastName,
 				password: password,
 				roleID: roleID,
-				creatorID: currentUserID,
-				creationDate: new Date(),
 				disabled: isDisabled,
 			};
+
+			fetch("/api/editUser", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(userData),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					if (data == "No Fields Edited") {
+						setNotifResult(data);
+					} else {
+						setNotifResult(data);
+						setTimeout(() => window.location.reload(), 800);
+					}
+				});
 		}
 	}
+
+	useEffect(() => {
+		console.log("ROLE ID IS:", roleID);
+	}, [roleID]);
 
 	return (
 		<>
 			<form className="user-create-main-container">
 				<div className="user-create-top-container">
-					<h1>CREATE NEW USER</h1>
+					<h1>EDIT USER</h1>
 					<button className="user-create-exit-button" onClick={cancelForm}>
 						<svg
 							viewBox="0 0 12 12"
@@ -125,14 +145,23 @@ function UserEdit({ roles, userID, setShow }) {
 				<select
 					className="sort-dropdown"
 					id="user-create-role"
-					defaultValue={roleID}
 					onChange={(e) => setRoleID(e.target.value)}
 				>
-					{roles.map((role) => (
-						<option key={role.roleID} value={role.roleID}>
-							{role.roleName}
-						</option>
-					))}
+					{roles.map((role) => {
+						if (role.roleID == roleID) {
+							return (
+								<option key={role.roleID} value={role.roleID} selected>
+									{role.roleName}
+								</option>
+							);
+						} else {
+							return (
+								<option key={role.roleID} value={role.roleID}>
+									{role.roleName}
+								</option>
+							);
+						}
+					})}
 				</select>
 				<span>Status:</span>
 				<ToggleSwitch

@@ -314,6 +314,25 @@ svg{
     height: 100%;
 }
 
+.top-notification-container{
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 80%;
+  top: 30px;
+  left: calc(50% - 150px);
+  width: 400px;
+  height: 80px;
+  border: 2px solid ;
+  border-radius: 15px;
+  padding: 10px;
+  background-color: map-get($colors-neutral, 100);
+  border: 4px solid map-get($colors-neutral, 500);
+  border-radius: 15px;
+  z-index: 100;
+}
+
 
 .user-main-container{
   display: flex;
@@ -815,6 +834,7 @@ a {
   background-color: transparent;
     transform: translate(20%, -5%);
 }
+
 .item-modal-bg {
   position: fixed; 
   z-index: 1; 
@@ -825,6 +845,22 @@ a {
   overflow: auto; 
   background-color: rgba(0,0,0,0.4); 
 }
+
+.user-edit-result-container{
+  position: absolute;
+  margin-top: calc(50% - 600px);
+  margin-left: calc(50% - 600px);
+  height: 300px;
+  width: 600px;
+  border: 4px solid map-get($colors-neutral, 500);
+  background-color: map-get($colors-neutral, 100);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 
 .item-modal {
   display: flex;

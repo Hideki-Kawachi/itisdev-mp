@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ToggleSwitch from "../ToggleSwitch";
 
 function UserCard({
@@ -10,8 +10,25 @@ function UserCard({
 	setEditing,
 }) {
 	const [isDisabled, setIsDisabled] = useState(disabled);
+	const isMounted = useRef(false);
 
-	useEffect(() => ({}), [isDisabled]);
+	useEffect(() => {
+		if (isMounted.current) {
+			fetch("/api/editUserToggle", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ userID: userID, disabled: isDisabled }),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					console.log("Response from toggle is:", data);
+				});
+		} else {
+			isMounted.current = true;
+		}
+	}, [isDisabled]);
 
 	return (
 		<div className="user-card-main-container">
