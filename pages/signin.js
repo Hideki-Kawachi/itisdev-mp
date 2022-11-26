@@ -10,7 +10,7 @@ function SignIn() {
     const [password, setPassword] = useState("");
     const [isDisabled, setIsDisabled] = useState(false);
     const [error, setError] = useState(false);
-    useEffect(()=>console.log(employeeID),[employeeID])
+    // useEffect(()=>console.log(employeeID),[employeeID])
 
     function submitForm(){
 
