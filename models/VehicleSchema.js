@@ -21,7 +21,7 @@ const VehicleSchema = new mongoose.Schema({
     required: true,
   },
   manufacturingYear: {
-    type: Int32,
+    type: String,
     minlength: 4,
     maxlength: 4,
     required: true,
