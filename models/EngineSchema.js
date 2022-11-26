@@ -21,7 +21,7 @@ const EngineSchema = new mongoose.Schema({
   },
 });
 
-const engineType =
-  mongoose.models.engineType || mongoose.model("engineType", EngineSchema);
+const EngineType =
+  mongoose.models.EngineType || mongoose.model("EngineType", EngineSchema);
 
-export default engineType;
+export default EngineType;

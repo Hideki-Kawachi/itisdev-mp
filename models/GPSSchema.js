@@ -22,7 +22,7 @@ const GPSSchema = new mongoose.Schema({
   },
 });
 
-const GPS =
-  mongoose.models.GPS || mongoose.model("GPS", GPSSchema);
+const gpsProvider =
+  mongoose.models.gpsProvider || mongoose.model("gpsProvider", GPSSchema);
 
-export default GPS;
+export default gpsProvider;
