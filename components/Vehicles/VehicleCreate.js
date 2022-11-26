@@ -6,12 +6,18 @@ import VCatTable from "../../components/Vehicles/vCategoryList";
 import Modal from 'react-modal';
 
 
-function VehicleCreate({trigger, setTrigger}) {
+function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [vTypeOpen, setvTypeOpen] = useState(false);
-  const [vBrandOpen, setvBrandOpen] = useState(false);
-  const [vTransOpen, setvTransOpen] = useState(false);
-  const [vEngineOpen, setvEngineOpen] = useState(false);
+  const [otype, setOType] = useState();
+  const [name, setName] = useState("");
+
+  const changeType = e => {
+    const { type, value } = e.target;
+    setOType(prevState => ({
+      ...prevState, [name] : value
+    }));
+  };
 
   return (
     <>
@@ -36,14 +42,16 @@ function VehicleCreate({trigger, setTrigger}) {
           <button
             className="vehicle-icon-button vehicle-add-option-button "
             onClick={() => {
-              setvTypeOpen(true);
+             setName("VEHICLE TYPE");
+             setOType(vtype);
+             setvTypeOpen(true);
             }}
           >
             {" "}
             ✎{" "}
           </button>
           <Modal isOpen={vTypeOpen} className="modal">
-            <VCatTable trigger={vTypeOpen} setTrigger= {setvTypeOpen}> </VCatTable>
+            <VCatTable trigger={vTypeOpen} setTrigger= {setvTypeOpen} name = {name} type = {otype} > </VCatTable>
           </Modal>
           <br />
           <select
@@ -80,7 +88,7 @@ function VehicleCreate({trigger, setTrigger}) {
           <button
             className="vehicle-icon-button vehicle-add-option-button "
             onClick={() => {
-              setvTypeOpen(true);
+              setName("VEHICLE BRAND"); setOType(brand); setvTypeOpen(true);
             }}
           >
             {" "}
@@ -109,6 +117,8 @@ function VehicleCreate({trigger, setTrigger}) {
           <button
             className="vehicle-icon-button vehicle-add-option-button "
             onClick={() => {
+              setName("TRANSMISSION TYPES");
+              setOType(transmission);
               setvTypeOpen(true);
             }}
           >
@@ -144,6 +154,8 @@ function VehicleCreate({trigger, setTrigger}) {
           <button
             className="vehicle-icon-button vehicle-add-option-button "
             onClick={() => {
+              setName("ENGINE TYPES");
+              setOType(engine);
               setvTypeOpen(true);
             }}
           >
@@ -204,6 +216,8 @@ function VehicleCreate({trigger, setTrigger}) {
           <button
             className="vehicle-icon-button vehicle-add-option-button "
             onClick={() => {
+              setName("GPS PROVIDER");
+              setOType(gpsDATA);
               setvTypeOpen(true);
             }}
           >
@@ -221,6 +235,8 @@ function VehicleCreate({trigger, setTrigger}) {
           <button
             className="vehicle-icon-button vehicle-add-option-button "
             onClick={() => {
+              setName("FUEL LEVEL SENSOR");
+              setOType(sensor);
               setvTypeOpen(true);
             }}
           >

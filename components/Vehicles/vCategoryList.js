@@ -13,9 +13,9 @@ import GlobalFilter from "../GlobalFilter";
 import AddVehicleCategory from "./vCategoryCreate";
 import Link from "next/link";
 
-function VCatTable({ trigger, setTrigger }) {
+function VCatTable({ trigger, setTrigger, name, type}) {
   const columns = useMemo(() => VCAT_COLUMNS, []);
-  const data = useMemo(() => VCAT_MOCK_DATA, []);
+  const data = useMemo(() => type, []);
   const [vAddOpen, setvAddOpen] = useState(false);
 
   const {
@@ -53,7 +53,7 @@ function VCatTable({ trigger, setTrigger }) {
       <div className="item-modal">
         <div className="item-header item-modal-header">
           <div className="item-column-container">
-            <h1>VEHICLE TYPES</h1>
+            <h1>{name}</h1>
           </div>
           <button
             className="item-icon-button item-x-button"
@@ -105,23 +105,6 @@ function VCatTable({ trigger, setTrigger }) {
           </tbody>
         </table>
         <div className="page-buttons">
-          {/* <span>
-            Page{" "}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>
-          </span>
-          <input
-            type="number"
-            className="page-input"
-            defaultValue={pageIndex + 1}
-            onChange={(e) => {
-              const pageNumber = e.target.value
-                ? Number(e.target.value) - 1
-                : 0;
-              gotoPage(pageNumber);
-            }}
-          /> */}
           <br />
           <div className="navigate-page-group">
             <span>
@@ -174,6 +157,8 @@ function VCatTable({ trigger, setTrigger }) {
           <AddVehicleCategory
             trigger={vAddOpen}
             setTrigger={setvAddOpen}
+            name = {name}
+            type = {type}
           />{" "}
         </Modal>
       </div>
