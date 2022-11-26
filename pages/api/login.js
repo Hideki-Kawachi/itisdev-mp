@@ -7,32 +7,25 @@ dbConnect();
 
 export default async function handler(req, res) {
 	const { employeeID, password, disabled} = req.body;
-    // console.log(req.body);
-
-	//bcrypt 
 
 	console.log("User: " + employeeID + " Pass: " + password + " Disabled:" + disabled);
 
-	const user = await User.findOne({userID: employeeID, password ,disabled: disabled});
+	const user = await User.findOne({userID: employeeID, disabled: disabled});
 
-	const retrievedHash = user.password;
-
-	console.log("Retrieved hash is" + retrievedHash);
-
-	// const hashPass = await hash(password, 10);
-	// console.log(hashPass);
-
-	const isMatch = await bcrypt.compare(password, retrievedHash);
-
-	console.log("isMatch: " + isMatch);
-
-	
-	if (!user || !isMatch) {
+	if (!user) {
 		return res.json(false);
 	} else {
-		console.log("here: " + req.body);
-		return res.json(user);
+		//Retrieve the hash
+		const retrievedHash = user.get("password");
+		const hashPass = await hash(password, 10); //10 is the salt rounds
+		const isMatch = await bcrypt.compare(password, retrievedHash);
+
+		if (!isMatch) {
+			return res.json(false);
+		}
 		// res.redirect("/dashboard");
 		//Session
+
+		return res.json(user);
 	}
 }
