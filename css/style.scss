@@ -1041,7 +1041,7 @@ a {
   padding: 15px;
   text-align: center;
   width: 50%;
-  background: rgba(128, 128, 128, 0.075);
+  // background: rgba(128, 128, 128, 0.075);
   cursor: pointer;
   // border-bottom: 1px solid rgba(0, 0, 0, 0.274);
   //box-sizing: content-box;
@@ -1058,6 +1058,7 @@ a {
 button {
   border: none;
   font-family: Inter;
+  font-size:30px;
 }
 
 .content {

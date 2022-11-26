@@ -35,6 +35,8 @@ function Tabs() {
         <div
           className={toggleState === 1 ? "content  active-content" : "content"}
         >
+          
+          {/* First Field Group */}
 
           <div className="form-container">
             <div className="form-item">
@@ -197,10 +199,66 @@ function Tabs() {
         <div
           className={toggleState === 2 ? "content  active-content" : "content"}
         >
-          <h2> Pull-out Inventory </h2>
-         
+          
           <p>
-            *Sample pull-out inventory here*
+            {/* First Field Group */}
+
+            <div className="form-container">
+              <div className="form-item">
+                  <label className="form-labels">
+                  Pull-out Date: {" "}
+                  </label>{" "}
+                  <br />
+                  <input
+                  type="date"
+                  className="form-fields"
+                  placeholder="Acquired Date"
+                  />
+              </div>
+
+              <div className="form-item">
+                <label className="form-labels">
+                Job Order Number: <label className="required"> * </label>{" "}
+                </label>{" "}
+                <br />
+                <input
+                type="text"
+                className="form-fields"
+                placeholder="Enter Job Order Number"
+                />
+              </div>
+
+              <div className="form-item">
+                <label className="form-labels">
+                Plate Number: <label className="required"> * </label>{" "}
+                </label>{" "}
+              <button
+                className="vehicle-icon-button vehicle-add-option-button "
+                onClick={() => setTrigger(!trigger)}
+              >
+              {" "}
+              ✎{" "}
+            </button>
+            <br />
+            <select className="form-fields" />
+            </div>
+          
+            <div className="form-item">
+                <label className="form-labels">
+                Mechanic Name: <label className="required"> * </label>{" "}
+                </label>{" "}
+              <button
+                className="vehicle-icon-button vehicle-add-option-button "
+                onClick={() => setTrigger(!trigger)}
+              >
+              {" "}
+              ✎{" "}
+            </button>
+            <br />
+            <select className="form-fields" />
+            </div>
+
+        </div>
           </p>
         </div>
       </div>
