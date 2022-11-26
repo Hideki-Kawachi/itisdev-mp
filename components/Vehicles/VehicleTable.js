@@ -11,42 +11,42 @@ import { COLUMNS } from "./VehicleColumns";
 import GlobalFilter from "../GlobalFilter";
 import Link from "next/link";
 
-export const BasicTable = () => {
-	const columns = useMemo(() => COLUMNS, []);
-	const data = useMemo(() => V_MOCK_DATA, []);
 
-	const {
-		getTableProps,
-		getTableBodyProps,
-		headerGroups,
-		page,
-		nextPage,
-		canNextPage,
-		previousPage,
-		canPreviousPage,
-		gotoPage,
-		pageOptions,
-		pageCount,
-		prepareRow,
+export const BasicTable = ({vehicle} ) => {
+  const columns = useMemo(() => COLUMNS, []);
+  const data = useMemo(() => vehicle, []);
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    nextPage,
+    canNextPage,
+    previousPage,
+    canPreviousPage,
+    gotoPage,
+    pageOptions,
+    pageCount,
+    prepareRow,
     setPageSize,
-		state,
-		setGlobalFilter,
-	} = useTable(
-		{
-			columns,
-			data,
+    state,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
+      data,
+    },
 
-		},
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
 
-		useGlobalFilter,
-		useSortBy,
-		usePagination
-	);
+  const { globalFilter } = state;
+  const { pageIndex } = state;
 
-	const { globalFilter } = state;
-	const { pageIndex } = state;
-
-	return (
+  return (
     <>
       <div className="user-left-container">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
@@ -93,27 +93,30 @@ export const BasicTable = () => {
         </tbody>
       </table>
 
-	  <br/>
+      <br />
       <div className="page-buttons">
         <span>
           Page{" "}
           <strong>
-            {pageIndex + 1} of {pageOptions.length} 
+            {pageIndex + 1} of {pageOptions.length}
           </strong>
         </span>
-		<input type='number' defaultValue = {pageIndex + 1} onChange={e => {
-			const pageNumber= e.target.value ? Number(e.target.value) - 1 : 0
-			gotoPage(pageNumber)}
-		}/>
+        <input
+          type="number"
+          defaultValue={pageIndex + 1}
+          onChange={(e) => {
+            const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0;
+            gotoPage(pageNumber);
+          }}
+        />
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
         </button>
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {"<"}
-  
         </button>
         <button onClick={() => nextPage()} disabled={!canNextPage}>
- 		{">"}
+          {">"}
         </button>
         <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
           {">>"}
