@@ -6,14 +6,14 @@ import {
 	useFilters,
 	usePagination,
 } from "react-table";
-import ADDINV_MOCK_DATA from "../ADDINV_MOCK_DATA.json";
-import { COLUMNS } from "./InventoryColumns";
+import PULLINV_MOCK_DATA from "../PULLINV_MOCK_DATA.json";
+import { COLUMNS } from "./InventoryColumnsPull";
 import GlobalFilter from "../GlobalFilter";
 import Link from "next/link";
 
 export const BasicTable = () => {
 	const columns = useMemo(() => COLUMNS, []);
-	const data = useMemo(() => ADDINV_MOCK_DATA, []);
+	const data = useMemo(() => PULLINV_MOCK_DATA, []);
 
 	const {
 		getTableProps,

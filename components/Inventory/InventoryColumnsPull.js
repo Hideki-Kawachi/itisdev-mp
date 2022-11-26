@@ -12,8 +12,8 @@ export const COLUMNS = [
     Filter: GlobalFilter,
   },
   {
-    Header: "Invoice Number",
-    accessor: "invoiceNum",
+    Header: "Plate Number",
+    accessor: "plateNum",
     Filter: GlobalFilter,
   },
   {

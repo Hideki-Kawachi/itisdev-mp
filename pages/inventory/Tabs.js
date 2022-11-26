@@ -5,7 +5,8 @@ import NavBar from "../../components/NavBar";
 import Dropdown from "../../components/Dropdown";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import BasicButton from "../../components/BasicButton";
-import BasicTable from "../../components/Inventory/InventoryTable";
+import BasicTableAdd from "../../components/Inventory/InventoryTable";
+import BasicTablePull from "../../components/Inventory/InventoryTablePull";
 
 function Tabs() {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -36,10 +37,10 @@ function Tabs() {
         <div
           className={toggleState === 1 ? "content  active-content" : "content"}
         >
-          <BasicTable> </BasicTable>
+          <BasicTableAdd> </BasicTableAdd>
           <br />
           <br />
-          
+
           {/* First Field Group */}
 
           <div className="form-container">
@@ -203,6 +204,8 @@ function Tabs() {
         <div
           className={toggleState === 2 ? "content  active-content" : "content"}
         >
+
+      <BasicTablePull> </BasicTablePull>
           
           <p>
             {/* First Field Group */}
