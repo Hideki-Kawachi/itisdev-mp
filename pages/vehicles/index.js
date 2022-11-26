@@ -11,7 +11,7 @@ import Vehicle from "../../models/VehicleSchema";
 
  export async function getServerSideProps() {
    await dbConnect();
-   const vehicleList = await Vehicle.find({}, {plateNum: 1, transmissionID: 1, brandID: 1, vehicleTypeID: 1} );
+   const vehicleList = await Vehicle.find({}, {plateNum: 1, transmissionID: 1, brandID: 1, vehicleTypeID: 1, insuranceExpDate: 1} );
 
    let vehicleData = JSON.stringify(vehicleList);
 //    console.log(vehicleList);

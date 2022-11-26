@@ -18,7 +18,7 @@ export const COLUMNS = [
   },
   {
     Header: "Vehicle Type",
-    accessor: "vehicleType",
+    accessor: "vehicleTypeID",
     disableGlobalFilter: true,
   },
   {
