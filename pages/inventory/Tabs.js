@@ -41,51 +41,49 @@ function Tabs() {
           <br />
           <br />
 
-          {/* First Field Group */}
+        {/* First Field Group */}
 
-          <div className="form-container">
-            <div className="form-item">
-                <label className="form-labels">
-                Acquired Date: {" "}
-                </label>{" "}
-                <br />
-                <input
-                type="date"
-                className="form-fields"
-                placeholder="Acquired Date"
-                />
-            </div>
+        <div className="form-container">
+          <div className="form-item">
+              <label className="form-labels">
+              Acquired Date: {" "}
+              </label>{" "}
+              <br />
+              <input
+              type="date"
+              className="form-fields"
+              placeholder="Acquired Date"
+              />
+          </div>
         </div>
         <br />
-    
-            
-            <div className="form-container">
+   
+        <div className="form-container">
+          <div className="form-item">
+            <label className="form-labels">
+            Invoice Number: <label className="required"> * </label>{" "}
+            </label>{" "}
+            <br />
+            <input
+            type="text"
+            className="form-fields"
+            placeholder="Enter Invoice Number"
+            />
+          </div>
 
-            <div className="form-item">
-                <label className="form-labels">
-                Invoice Number: <label className="required"> * </label>{" "}
-                </label>{" "}
-                <br />
-                <input
-                type="text"
-                className="form-fields"
-                placeholder="Enter Invoice Number"
-                />
-            </div>
+          <div className="form-item">
+            <label className="form-labels">
+            Item Name: <label className="required"> * </label>{" "}
+            </label>{" "}
+            <br />
+            <input
+            type="text"
+            className="form-fields"
+            placeholder="Enter Item Name"
+            />
+          </div>
 
-            <div className="form-item">
-                <label className="form-labels">
-                Item Name: <label className="required"> * </label>{" "}
-                </label>{" "}
-                <br />
-                <input
-                type="text"
-                className="form-fields"
-                placeholder="Enter Item Name"
-                />
-            </div>
-
-            <div className="form-item form-toggle">
+          <div className="form-item form-toggle">
             {" "}
             Status:{" "}
             <button
@@ -108,106 +106,109 @@ function Tabs() {
         <br />
         <div className="form-container">
 
-            <div className="form-item">
-                <label className="form-labels">
-                Quantity: <label className="required"> * </label>{" "}
-                </label>{" "}
-                <br />
-                <input
-                type="text"
-                className="form-fields"
-                placeholder="Enter Quantity"
-                />
-            </div>
-
-            <div className="form-item">
-                <label className="form-labels">
-                Unit: <label className="required"> * </label>{" "}
-                </label>{" "}
-                <button
-              className="vehicle-icon-button vehicle-add-option-button "
-              onClick={() => setTrigger(!trigger)}
-            >
-              {" "}
-              ✎{" "}
-            </button>
-            <br />
-            <select className="form-fields" />
-            </div>
-
-            <div className="form-item">
-                <label className="form-labels">
-                Unit Price: <label className="required"> * </label>{" "}
-                </label>{" "}
-                <br />
-                <input
-                type="text"
-                className="form-fields"
-                placeholder="Enter Unit Price"
-                />
-            </div>
-        </div>
-
-        <br />
-  
-        {/* Third Field Row */}
-
-        <div className="form-container">
-          <div className="form-item">
+        <div className="form-item">
             <label className="form-labels">
-              Brand: <label className="required"> * </label>{" "}
-            </label>{" "}
-            <button
-              className="vehicle-icon-button vehicle-add-option-button "
-              onClick={() => setTrigger(!trigger)}
-            >
-              {" "}
-              ✎{" "}
-            </button>
-            <br />
-            <select className="form-fields" />
-          </div>
-
-          <div className="form-item">
-            <label className="form-labels">
-              Part Number: {" "}
+            Quantity: <label className="required"> * </label>{" "}
             </label>{" "}
             <br />
             <input
-              type="text"
-              className="form-fields"
-              placeholder="Enter Part Number"
+            type="text"
+            className="form-fields"
+            placeholder="Enter Quantity"
             />
-          </div>
+        </div>
 
-          <div className="form-item">
+        <div className="form-item">
             <label className="form-labels">
-              Supplier: <label className="required"> * </label>{" "}
+            Unit: <label className="required"> * </label>{" "}
             </label>{" "}
             <button
-              className="vehicle-icon-button vehicle-add-option-button "
-              onClick={() => setTrigger(!trigger)}
-            >
-              {" "}
-              ✎{" "}
-            </button>
+          className="vehicle-icon-button vehicle-add-option-button "
+          onClick={() => setTrigger(!trigger)}
+        >
+          {" "}
+          ✎{" "}
+        </button>
+        <br />
+        <select className="form-fields" />
+        </div>
+
+        <div className="form-item">
+            <label className="form-labels">
+            Unit Price: <label className="required"> * </label>{" "}
+            </label>{" "}
             <br />
-            <select className="form-fields" />
-          </div>
-
+            <input
+            type="text"
+            className="form-fields"
+            placeholder="Enter Unit Price"
+            />
+        </div>
         </div>
 
         <br />
+
+        {/* Third Field Row */}
+
+        <div className="form-container">
+        <div className="form-item">
+        <label className="form-labels">
+          Brand: <label className="required"> * </label>{" "}
+        </label>{" "}
+        <button
+          className="vehicle-icon-button vehicle-add-option-button "
+          onClick={() => setTrigger(!trigger)}
+        >
+          {" "}
+          ✎{" "}
+        </button>
+        <br />
+        <select className="form-fields" />
+        </div>
+
+        <div className="form-item">
+        <label className="form-labels">
+          Part Number: {" "}
+        </label>{" "}
+        <br />
+        <input
+          type="text"
+          className="form-fields"
+          placeholder="Enter Part Number"
+        />
+        </div>
+
+        <div className="form-item">
+        <label className="form-labels">
+          Supplier: <label className="required"> * </label>{" "}
+        </label>{" "}
+        <button
+          className="vehicle-icon-button vehicle-add-option-button "
+          onClick={() => setTrigger(!trigger)}
+        >
+          {" "}
+          ✎{" "}
+        </button>
+        <br />
+        <select className="form-fields" />
+        </div>
+
         </div>
         <br />
+
+        <div className="item-footer">      
+          <button className="gray-button-container">Cancel</button>
+          <button className="green-button-container">Save</button>     
+        </div>
+
+      </div>
 
         <div
           className={toggleState === 2 ? "content  active-content" : "content"}
         >
 
-      <BasicTablePull> </BasicTablePull>
+          <BasicTablePull> </BasicTablePull>
           
-          <p>
             {/* First Field Group */}
 
             <div className="form-container">
@@ -266,8 +267,14 @@ function Tabs() {
             </div>
 
         </div>
-          </p>
+
+          <div className="item-footer">      
+            <button className="gray-button-container">Cancel</button>
+            <button className="green-button-container">Save</button>     
+          </div>
+
         </div>
+
       </div>
     </div>
   );

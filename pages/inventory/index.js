@@ -4,7 +4,6 @@ import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import Dropdown from "../../components/Dropdown";
 import Tabs from "./Tabs";
-import BasicTable from "../../components/Inventory/InventoryTable";
 
 
 function Inventory() {
