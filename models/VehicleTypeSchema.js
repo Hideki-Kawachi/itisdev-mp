@@ -8,7 +8,7 @@ const VehicleTypeSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  typeName: {
+  name: {
     type: String,
     required: true,
     maxLength: 50,

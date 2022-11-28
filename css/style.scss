@@ -725,6 +725,23 @@ svg{
   width: 400px;
   margin-left: 35px;
   margin-top: 10px;
+
+
+}
+
+.select-form{
+  font-size: 25px;
+  border-radius: 5px;
+  padding: 8px;
+  width: 400px;
+  margin-left: 35px;
+  margin-top: 10px;
+
+    &.select-form:invalid, &.select-form option[value=""]{
+    color: map-get($colors-neutral, 500);
+    opacity: 80%;
+  }
+
 }
 
 .page-buttons{
@@ -1073,3 +1090,6 @@ button {
 .active-content {
   display: block;
 }
+
+
+

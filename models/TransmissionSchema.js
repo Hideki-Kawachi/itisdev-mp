@@ -8,7 +8,7 @@ const TransmissionSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  transmissionName: {
+  name: {
     type: String,
     required: true,
     maxLength: 50,
