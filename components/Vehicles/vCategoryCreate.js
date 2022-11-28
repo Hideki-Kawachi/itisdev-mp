@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import ToggleSwitch from "../ToggleSwitch";
 
 function AddVehicleCategory({ trigger, setTrigger, name, type }) {

@@ -238,7 +238,8 @@ svg{
   background-color: map-get($colors-red, 200);
   min-height: 60px;
   min-width: 150px;
-  display: flex;
+  display: inline;
+  margin-left: 15px;
   justify-content: center;
   box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.50);
   cursor: pointer;
@@ -254,6 +255,7 @@ svg{
   &:hover{
     animation: button-hover 0.3s ease-in-out forwards;
   }
+
 }
 
 .green-button-container{
@@ -728,7 +730,10 @@ svg{
 
 
 }
-
+.cancel-header{
+  font-size: 32px;
+  text-align: center;
+}
 .select-form{
   font-size: 25px;
   border-radius: 5px;
@@ -743,7 +748,10 @@ svg{
   }
 
 }
-
+.pop-up-buttons{
+  margin: auto;
+  display: inline-block;
+}
 .page-buttons{
  font-size: 18px;
  margin: auto;
@@ -819,6 +827,10 @@ a {
     
   }
 
+  &.item-modal-header-center {
+    margin: auto;
+  }
+
   &.item-table-header {
     padding-top: 30px;
 
@@ -852,6 +864,7 @@ a {
     background-color: map-get($colors-red, 200);
     height: 35px;
     width: 35px;
+
   }
   
   &.item-add-option-button {

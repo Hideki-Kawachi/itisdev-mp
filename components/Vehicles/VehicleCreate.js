@@ -4,6 +4,7 @@ import ToggleSwitch from "../../components/ToggleSwitch";
 import BasicButton from "../../components/BasicButton";
 import VCatTable from "../../components/Vehicles/vCategoryList";
 import Modal from 'react-modal';
+import Cancel from "../../components/Pop-up/cancel";
 
 
 function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
@@ -11,14 +12,52 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   const [vTypeOpen, setvTypeOpen] = useState(false);
   const [otype, setOType] = useState();
   const [name, setName] = useState("");
+  const [cancel, setCancel] = useState(false);
+  
+	// function submitForm() {
+  //   if (
+  //     employeeID.length != 8 ||
+  //     firstName.length == 0 ||
+  //     lastName.length == 0 ||
+  //     password.length == 0 ||
+  //     roleID.length == 0
+  //   ) {
+  //     setError(true);
+  //   } else {
+  //     let userData = {
+  //       userID: employeeID,
+  //       firstName: firstName,
+  //       lastName: lastName,
+  //       password: password,
+  //       roleID: roleID,
+  //       creatorID: currentUserID,
+  //       creationDate: new Date(),
+  //       disabled: isDisabled,
+  //     };
 
-  const changeType = e => {
-    const { type, value } = e.target;
-    setOType(prevState => ({
-      ...prevState, [name] : value
-    }));
-  };
-
+  //     fetch("/api/createUser", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(userData),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data == "created") {
+  //           console.log("SUCCESS");
+  //           setError(false);
+  //           window.location.reload();
+  //         } else {
+  //           setError(true);
+  //           setEmployeeIDError(data);
+  //         }
+  //       });
+  //   }
+  // }
+  function cancelForm(){
+    setCancel(true);
+  }
   return (
     <>
       {/* First Field Group */}
@@ -59,6 +98,13 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               >
                 {" "}
               </VCatTable>
+            </Modal>
+            <Modal isOpen={cancel} className="modal">
+              <Cancel
+                trigger={cancel}
+                setTrigger={setCancel}
+                transaction={" Creation of Vehicle"}
+              ></Cancel>
             </Modal>
             <br />
             <select type="text" className="select-form" required>
@@ -331,11 +377,13 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               label={"Cancel"}
               color={"gray"}
               type={"reset"}
+              clickFunction={cancelForm}
             ></BasicButton>
             <BasicButton
               label={"Save"}
               color={"green"}
               type={"button"}
+              // clickFunction={submitForm}
             ></BasicButton>
           </span>
         </div>

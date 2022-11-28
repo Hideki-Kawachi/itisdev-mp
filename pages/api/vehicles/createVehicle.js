@@ -1,5 +1,5 @@
-import dbConnect from "../../lib/dbConnect";
-import Vehicle from "../../models/VehicleSchema";
+import dbConnect from "../../../lib/dbConnect";
+import Vehicle from "../../../models/VehicleSchema";
 
 export default async (req, res) => {
   await dbConnect();
@@ -7,7 +7,7 @@ export default async (req, res) => {
   const vehicleInfo = req.body;
   var invalidplateNum = false;
 
-  Vehicle.find({ vehicleID: vehicleInfo.plateNum }, null, (err, result) => {
+  Vehicle.find({ plateNum: vehicleInfo.plateNum }, null, (err, result) => {
     if (err) {
       console.log(err);
       invalidplateNum = true;
