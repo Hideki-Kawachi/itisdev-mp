@@ -10,9 +10,6 @@ function Cancel({ trigger, setTrigger, transaction }) {
     function Close() {
       setTrigger(!trigger);
     }
-
-
-
     
   return (
     <>

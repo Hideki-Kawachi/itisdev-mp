@@ -12,6 +12,7 @@ export default async (req, res) => {
       console.log(err);
       invalidplateNum = true;
     } else if (result.length > 0) {
+      console.log(result);
       console.log("Plate Number is already present");
       invalidplateNum = true;
     }
@@ -21,6 +22,6 @@ export default async (req, res) => {
     res.json("Plate Number " + vehicleInfo.plateNum + " is already taken");
   } else {
     await Vehicle.create(vehicleInfo);
-    res.json("User ID " + vehicleInfo.plateNum + " created");
+    res.json("created");
   }
 };

@@ -69,7 +69,7 @@ export async function getServerSideProps() {
     {},
     {
       transmissionID: 1,
-      name: "1",
+      name: 1,
       disabled: 1,
     }
   );
@@ -82,7 +82,7 @@ export async function getServerSideProps() {
       disabled: 1,
     }
   );
-  console.log(transmissionList);
+  // console.log(transmissionList);
   let vehicleData = JSON.stringify(vehicleList);
   let typeData = JSON.stringify(typeList);
   let brandData = JSON.stringify(brandList);

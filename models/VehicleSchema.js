@@ -4,7 +4,7 @@ const VehicleSchema = new mongoose.Schema({
   plateNum: {
     type: String,
     minlength: 5,
-    maxlength: 5,
+    maxlength: 8,
     unique: true,
     required: true,
   },
@@ -34,7 +34,7 @@ const VehicleSchema = new mongoose.Schema({
   },
   engineNum: {
     type: String,
-    minlength: 8,
+    minlength: 4,
     maxlength: 50,
     required: true,
   },
@@ -57,7 +57,8 @@ const VehicleSchema = new mongoose.Schema({
   },
   fuelSensorID: {
     type: String,
-    maxlength: 50,
+    minlength: 5,
+    maxlength: 5,
     required: true,
   },
   insuranceAmount: {

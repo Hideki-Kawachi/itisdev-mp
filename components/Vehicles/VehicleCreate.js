@@ -13,48 +13,77 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   const [otype, setOType] = useState();
   const [name, setName] = useState("");
   const [cancel, setCancel] = useState(false);
+  const [plateNum, setPlateNum] = useState("");
+  const [vehicleTypeID, setVehicleTypeID] = useState("");
+  const [brandID, setBrandID] = useState("");
+  const [manufacturingYear, setManufacturingYear] = useState("");
+  const [engineNum, setEngineNum] = useState("");
+  const [transmissionID, setTransmissionID] = useState("");
+  const [engineTypeID, setEngineTypeID] = useState("");
+  const [chassisID, setChassisID] = useState("");
+  const [gpsID, setGpsID] = useState("");
+  const [fuelSensorID, setFuelSensorID] = useState("");
+  const [insuranceAmount, setInsuranceAmount] = useState("");
+  const [insuranceExpDate, setInsuranceExpDate] = useState("");
+  const [error, setError] = useState(false);
+  const [plateNumError, setPlateNumError] = useState("");
+  const currentUserID = "00000001";
+ 
   
-	// function submitForm() {
-  //   if (
-  //     employeeID.length != 8 ||
-  //     firstName.length == 0 ||
-  //     lastName.length == 0 ||
-  //     password.length == 0 ||
-  //     roleID.length == 0
-  //   ) {
-  //     setError(true);
-  //   } else {
-  //     let userData = {
-  //       userID: employeeID,
-  //       firstName: firstName,
-  //       lastName: lastName,
-  //       password: password,
-  //       roleID: roleID,
-  //       creatorID: currentUserID,
-  //       creationDate: new Date(),
-  //       disabled: isDisabled,
-  //     };
+	function submitForm() {
+    if (
+      plateNum.length == 0 ||
+      vehicleTypeID.length == 0 ||
+      brandID.length == 0 ||
+      manufacturingYear.length == 0 ||
+      engineNum.length == 0 ||
+      transmissionID.length == 0 ||
+      chassisID.length == 0 ||
+      gpsID.length == 0 ||
+      fuelSensorID.length == 0 ||
+      insuranceAmount.length == 0 ||
+      insuranceExpDate.length == 0 
+    ) {
+      setError(true);
+    } else {
+      let vehicleData = {
+        plateNum: plateNum,
+        vehicleTypeID: vehicleTypeID,
+        brandID: brandID,
+        manufacturingYear: manufacturingYear,
+        transmissionID: transmissionID,
+        engineNum: engineNum,
+        engineTypeID: engineTypeID,
+        chassisID: chassisID,
+        gpsID: gpsID,
+        fuelSensorID: fuelSensorID,
+        insuranceAmount: insuranceAmount,
+        insuranceExpDate: insuranceExpDate,
+        creatorID: currentUserID,
+        creationDate: new Date(),
+        disabled: isDisabled,
+      };
 
-  //     fetch("/api/createUser", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(userData),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         if (data == "created") {
-  //           console.log("SUCCESS");
-  //           setError(false);
-  //           window.location.reload();
-  //         } else {
-  //           setError(true);
-  //           setEmployeeIDError(data);
-  //         }
-  //       });
-  //   }
-  // }
+      fetch("/api/vehicles/createVehicle", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(vehicleData),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data == "created") {
+            console.log("SUCCESS");
+            setError(false);
+            window.location.reload();
+          } else {
+            setError(true);
+            setPlateNumError(data);
+          }
+        });
+    }
+  }
   function cancelForm(){
     setCancel(true);
   }
@@ -72,6 +101,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               type="text"
               className="form-fields"
               placeholder="Enter Plate Number"
+              onChange={(e) => setPlateNum(e.target.value)}
             />
           </div>
           <div className="form-item">
@@ -107,15 +137,20 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               ></Cancel>
             </Modal>
             <br />
-            <select type="text" className="select-form" required>
-              <option value="" selected hidden>
+            <select
+              type="text"
+              className="select-form"
+              onChange={(e) => setVehicleTypeID(e.target.value)}
+              required
+            >
+              <option value="" defaultValue hidden>
                 {" "}
                 Select Vehicle Type{" "}
               </option>
               {vtype.map((vehicleType) => (
                 <option
                   key={vehicleType.vehicleTypeID}
-                  value={vehicleType.name}
+                  value={vehicleType.vehicleTypeID}
                 >
                   {vehicleType.name}
                 </option>
@@ -159,13 +194,17 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               ✎{" "}
             </button>
             <br />
-            <select className="select-form" required>
-              <option value="" selected hidden>
+            <select
+              className="select-form"
+              onChange={(e) => setBrandID(e.target.value)}
+              required
+            >
+              <option value="" defaultValue hidden>
                 {" "}
                 Select Brand{" "}
               </option>
               {brand.map((brand) => (
-                <option key={brand.brandID} value={brand.name}>
+                <option key={brand.brandID} value={brand.brandID}>
                   {brand.name}
                 </option>
               ))}
@@ -181,6 +220,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               type="text"
               className="form-fields"
               placeholder="Enter Manufacturing Year"
+              onChange={(e) => setManufacturingYear(e.target.value)}
             />
           </div>
 
@@ -200,15 +240,19 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               ✎{" "}
             </button>
             <br />
-            <select className="select-form" required>
-              <option value="" selected hidden>
+            <select
+              className="select-form"
+              onChange={(e) => setTransmissionID(e.target.value)}
+              required
+            >
+              <option value="" defaultValue hidden>
                 {" "}
                 Select Transmission{" "}
               </option>
               {transmission.map((transmission) => (
                 <option
                   key={transmission.transmissionID}
-                  value={transmission.name}
+                  value={transmission.transmissionID}
                 >
                   {transmission.name}
                 </option>
@@ -231,6 +275,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               type="text"
               className="form-fields"
               placeholder="Enter Engine Number"
+              onChange={(e) => setEngineNum(e.target.value)}
             />
           </div>
 
@@ -250,13 +295,20 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               ✎{" "}
             </button>
             <br />
-            <select className="select-form" required>
-              <option value="" selected hidden>
+            <select
+              className="select-form"
+              onChange={(e) => setEngineTypeID(e.target.value)}
+              required
+            >
+              <option value="" defaultValue hidden>
                 {" "}
                 Select Engine Type{" "}
               </option>
               {engine.map((engineType) => (
-                <option key={engineType.engineTypeID} value={engineType.name}>
+                <option
+                  key={engineType.engineTypeID}
+                  value={engineType.engineTypeID}
+                >
                   {engineType.name}
                 </option>
               ))}
@@ -272,6 +324,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               type="text"
               className="form-fields"
               placeholder="Enter Chassis"
+              onChange={(e) => setChassisID(e.target.value)}
             />
           </div>
         </div>
@@ -288,6 +341,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               type="text"
               className="form-fields"
               placeholder="Enter Insurance Amount"
+              onChange={(e) => setInsuranceAmount(e.target.value)}
             />
           </div>
 
@@ -300,6 +354,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               type="date"
               className="form-fields"
               placeholder="Enter Insurance Expiry Date"
+              onChange={(e) => setInsuranceExpDate(e.target.value)}
             />
           </div>
         </div>
@@ -322,16 +377,20 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               ✎{" "}
             </button>
             <br />
-            <select className="select-form" required>
+            <select
+              className="select-form"
+              onChange={(e) => setGpsID(e.target.value)}
+              required
+            >
               {" "}
-              <option value="" selected hidden>
+              <option value="" defaultValue hidden>
                 {" "}
                 Select GPS Provider{" "}
               </option>
               {gpsDATA.map((gpsProvider) => (
                 <option
                   key={gpsProvider.GPSProviderID}
-                  value={gpsProvider.name}
+                  value={gpsProvider.GPSProviderID}
                 >
                   {gpsProvider.name}
                 </option>
@@ -355,14 +414,21 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               ✎{" "}
             </button>
             <br />
-            <select className="select-form" required>
+            <select
+              className="select-form"
+              onChange={(e) => setFuelSensorID(e.target.value)}
+              required
+            >
               {" "}
-              <option value="" selected hidden>
+              <option value="" defaultValue hidden>
                 {" "}
                 Select Fuel Level Sensor{" "}
               </option>
               {sensor.map((fuelSensor) => (
-                <option key={fuelSensor.fuelSensorID} value={fuelSensor.name}>
+                <option
+                  key={fuelSensor.FuelSensorID}
+                  value={fuelSensor.FuelSensorID}
+                >
                   {fuelSensor.name}
                 </option>
               ))}
@@ -383,7 +449,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               label={"Save"}
               color={"green"}
               type={"button"}
-              // clickFunction={submitForm}
+              clickFunction={submitForm}
             ></BasicButton>
           </span>
         </div>
