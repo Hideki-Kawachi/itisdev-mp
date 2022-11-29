@@ -28,6 +28,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   const [error, setError] = useState(false);
   const [plateNumError, setPlateNumError] = useState("");
   const currentUserID = "00000001";
+  const dt = new Date();
  
   
 	function submitForm() {
@@ -47,7 +48,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
       setError(true);
     } else {
       let vehicleData = {
-        plateNum: plateNum,
+        plateNum: plateNum.toUpperCase(),
         vehicleTypeID: vehicleTypeID,
         brandID: brandID,
         manufacturingYear: manufacturingYear,
@@ -87,6 +88,53 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   function cancelForm(){
     setCancel(true);
   }
+
+  function showPlateNumError(){
+  
+    if (error){
+        //plateNum is Empty
+        if (plateNum.length == 0){
+          return (
+            <span className="vehicle-create-error">Input Plate Number</span>
+          );
+        }
+        //plateNum reached max char length
+        else if (plateNum.length >  7 || plateNum.length < 5){
+          return (
+            <span className="vehicle-create-error">
+              Plate number must be 5 to 7 characters long
+            </span>
+          );
+        }
+
+        // else if (
+        //   plateNum.prototype.includes(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/)) 
+        //   {
+        //   <span className="vehicle-create-error">
+        //     Must not contain spaces or special characters
+        //   </span>;
+        // }
+    }
+
+  }
+
+  function showYearError(){
+    if(error){
+            if (
+              parseInt(manufacturingYear) < 1900 ||
+              parseInt(manufacturingYear) > dt.getFullYear()
+            ) {
+              <span className="vehicle-create-error">
+                Enter valid Manufacturing Year
+              </span>;
+            } else if (manufacturingYear.length != 4) {
+              <span className="vehicle-create-error">
+                Must be 4 characters
+              </span>;
+            }
+          }
+  }
+
   return (
     <>
       {/* First Field Group */}
@@ -96,6 +144,10 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <label className="form-labels">
               Plate Number: <label className="required"> * </label>{" "}
             </label>{" "}
+            <label className="label-format">
+              {" "}
+              Format: Exclude spaces and dashes.{" "}
+            </label>{" "}
             <br />
             <input
               type="text"
@@ -103,6 +155,14 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               placeholder="Enter Plate Number"
               onChange={(e) => setPlateNum(e.target.value)}
             />
+            {showPlateNumError()}
+            {plateNumError == plateNum && plateNum.length > 0 ? (
+              <span className="vehicle-create-error">
+                Plate Number has already been registered
+              </span>
+            ) : (
+              <></>
+            )}
           </div>
           <div className="form-item">
             <label className="form-labels">
@@ -156,6 +216,11 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 </option>
               ))}
             </select>
+            {error && vehicleTypeID.length == 0 ? (
+              <span className="vehicle-create-error">Select Vehicle Type</span>
+            ) : (
+              <></>
+            )}
           </div>
           <div className="form-item form-toggle">
             {" "}
@@ -209,6 +274,11 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 </option>
               ))}
             </select>
+            {error && brandID.length == 0 ? (
+              <span className="vehicle-create-error">Select Vehicle Brand</span>
+            ) : (
+              <></>
+            )}
           </div>
 
           <div className="form-item">
@@ -217,11 +287,19 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             </label>{" "}
             <br />
             <input
-              type="text"
+              type="number"
               className="form-fields"
               placeholder="Enter Manufacturing Year"
               onChange={(e) => setManufacturingYear(e.target.value)}
             />
+            {showYearError()}
+            {error && manufacturingYear.length == 0 ? (
+              <span className="vehicle-create-error">
+                Input Manufacturing Year
+              </span>
+            ) : (
+              <></>
+            )}
           </div>
 
           <div className="form-item">
@@ -258,6 +336,13 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 </option>
               ))}
             </select>
+            {error && transmissionID.length == 0 ? (
+              <span className="vehicle-create-error">
+                Select Transmission Type
+              </span>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
 
@@ -277,6 +362,11 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               placeholder="Enter Engine Number"
               onChange={(e) => setEngineNum(e.target.value)}
             />
+            {error && engineNum.length == 0 ? (
+              <span className="vehicle-create-error">Input Engine Number</span>
+            ) : (
+              <></>
+            )}
           </div>
 
           <div className="form-item">
@@ -313,6 +403,11 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 </option>
               ))}
             </select>
+            {error && engineTypeID.length == 0 ? (
+              <span className="vehicle-create-error">Select Engine Type</span>
+            ) : (
+              <></>
+            )}
           </div>
 
           <div className="form-item">
@@ -326,6 +421,11 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               placeholder="Enter Chassis"
               onChange={(e) => setChassisID(e.target.value)}
             />
+            {error && chassisID.length == 0 ? (
+              <span className="vehicle-create-error">Input Chassis</span>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
 
@@ -336,13 +436,21 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <label className="form-labels">
               Insurance Amount: <label className="required"> * </label>{" "}
             </label>{" "}
-            <br />
+            <label className="label-format"> Format: " 0000.00 " </label> <br />
             <input
-              type="text"
+              type="number"
+              step=".01"
               className="form-fields"
               placeholder="Enter Insurance Amount"
               onChange={(e) => setInsuranceAmount(e.target.value)}
             />
+            {error && insuranceAmount.length == 0 ? (
+              <span className="vehicle-create-error">
+                Input Insurance Amount
+              </span>
+            ) : (
+              <></>
+            )}
           </div>
 
           <div className="form-item">
@@ -356,6 +464,13 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               placeholder="Enter Insurance Expiry Date"
               onChange={(e) => setInsuranceExpDate(e.target.value)}
             />
+            {error && insuranceExpDate.length == 0 ? (
+              <span className="vehicle-create-error">
+                Input Insurance Expiry Date
+              </span>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <br />
@@ -396,6 +511,13 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 </option>
               ))}
             </select>
+            {error && gpsID.length == 0 ? (
+              <span className="vehicle-create-error">
+                Input GPS Provider Name
+              </span>
+            ) : (
+              <></>
+            )}
           </div>
 
           <div className="form-item">
@@ -433,6 +555,13 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 </option>
               ))}
             </select>
+            {error && fuelSensorID.length == 0 ? (
+              <span className="vehicle-create-error">
+                Select Fuel Sensor Name
+              </span>
+            ) : (
+              <></>
+            )}
           </div>
 
           <br />

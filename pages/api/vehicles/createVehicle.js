@@ -1,27 +1,19 @@
 import dbConnect from "../../../lib/dbConnect";
+import User from "../../../models/UserSchema";
 import Vehicle from "../../../models/VehicleSchema";
 
 export default async (req, res) => {
   await dbConnect();
 
   const vehicleInfo = req.body;
-  var invalidplateNum = false;
+  let invalidPlateNum = await Vehicle.findOne({ plateNum: vehicleInfo.plateNum });
 
-  Vehicle.find({ plateNum: vehicleInfo.plateNum }, null, (err, result) => {
-    if (err) {
-      console.log(err);
-      invalidplateNum = true;
-    } else if (result.length > 0) {
-      console.log(result);
-      console.log("Plate Number is already present");
-      invalidplateNum = true;
-    }
-  });
-
-  if (invalidplateNum) {
-    res.json("Plate Number " + vehicleInfo.plateNum + " is already taken");
+	if (invalidPlateNum != null) {
+    console.log("INVALID");
+    res.json(vehicleInfo.plateNum);
   } else {
     await Vehicle.create(vehicleInfo);
     res.json("created");
   }
+
 };
