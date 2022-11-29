@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 export default async (req, res) => {
 	await dbConnect();
 
-
 	const userInfo = req.body;
 
 	let invalidUserID = await User.findOne({ userID: userInfo.userID });

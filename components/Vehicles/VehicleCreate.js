@@ -32,6 +32,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
  
   
 	function submitForm() {
+    // console.log("1. Error is " + error + ", Data is " + data);
     if (
       plateNum.length == 0 ||
       vehicleTypeID.length == 0 ||
@@ -43,12 +44,15 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
       gpsID.length == 0 ||
       fuelSensorID.length == 0 ||
       insuranceAmount.length == 0 ||
-      insuranceExpDate.length == 0 
+      insuranceExpDate.length == 0 ||
+      checkSpecial() == true ||
+      manufacturingYear.length != 4 && manufacturingYear.length != 0 ||
+      insuranceAmount < 0
     ) {
       setError(true);
     } else {
       let vehicleData = {
-        plateNum: plateNum.toUpperCase(),
+        plateNum: plateNum,
         vehicleTypeID: vehicleTypeID,
         brandID: brandID,
         manufacturingYear: manufacturingYear,
@@ -63,7 +67,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
         creatorID: currentUserID,
         creationDate: new Date(),
         disabled: isDisabled,
-      };
+      }
 
       fetch("/api/vehicles/createVehicle", {
         method: "POST",
@@ -78,61 +82,79 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             console.log("SUCCESS");
             setError(false);
             window.location.reload();
-          } else {
+          } else  {
             setError(true);
             setPlateNumError(data);
+            console.log("Duplicate Plate Num is" + plateNumError);
           }
         });
+
+    //     console.log("2. Error is " + error + ", Data is " + data);
     }
   }
   function cancelForm(){
     setCancel(true);
   }
-
-  function showPlateNumError(){
-  
-    if (error){
-        //plateNum is Empty
-        if (plateNum.length == 0){
-          return (
-            <span className="vehicle-create-error">Input Plate Number</span>
-          );
-        }
-        //plateNum reached max char length
-        else if (plateNum.length >  7 || plateNum.length < 5){
-          return (
-            <span className="vehicle-create-error">
-              Plate number must be 5 to 7 characters long
-            </span>
-          );
-        }
-
-        // else if (
-        //   plateNum.prototype.includes(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/)) 
-        //   {
-        //   <span className="vehicle-create-error">
-        //     Must not contain spaces or special characters
-        //   </span>;
-        // }
-    }
-
+  function checkSpecial(){
+    const specialChars = `/[!@#$%^&* ()_+\-=\[\]{};':"\\|,.<>\/?]+/;`;
+    return specialChars.split("").some((char) => plateNum.includes(char)); // true if present and false if not
   }
+  function showPlateNumError() {
+
+    console.log("Plate Number has special chars: " + checkSpecial()); 
+
+    if (error) {
+      //plateNum is Empty
+      if (plateNum.length == 0) {
+        return <span className="vehicle-create-error">Input Plate Number</span>;
+      } else if (checkSpecial()) {
+        return (
+          <span className="vehicle-create-error">
+            Must not contain spaces or special characters
+          </span>
+        );
+      }
+      //plateNum reached max char length
+      else if (plateNum.length > 7 || plateNum.length < 5) {
+        return (
+          <span className="vehicle-create-error">
+            Plate number must be 5 to 7 characters long
+          </span>
+        );
+      } 
+    } 
+  }
+  function checkYear(){
+    return    parseInt(manufacturingYear) < 1900 ||
+              parseInt(manufacturingYear) > dt.getFullYear()
+  }
+
 
   function showYearError(){
     if(error){
             if (
-              parseInt(manufacturingYear) < 1900 ||
-              parseInt(manufacturingYear) > dt.getFullYear()
+              checkYear() ||
+              (manufacturingYear.length != 4 && manufacturingYear.length != 0)
             ) {
-              <span className="vehicle-create-error">
-                Enter valid Manufacturing Year
-              </span>;
-            } else if (manufacturingYear.length != 4) {
-              <span className="vehicle-create-error">
-                Must be 4 characters
-              </span>;
-            }
-          }
+              return (
+                <span className="vehicle-create-error">
+                  Enter valid Manufacturing Year
+                </span>
+              );
+            } 
+      }
+  }
+
+  function ShowInsuranceError(){
+    if(error){
+      if (insuranceAmount < 0){
+        return (
+          <span className="vehicle-create-error">
+            Input must not be negative
+          </span>
+        )
+      }
+    }
   }
 
   return (
@@ -263,7 +285,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               className="select-form"
               onChange={(e) => setBrandID(e.target.value)}
               required
-            >
+            > 
               <option value="" defaultValue hidden>
                 {" "}
                 Select Brand{" "}
@@ -436,7 +458,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <label className="form-labels">
               Insurance Amount: <label className="required"> * </label>{" "}
             </label>{" "}
-            <label className="label-format"> Format: " 0000.00 " </label> <br />
+            <label className="label-format"> Format: "0000.00" </label> <br />
             <input
               type="number"
               step=".01"
@@ -444,6 +466,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               placeholder="Enter Insurance Amount"
               onChange={(e) => setInsuranceAmount(e.target.value)}
             />
+            {ShowInsuranceError()}
             {error && insuranceAmount.length == 0 ? (
               <span className="vehicle-create-error">
                 Input Insurance Amount

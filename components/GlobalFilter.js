@@ -1,5 +1,4 @@
 import React , { useState } from 'react'
-import { useAsyncDebounce } from 'react-table'
 
 export const GlobalFilter = ({filter, setFilter}) => {
 
