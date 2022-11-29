@@ -7,45 +7,48 @@ import MeasureCard from "../../components/Measures/MeasureCard";
 import MeasureCreate from "../../components/Measures/MeasureCreate";
 import MeasureEdit from "../../components/Measures/MeasureEdit";
 import dbConnect from "../../lib/dbConnect";
-import Role from "../../models/RoleSchema";
-import User from "../../models/UserSchema";
+//schemas
+import Measure from "../../models/MeasureSchema";
+import UnitType from "../../models/UnitTypeSchema";
+import UnitConvertion from "../../models/UnitConvertionSchema";
 
 export async function getServerSideProps() {
 	await dbConnect();
-
-	const userList = await User.find(
-		{},
-		{ userID: 1, firstName: 1, lastName: 1, roleID: 1, disabled: 1 }
+	//get measures
+	const measureList = await Measure.find(
+	  {},
+	  {
+		unitID: 1,
+		unitName: 1,
+		unitTypeID: 1,
+		disabled: 1,
+	  }
 	);
-	const roleList = await Role.find({}, { roleID: 1, roleName: 1 });
-
-	var tempUserData = [];
-
-	userList.forEach((user) => {
-		let isFound = false;
-		let roleName = "";
-		while (!isFound) {
-			roleList.forEach((role) => {
-				if (role.roleID == user.roleID) {
-					roleName = role.roleName;
-					isFound = true;
-				}
-			});
-		}
-		tempUserData.push({
-			userID: user.userID,
-			firstName: user.firstName,
-			lastName: user.lastName,
-			roleName: roleName,
-			disabled: user.disabled,
-		});
-	});
-
-	let userData = JSON.stringify(tempUserData);
-	let roleData = JSON.stringify(roleList);
-
-	return { props: { userData, roleData } };
-}
+	
+	const unitTypeList = await UnitType.find(
+	  {},
+	  {
+		UnitTypeID: 1,
+		UnitTypeName: 1,
+		disabled: 1,
+	   }
+	);
+	
+	 const unitConversionList = await UnitConvertion.find(
+	  {},
+	  {
+		parentUnit: 1,
+		childUnit: 1,
+		disabled: 1,
+	  }
+	);
+  
+   let measureData = JSON.stringify(measureList);
+   let unitTypeData = JSON.stringify(unitTypeList);
+   let unitConversionData = JSON.stringify(unitConversionList);
+  
+	return { props: { measureData, unitTypeData, unitConversionData } };
+  }
 
 function Users({ userData, roleData }) {
 	const users = JSON.parse(userData);

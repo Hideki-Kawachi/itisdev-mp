@@ -21,8 +21,8 @@ const UnitConvertionSchema = new mongoose.Schema({
   },
 });
 
-const vehicleType =
+const unitConvertion =
   mongoose.models.unitConvertion ||
   mongoose.model("vehicleType", UnitConvertionSchema);
 
-export default vehicleType;
+export default unitConvertion;

@@ -26,8 +26,8 @@ const MeasureSchema = new mongoose.Schema({
   },
 });
 
-const engineType =
+const Measure =
   mongoose.models.Measure ||
   mongoose.model("engineType", MeasureSchema);
 
-export default engineType;
+export default Measure;
