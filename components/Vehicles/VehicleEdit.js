@@ -1,19 +1,17 @@
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import ToggleSwitch from "../../components/ToggleSwitch";
+import LockedToggle from "../../components/LockedToggle";
 import BasicButton from "../../components/BasicButton";
 import VCatTable from "../../components/Vehicles/vCategoryList";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import Cancel from "../../components/Pop-up/cancel";
 
-
-function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
+function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gpsDATA }) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [vTypeOpen, setvTypeOpen] = useState(false);
   const [otype, setOType] = useState();
   const [name, setName] = useState("");
   const [cancel, setCancel] = useState(false);
-  const [plateNum, setPlateNum] = useState("");
   const [vehicleTypeID, setVehicleTypeID] = useState("");
   const [brandID, setBrandID] = useState("");
   const [manufacturingYear, setManufacturingYear] = useState("");
@@ -26,15 +24,51 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   const [insuranceAmount, setInsuranceAmount] = useState("");
   const [insuranceExpDate, setInsuranceExpDate] = useState("");
   const [error, setError] = useState(false);
-  const [plateNumError, setPlateNumError] = useState("");
-  const currentUserID = "00000001";
+  const [isEditable, setEditable] = useState(false)
+  const [notifResult, setNotifResult] = useState("");
   const dt = new Date();
  
-  
-	function submitForm() {
+
+  	useEffect(() => {
+      console.log("EDITING:", plateNum);
+      fetch("/api/vehicles/" + plateNum, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+        //  console.log("RECEIVED DATA:", data);
+          setVehicleTypeID(data.vehicleTypeID);
+          setBrandID(data.brandID);
+          setManufacturingYear(data.manufacturingYear);
+          setEngineNum(data.engineNum);
+          setTransmissionID(data.transmissionID);
+          setEngineTypeID(data.engineTypeID);
+          setChassisID(data.chassisID);
+          setGpsID(data.gpsID);
+          setFuelSensorID(data.fuelSensorID);
+          setInsuranceAmount(data.insuranceAmount);
+          setInsuranceExpDate(
+            new Date(data.insuranceExpDate).toISOString().split("T")[0]
+          );
+          setIsDisabled(data.disabled);
+          console.log(insuranceExpDate);
+        })
+    }, [plateNum]);
+
+    	useEffect(() => {
+        if (notifResult.length > 0) {
+          console.log("result is:", notifResult);
+          setTimeout(() => setNotifResult(""), 3000);
+        }
+      }, [notifResult]);
+
+  function submitForm() {
     // console.log("1. Error is " + error + ", Data is " + data);
     if (
-      plateNum.length == 0 ||
       vehicleTypeID.length == 0 ||
       brandID.length == 0 ||
       manufacturingYear.length == 0 ||
@@ -45,9 +79,8 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
       fuelSensorID.length == 0 ||
       insuranceAmount.length == 0 ||
       insuranceExpDate.length == 0 ||
-      checkSpecial() == true ||
       checkYear() == true ||
-      manufacturingYear.length != 4 && manufacturingYear.length != 0 ||
+      (manufacturingYear.length != 4 && manufacturingYear.length != 0) ||
       insuranceAmount < 0
     ) {
       setError(true);
@@ -65,12 +98,10 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
         fuelSensorID: fuelSensorID,
         insuranceAmount: insuranceAmount,
         insuranceExpDate: insuranceExpDate,
-        creatorID: currentUserID,
-        creationDate: new Date(),
         disabled: isDisabled,
-      }
+      };
 
-      fetch("/api/vehicles/createVehicle", {
+      fetch("/api/vehicles/updateVehicle", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,120 +110,82 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data == "created") {
-            console.log("SUCCESS");
-            setError(false);
-            window.location.reload();
-          } else  {
-            setError(true);
-            setPlateNumError(data);
-            console.log("Duplicate Plate Num is" + plateNumError);
+          setNotifResult(data);
+          if (data != "No Fields Edited") {
+            setTimeout(() => window.location.reload(), 800);
           }
         });
-
-    //     console.log("2. Error is " + error + ", Data is " + data);
+      //     console.log("2. Error is " + error + ", Data is " + data);
     }
   }
-  function cancelForm(){
+  function cancelForm() {
     setCancel(true);
   }
-  function checkSpecial(){
-    const specialChars = `/[!@#$%^&* ()_+\-=\[\]{};':"\\|,.<>\/?]+/;`;
-    return specialChars.split("").some((char) => plateNum.includes(char)); // true if present and false if not
+
+  function checkYear() {
+    return (
+      parseInt(manufacturingYear) < 1900 ||
+      parseInt(manufacturingYear) > dt.getFullYear()
+    );
   }
-  function showPlateNumError() {
 
-    console.log("Plate Number has special chars: " + checkSpecial()); 
-
+  function showYearError() {
     if (error) {
-      //plateNum is Empty
-      if (plateNum.length == 0) {
-        return <span className="vehicle-create-error">Input Plate Number</span>;
-      } else if (checkSpecial()) {
+      if (
+        checkYear() ||
+        (manufacturingYear.length != 4 && manufacturingYear.length != 0)
+      ) {
         return (
           <span className="vehicle-create-error">
-            Must not contain spaces or special characters
+            Enter valid Manufacturing Year
           </span>
         );
       }
-      //plateNum reached max char length
-      else if (plateNum.length > 7 || plateNum.length < 5) {
-        return (
-          <span className="vehicle-create-error">
-            Plate number must be 5 to 7 characters long
-          </span>
-        );
-      } 
-    } 
-  }
-  function checkYear(){
-    return    parseInt(manufacturingYear) < 1900 ||
-              parseInt(manufacturingYear) > dt.getFullYear()
+    }
   }
 
-
-  function showYearError(){
-    if(error){
-            if (
-              checkYear() ||
-              (manufacturingYear.length != 4 && manufacturingYear.length != 0)
-            ) {
-              return (
-                <span className="vehicle-create-error">
-                  Enter valid Manufacturing Year
-                </span>
-              );
-            } 
-      }
-  }
-
-  function ShowInsuranceError(){
-    if(error){
-      if (insuranceAmount < 0){
+  function ShowInsuranceError() {
+    if (error) {
+      if (insuranceAmount < 0) {
         return (
           <span className="vehicle-create-error">
             Input must not be negative
           </span>
-        )
+        );
       }
     }
   }
 
+  function enableEdit(){
+    setEditable(true);
+  }
   return (
     <>
       {/* First Field Group */}
       <form>
         <div className="form-container">
           <div className="form-item">
-            <label className="form-labels">
-              Plate Number: <label className="required"> * </label>{" "}
-            </label>{" "}
-            <label className="label-format">
-              {" "}
-              Format: Exclude spaces and dashes.{" "}
-            </label>{" "}
-            <br />
+            <label className="form-labels">Plate Number:</label> <br />
             <input
+              name="input"
               type="text"
               className="form-fields"
-              placeholder="Enter Plate Number"
+              value={plateNum}
+              disabled
               onChange={(e) => setPlateNum(e.target.value)}
             />
-            {showPlateNumError()}
-            {plateNumError == plateNum && plateNum.length > 0 ? (
-              <span className="vehicle-create-error">
-                Plate Number has already been registered
-              </span>
-            ) : (
-              <></>
-            )}
           </div>
           <div className="form-item">
             <label className="form-labels">
-              Vehicle Type: <label className="required"> * </label>{" "}
+              Vehicle Type:{" "}
+              <label for="input" className="required" disabled={isEditable}>
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              disabled={!isEditable}
               onClick={() => {
                 setName("VEHICLE TYPE");
                 setOType(vtype);
@@ -223,21 +216,31 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <select
               type="text"
               className="select-form"
+              disabled={!isEditable}
               onChange={(e) => setVehicleTypeID(e.target.value)}
               required
             >
-              <option value="" defaultValue hidden>
-                {" "}
-                Select Vehicle Type{" "}
-              </option>
-              {vtype.map((vehicleType) => (
-                <option
-                  key={vehicleType.vehicleTypeID}
-                  value={vehicleType.vehicleTypeID}
-                >
-                  {vehicleType.name}
-                </option>
-              ))}
+              {vtype.map((vehicleType) => {
+                if (vtype.vehicleTypeID == vehicleTypeID) {
+                  return (
+                    <option
+                      key={vehicleType.vehicleTypeID}
+                      value={vehicleType.vehicleTypeID}
+                    >
+                      {vehicleType.name}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option
+                      key={vehicleType.vehicleTypeID}
+                      value={vehicleType.vehicleTypeID}
+                    >
+                      {vehicleType.name}
+                    </option>
+                  );
+                }
+              })}
             </select>
             {error && vehicleTypeID.length == 0 ? (
               <span className="vehicle-create-error">Select Vehicle Type</span>
@@ -245,33 +248,47 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               <></>
             )}
           </div>
+
           <div className="form-item form-toggle">
             {" "}
             Status:{" "}
             <button
               className="item-icon-button item-info-option-button "
+              disabled={!isEditable}
               onClick={() => setTrigger(!trigger)}
             >
               {" "}
               i{" "}
             </button>
             <br />
-            <ToggleSwitch
+         {isEditable == false ? (    
+            <LockedToggle
+              disabled={isDisabled}
+              setDisabled={setIsDisabled}
+            ></LockedToggle>
+        ) : (
+           <ToggleSwitch
               disabled={isDisabled}
               setDisabled={setIsDisabled}
             ></ToggleSwitch>
+        )}
           </div>
-        </div>
 
+      </div>
         {/* Second Field Group */}
         <br />
         <div className="form-container">
           <div className="form-item">
             <label className="form-labels">
-              Brand: <label className="required"> * </label>{" "}
+              Brand:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <button
-              className="vehicle-icon-button vehicle-add-option-button "
+              className="vehicle-icon-button vehicle-add-option-button"
+              disabled={!isEditable}
               onClick={() => {
                 setName("VEHICLE BRAND");
                 setOType(brand);
@@ -284,18 +301,25 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <br />
             <select
               className="select-form"
+              disabled={!isEditable}
               onChange={(e) => setBrandID(e.target.value)}
               required
-            > 
-              <option value="" defaultValue hidden>
-                {" "}
-                Select Brand{" "}
-              </option>
-              {brand.map((brand) => (
-                <option key={brand.brandID} value={brand.brandID}>
-                  {brand.name}
-                </option>
-              ))}
+            >
+              {brand.map((brand) => {
+                if (brand.brandID == brandID) {
+                  return (
+                    <option key={brand.brandID} value={brand.brandID} selected>
+                      {brand.name}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option key={brand.brandID} value={brand.brandID}>
+                      {brand.name}
+                    </option>
+                  );
+                }
+              })}
             </select>
             {error && brandID.length == 0 ? (
               <span className="vehicle-create-error">Select Vehicle Brand</span>
@@ -306,13 +330,19 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
 
           <div className="form-item">
             <label className="form-labels">
-              Manufacturing Year: <label className="required"> * </label>{" "}
+              Manufacturing Year:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <br />
             <input
+              name="input"
               type="number"
               className="form-fields"
-              placeholder="Enter Manufacturing Year"
+              value={manufacturingYear}
+              disabled={!isEditable}
               onChange={(e) => setManufacturingYear(e.target.value)}
             />
             {showYearError()}
@@ -331,6 +361,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              disabled={!isEditable}
               onClick={() => {
                 setName("TRANSMISSION TYPES");
                 setOType(transmission);
@@ -343,6 +374,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <br />
             <select
               className="select-form"
+              disabled={!isEditable}
               onChange={(e) => setTransmissionID(e.target.value)}
               required
             >
@@ -350,14 +382,28 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select Transmission{" "}
               </option>
-              {transmission.map((transmission) => (
-                <option
-                  key={transmission.transmissionID}
-                  value={transmission.transmissionID}
-                >
-                  {transmission.name}
-                </option>
-              ))}
+              {transmission.map((transmission) => {
+                if (transmission.transmissionID == transmissionID) {
+                  return (
+                    <option
+                      key={transmission.transmissionID}
+                      value={transmission.transmissionID}
+                      selected
+                    >
+                      {transmission.name}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option
+                      key={transmission.transmissionID}
+                      value={transmission.transmissionID}
+                    >
+                      {transmission.name}
+                    </option>
+                  );
+                }
+              })}
             </select>
             {error && transmissionID.length == 0 ? (
               <span className="vehicle-create-error">
@@ -376,14 +422,20 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
         <div className="form-container">
           <div className="form-item">
             <label className="form-labels">
-              Engine Number: <label className="required"> * </label>{" "}
+              Engine Number:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <br />
             <input
+              name="input"
               type="text"
               className="form-fields"
-              placeholder="Enter Engine Number"
+              value={engineNum}
               onChange={(e) => setEngineNum(e.target.value)}
+              disabled={!isEditable}
             />
             {error && engineNum.length == 0 ? (
               <span className="vehicle-create-error">Input Engine Number</span>
@@ -394,10 +446,15 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
 
           <div className="form-item">
             <label className="form-labels">
-              Engine Type: <label className="required"> * </label>{" "}
+              Engine Type:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              disabled={!isEditable}
               onClick={() => {
                 setName("ENGINE TYPES");
                 setOType(engine);
@@ -410,6 +467,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <br />
             <select
               className="select-form"
+              disabled={!isEditable}
               onChange={(e) => setEngineTypeID(e.target.value)}
               required
             >
@@ -417,14 +475,28 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select Engine Type{" "}
               </option>
-              {engine.map((engineType) => (
-                <option
-                  key={engineType.engineTypeID}
-                  value={engineType.engineTypeID}
-                >
-                  {engineType.name}
-                </option>
-              ))}
+              {engine.map((engine) => {
+                if (engine.engineTypeID == engineTypeID) {
+                  return (
+                    <option
+                      key={engine.engineTypeID}
+                      value={engine.engineTypeID}
+                      selected
+                    >
+                      {engine.name}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option
+                      key={engine.engineTypeID}
+                      value={engine.engineTypeID}
+                    >
+                      {engine.name}
+                    </option>
+                  );
+                }
+              })}
             </select>
             {error && engineTypeID.length == 0 ? (
               <span className="vehicle-create-error">Select Engine Type</span>
@@ -435,13 +507,19 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
 
           <div className="form-item">
             <label className="form-labels">
-              Chassis: <label className="required"> * </label>{" "}
+              Chassis:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <br />
             <input
+              name="input"
               type="text"
               className="form-fields"
-              placeholder="Enter Chassis"
+              value={chassisID}
+              disabled={!isEditable}
               onChange={(e) => setChassisID(e.target.value)}
             />
             {error && chassisID.length == 0 ? (
@@ -457,14 +535,20 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
         <div className="form-container">
           <div className="form-item">
             <label className="form-labels">
-              Insurance Amount: <label className="required"> * </label>{" "}
+              Insurance Amount:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <label className="label-format"> Format: "0000.00" </label> <br />
             <input
+              name="input"
               type="number"
               step=".01"
               className="form-fields"
-              placeholder="Enter Insurance Amount"
+              value={insuranceAmount}
+              disabled={!isEditable}
               onChange={(e) => setInsuranceAmount(e.target.value)}
             />
             {ShowInsuranceError()}
@@ -479,13 +563,19 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
 
           <div className="form-item">
             <label className="form-labels">
-              Insurance Expiry Date: <label className="required"> * </label>{" "}
+              Insurance Expiry Date:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <br />
             <input
+              name="input"
               type="date"
               className="form-fields"
-              placeholder="Enter Insurance Expiry Date"
+              defaultValue={insuranceExpDate}
+              disabled={!isEditable}
               onChange={(e) => setInsuranceExpDate(e.target.value)}
             />
             {error && insuranceExpDate.length == 0 ? (
@@ -502,10 +592,15 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
         <div className="form-container">
           <div className="form-item">
             <label className="form-labels">
-              GPS Provider Name: <label className="required"> * </label>{" "}
+              GPS Provider Name:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              disabled={!isEditable}
               onClick={() => {
                 setName("GPS PROVIDER");
                 setOType(gpsDATA);
@@ -518,22 +613,32 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <br />
             <select
               className="select-form"
+              disabled={!isEditable}
               onChange={(e) => setGpsID(e.target.value)}
               required
             >
-              {" "}
-              <option value="" defaultValue hidden>
-                {" "}
-                Select GPS Provider{" "}
-              </option>
-              {gpsDATA.map((gpsProvider) => (
-                <option
-                  key={gpsProvider.GPSProviderID}
-                  value={gpsProvider.GPSProviderID}
-                >
-                  {gpsProvider.name}
-                </option>
-              ))}
+              {gpsDATA.map((gpsProvider) => {
+                if (brand.brandID == brandID) {
+                  return (
+                    <option
+                      key={gpsProvider.GPSProviderID}
+                      value={gpsProvider.GPSProviderID}
+                      selected
+                    >
+                      {gpsProvider.name}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option
+                      key={gpsProvider.GPSProviderID}
+                      value={gpsProvider.GPSProviderID}
+                    >
+                      {gpsProvider.name}
+                    </option>
+                  );
+                }
+              })}
             </select>
             {error && gpsID.length == 0 ? (
               <span className="vehicle-create-error">
@@ -546,10 +651,15 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
 
           <div className="form-item">
             <label className="form-labels">
-              Fuel Level Sensor Name: <label className="required"> * </label>{" "}
+              Fuel Level Sensor Name:{" "}
+              <label for="input" className="required">
+                {" "}
+                *{" "}
+              </label>{" "}
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              disabled={!isEditable}
               onClick={() => {
                 setName("FUEL LEVEL SENSOR");
                 setOType(sensor);
@@ -562,6 +672,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <br />
             <select
               className="select-form"
+              disabled={!isEditable}
               onChange={(e) => setFuelSensorID(e.target.value)}
               required
             >
@@ -570,14 +681,28 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select Fuel Level Sensor{" "}
               </option>
-              {sensor.map((fuelSensor) => (
-                <option
-                  key={fuelSensor.FuelSensorID}
-                  value={fuelSensor.FuelSensorID}
-                >
-                  {fuelSensor.name}
-                </option>
-              ))}
+              {sensor.map((fuelSensor) => {
+                if (fuelSensor.FuelSensorID == fuelSensorID) {
+                  return (
+                    <option
+                      key={fuelSensor.FuelSensorID}
+                      value={fuelSensor.FuelSensorID}
+                      selected
+                    >
+                      {fuelSensor.name}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option
+                      key={fuelSensor.FuelSensorID}
+                      value={fuelSensor.FuelSensorID}
+                    >
+                      {fuelSensor.name}
+                    </option>
+                  );
+                }
+              })}
             </select>
             {error && fuelSensorID.length == 0 ? (
               <span className="vehicle-create-error">
@@ -587,7 +712,6 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               <></>
             )}
           </div>
-          <br />
         </div>
         <div className="form-container">
           <span className="form-item-buttons">
@@ -597,17 +721,27 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               type={"reset"}
               clickFunction={cancelForm}
             ></BasicButton>
-            <BasicButton
-              label={"Save"}
-              color={"green"}
-              type={"button"}
-              clickFunction={submitForm}
-            ></BasicButton>
+            {isEditable ? (
+              <BasicButton
+                label={"Save"}
+                color={"green"}
+                type={"button"}
+                clickFunction={submitForm}
+              ></BasicButton>
+            ) : (
+              <BasicButton
+                label={"Edit ✎"}
+                color={"green"}
+                type={"button"}
+                clickFunction={enableEdit}
+              ></BasicButton>
+            )}
           </span>
         </div>
+        <br></br>
       </form>
     </>
   );
 }
 
-export default VehicleCreate;
+export default VehicleEdit;

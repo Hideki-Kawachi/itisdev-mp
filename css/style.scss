@@ -713,11 +713,13 @@ svg{
     padding: 8px;
     border: 2px solid map-get($colors-neutral, 500);
   }
+  .form-buttons{
+    margin-bottom: 200px;
+  }
 }
 
 .form-item-buttons{
   margin-left: 120px;
-  margin-bottom: 50px;
   grid-column: 3;
 }
 .form-fields{
@@ -747,6 +749,12 @@ svg{
     opacity: 80%;
   }
 
+     &.select-form:disabled{
+    color: black;
+    background-color: map-get($colors-neutral, 200);
+    border-color: map-get($colors-neutral, 400);
+  }
+
 }
 .pop-up-buttons{
   margin: auto;
@@ -768,6 +776,10 @@ svg{
 }
 .required{
   color: map-get($colors-red, 200);
+
+  .required:disabled{
+    opacity: 0%;
+  }
 }
 
 hr{
@@ -1035,6 +1047,10 @@ a {
     height: 20px;
     width: 20px;
   }
+  &.vehicle-icon-button:disabled{
+    opacity: 0%
+  }
+  
 }
 
 .login-error{
@@ -1114,4 +1130,8 @@ button {
   font-size: 16px;
   margin-left: 35px;
   text-align: justify;
+}
+
+input:disabled+label {
+  opacity: 0px;
 }

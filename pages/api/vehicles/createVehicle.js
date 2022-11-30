@@ -1,5 +1,4 @@
 import dbConnect from "../../../lib/dbConnect";
-import User from "../../../models/UserSchema";
 import Vehicle from "../../../models/VehicleSchema";
 
 export default async (req, res) => {

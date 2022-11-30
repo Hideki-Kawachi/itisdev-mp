@@ -14,6 +14,7 @@ import EngineType from "../../models/EngineSchema";
 import FuelSensor from "../../models/FuelSensorSchema";
 import Transmission from "../../models/TransmissionSchema";
 import VehicleType from "../../models/VehicleTypeSchema";
+import Link from "next/link"
 import gpsProvider from "../../models/GPSSchema";
 
 export async function getServerSideProps() {
@@ -142,6 +143,8 @@ function AddVehicle({
             gpsDATA={gps}
           />
         </>
+      <Link href = "editvehicle"> edit vehicle </Link>
+
       </div>
     </>
   );

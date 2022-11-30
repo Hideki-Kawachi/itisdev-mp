@@ -81,7 +81,7 @@ export const BasicTable = ({vehicle} ) => {
           {page.map((row) => {
             prepareRow(row);
             return (
-              <tr id="btable" {...row.getRowProps()}>
+              <tr id="btable" {...row.getRowProps()} onClick={() => console.log(row.original)}>
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>

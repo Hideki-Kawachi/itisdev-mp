@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-function ToggleSwitch({ disabled, setDisabled}) {
-	function switchClicked() {
-		setDisabled(!disabled);
-	}
+function LockedToggle({ disabled, setDisabled }) {
 
-	const status = {
+  const status = {
     false: (
       <div
         className="toggle-switch-main-container-enabled"
-        onClick={switchClicked}
       >
         <svg viewBox="0 0 30 23" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -23,7 +19,6 @@ function ToggleSwitch({ disabled, setDisabled}) {
     true: (
       <div
         className="toggle-switch-main-container-disabled"
-        onClick={switchClicked}
       >
         <div className="toggle-switch-handle"></div>
 
@@ -37,7 +32,7 @@ function ToggleSwitch({ disabled, setDisabled}) {
     ),
   };
 
-	return <>{status[disabled]}</>;
+  return <>{status[disabled]}</>;
 }
 
-export default ToggleSwitch;
+export default LockedToggle;
