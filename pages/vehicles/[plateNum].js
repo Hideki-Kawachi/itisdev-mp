@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Router, useRouter } from "next/router";
-
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
-import ToggleSwitch from "../../components/ToggleSwitch";
-import BasicButton from "../../components/BasicButton";
-import VCatTable from "../../components/Vehicles/vCategoryList";
 import VehicleEdit from "../../components/Vehicles/VehicleEdit";
 import dbConnect from "../../lib/dbConnect";
 import Vehicle from "../../models/VehicleSchema";
@@ -83,6 +79,8 @@ export async function getServerSideProps() {
       disabled: 1,
     }
   );
+
+
   // console.log(transmissionList);
   let vehicleData = JSON.stringify(vehicleList);
   let typeData = JSON.stringify(typeList);
@@ -115,6 +113,8 @@ function EditVehicle({
   gpsData,
 }) {
   const router = useRouter();
+  const plateNum = router.query.plateNum;
+
   const vehicles = JSON.parse(vehicleData);
   const vtypes = JSON.parse(typeData);
   const brands = JSON.parse(brandData);
@@ -135,7 +135,7 @@ function EditVehicle({
       <div id="main-container">
         <>
           <VehicleEdit
-            plateNum={"GWE365"}
+            plateNum={plateNum}
             vtype={vtypes}
             brand={brands}
             engine={engines}

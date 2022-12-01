@@ -143,8 +143,6 @@ function AddVehicle({
             gpsDATA={gps}
           />
         </>
-      <Link href = "editvehicle"> edit vehicle </Link>
-
       </div>
     </>
   );

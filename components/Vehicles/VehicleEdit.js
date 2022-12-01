@@ -178,7 +178,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Vehicle Type:{" "}
-              <label for="input" className="required" disabled={isEditable}>
+              <label  className="required" disabled={isEditable}>
                 {" "}
                 *{" "}
               </label>{" "}
@@ -209,7 +209,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
               <Cancel
                 trigger={cancel}
                 setTrigger={setCancel}
-                transaction={" Creation of Vehicle"}
+                transaction={" Editing of Vehicle"}
               ></Cancel>
             </Modal>
             <br />
@@ -281,7 +281,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Brand:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -331,7 +331,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Manufacturing Year:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -378,10 +378,6 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
               onChange={(e) => setTransmissionID(e.target.value)}
               required
             >
-              <option value="" defaultValue hidden>
-                {" "}
-                Select Transmission{" "}
-              </option>
               {transmission.map((transmission) => {
                 if (transmission.transmissionID == transmissionID) {
                   return (
@@ -423,7 +419,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Engine Number:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -447,7 +443,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Engine Type:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -471,10 +467,6 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
               onChange={(e) => setEngineTypeID(e.target.value)}
               required
             >
-              <option value="" defaultValue hidden>
-                {" "}
-                Select Engine Type{" "}
-              </option>
               {engine.map((engine) => {
                 if (engine.engineTypeID == engineTypeID) {
                   return (
@@ -508,7 +500,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Chassis:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -536,7 +528,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Insurance Amount:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -564,7 +556,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Insurance Expiry Date:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -593,7 +585,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               GPS Provider Name:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -652,7 +644,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Fuel Level Sensor Name:{" "}
-              <label for="input" className="required">
+              <label  className="required">
                 {" "}
                 *{" "}
               </label>{" "}
@@ -677,10 +669,6 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
               required
             >
               {" "}
-              <option value="" defaultValue hidden>
-                {" "}
-                Select Fuel Level Sensor{" "}
-              </option>
               {sensor.map((fuelSensor) => {
                 if (fuelSensor.FuelSensorID == fuelSensorID) {
                   return (

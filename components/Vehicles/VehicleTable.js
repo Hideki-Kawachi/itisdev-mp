@@ -10,12 +10,13 @@ import V_MOCK_DATA from "../V_MOCK_DATA.json";
 import { COLUMNS } from "./VehicleColumns";
 import GlobalFilter from "../GlobalFilter";
 import Link from "next/link";
+import { useRouter }  from 'next/router';
 
 
 export const BasicTable = ({vehicle} ) => {
   const columns = useMemo(() => COLUMNS, []);
   const data = useMemo(() => vehicle, []);
-
+  const router = useRouter();
   const {
     getTableProps,
     getTableBodyProps,
@@ -45,7 +46,8 @@ export const BasicTable = ({vehicle} ) => {
 
   const { globalFilter } = state;
   const { pageIndex } = state;
-
+ 
+    
   return (
     <>
       <div className="user-left-container">
@@ -81,7 +83,15 @@ export const BasicTable = ({vehicle} ) => {
           {page.map((row) => {
             prepareRow(row);
             return (
-              <tr id="btable" {...row.getRowProps()} onClick={() => console.log(row.original)}>
+              <tr
+                id="btable"
+                {...row.getRowProps()}
+                onClick={() =>
+                  router.push(
+                    "vehicles/" + row.original.plateNum
+                  )
+                }
+              >
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
