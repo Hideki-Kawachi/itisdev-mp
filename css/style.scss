@@ -307,6 +307,30 @@ svg{
   }
 }
 
+.gray-button-container1 {
+  border: none;
+  border-radius: 15px;
+  background-color: map-get($colors-neutral, 400);
+  min-height: 60px;
+  min-width: 900px;
+  display: inline;
+  justify-content: center;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.50);
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: 700;
+  color: map-get($colors-neutral,100);
+  padding: 20px;
+  
+  span{
+    align-self: center;
+  }
+
+  &:hover{
+    animation: button-hover 0.3s ease-in-out forwards;
+  }
+}
+
 
 .main-container-bg{
     border: 5px;
@@ -730,8 +754,15 @@ svg{
   width: 400px;
   margin-left: 35px;
   margin-top: 10px;
-
-
+}
+.form-fields-remarks{
+  font-size: 25px;
+  border-radius: 5px;
+  padding: 8px;
+  width: 1700px;
+  height: 200px;
+  margin-left: 35px;
+  margin-top: 10px;
 }
 .cancel-header{
   font-size: 32px;
@@ -787,7 +818,6 @@ hr{
   background-color: 10px map-get($colors-neutral, 500);
   width: 98%;
 }
-
 
 //SIGN IN CSS
 

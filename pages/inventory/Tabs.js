@@ -99,8 +99,9 @@ function Tabs() {
               setDisabled={setIsDisabled}
             ></ToggleSwitch>
           </div>
-
+          
         </div>
+        <hr />
 
         {/* Second Field Group */}
         <br />
@@ -194,6 +195,7 @@ function Tabs() {
           </div>
         </div>
         <br />
+        <hr />
 
         { /*Remarks */}
 
@@ -204,9 +206,9 @@ function Tabs() {
             <br />
             <input
             type="textarea"
-            className="form-fields"
+            className="form-fields-remarks"
             />
-          </div>
+        </div>
 
         {/* Button */}
         <div className="item-footer">      
@@ -223,7 +225,6 @@ function Tabs() {
           <BasicTablePull> </BasicTablePull>
           
             {/* First Field Group */}
-
             <div className="form-container">
               <div className="form-item">
                   <label className="form-labels">
@@ -279,6 +280,7 @@ function Tabs() {
             <select className="form-fields" />
             </div>
         </div>
+        <hr />
         
         <br />
 
@@ -354,15 +356,30 @@ function Tabs() {
           />
         </div>
       </div>
+      <br />
+      <button className="gray-button-container1"> Add to Pull Cart
+      </button>
+      <hr />
+      <br />
+      <div className="form-item">
+            <label className="form-labels">
+            Remarks: 
+            </label>{" "}
+            <br />
+            <input
+            type="textarea"
+            className="form-fields-remarks"
+            />
+        </div>
 
         {/* Buttons */}
           <div className="item-footer">      
             <button className="gray-button-container">Cancel</button>
             <button className="green-button-container">Save</button>     
           </div>
+          
 
         </div>
-
       </div>
     </div>
   );
