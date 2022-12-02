@@ -336,7 +336,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               onClick={() => {
-                setName("Transmission Types");
+                setName("Transmission Type");
                 setOType(transmission);
                 setvTypeOpen(true);
                 setCategoryID("transmissionID");
@@ -404,7 +404,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               onClick={() => {
-                setName("Engine Types");
+                setName("Engine Type");
                 setOType(engine);
                 setvTypeOpen(true);
                 setCategoryID("engineTypeID");
@@ -558,7 +558,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               onClick={() => {
-                setName("FUEL LEVEL SENSOR");
+                setName("Fuel Level Sensor");
                 setOType(sensor);
                 setvTypeOpen(true);
                 setCategoryID("FuelSensorID");

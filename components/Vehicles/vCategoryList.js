@@ -11,12 +11,15 @@ import VCAT_MOCK_DATA from "../VCAT_MOCK_DATA.json";
 import { VCAT_COLUMNS } from "./VCategoryColumns";
 import GlobalFilter from "../GlobalFilter";
 import AddVehicleCategory from "./vCategoryCreate";
+import EditVehicleCategory from "./vCategoryEdit";
 import Link from "next/link";
 
 function VCatTable({ trigger, setTrigger, name, type, id}) {
   const columns = useMemo(() => VCAT_COLUMNS, []);
   const data = useMemo(() => type, []);
   const [vAddOpen, setvAddOpen] = useState(false);
+  const [vEditOpen, setvEditOpen] = useState(false);
+  const [selected, setSelected] = useState("");
 
   const {
     getTableProps,
@@ -45,6 +48,10 @@ function VCatTable({ trigger, setTrigger, name, type, id}) {
     usePagination
   );
 
+  function clickRow(rowdata){
+    setSelected(rowdata);
+    setvEditOpen(true);
+  }
   const { globalFilter } = state;
   const { pageIndex } = state;
 
@@ -93,7 +100,11 @@ function VCatTable({ trigger, setTrigger, name, type, id}) {
             {page.map((row) => {
               prepareRow(row);
               return (
-                <tr id="btable" {...row.getRowProps()}>
+                <tr
+                  id="btable"
+                  {...row.getRowProps()}
+                  onClick={() => clickRow(row.original[id])}
+                >
                   {row.cells.map((cell) => {
                     return (
                       <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
@@ -163,6 +174,16 @@ function VCatTable({ trigger, setTrigger, name, type, id}) {
             type={type}
             id={id}
           />{" "}
+        </Modal>
+        <Modal isOpen={vEditOpen} className="modal">
+          <EditVehicleCategory
+            trigger={vEditOpen}
+            setTrigger={setvEditOpen}
+            name={name}
+            type={type}
+            id={id}
+            selected={selected}
+          />
         </Modal>
       </div>
     </>
