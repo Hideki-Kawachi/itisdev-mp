@@ -13,7 +13,7 @@ import GlobalFilter from "../GlobalFilter";
 import AddVehicleCategory from "./vCategoryCreate";
 import Link from "next/link";
 
-function VCatTable({ trigger, setTrigger, name, type}) {
+function VCatTable({ trigger, setTrigger, name, type, id}) {
   const columns = useMemo(() => VCAT_COLUMNS, []);
   const data = useMemo(() => type, []);
   const [vAddOpen, setvAddOpen] = useState(false);
@@ -147,18 +147,21 @@ function VCatTable({ trigger, setTrigger, name, type}) {
         </div>
         <button
           className="add-button add-button-modal"
-          onClick={() => {setvAddOpen(true)}}
+          onClick={() => {
+            setvAddOpen(true);
+          }}
         >
           {" "}
           + Add Option
         </button>{" "}
-        <Modal isOpen={vAddOpen} className="modal">
+        <Modal isOpen={vAddOpen} className="modal" ariaHideApp={false}>
           {" "}
           <AddVehicleCategory
             trigger={vAddOpen}
             setTrigger={setvAddOpen}
-            name = {name}
-            type = {type}
+            name={name}
+            type={type}
+            id={id}
           />{" "}
         </Modal>
       </div>

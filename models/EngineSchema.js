@@ -8,7 +8,7 @@ const EngineSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  engineName: {
+  name: {
     type: String,
     required: true,
     maxLength: 50,

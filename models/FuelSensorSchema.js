@@ -8,7 +8,7 @@ const FuelSensorSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  sensorName: {
+  name: {
     type: String,
     required: true,
     maxLength: 50,

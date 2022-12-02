@@ -5,6 +5,7 @@ import BasicButton from "../../components/BasicButton";
 import VCatTable from "../../components/Vehicles/vCategoryList";
 import Modal from "react-modal";
 import Cancel from "../../components/Pop-up/cancel";
+import { useRouter } from "next/router";
 
 function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gpsDATA }) {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -26,8 +27,9 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
   const [error, setError] = useState(false);
   const [isEditable, setEditable] = useState(false)
   const [notifResult, setNotifResult] = useState("");
+  const [categoryID, setCategoryID] = useState("");
   const dt = new Date();
- 
+  const router = useRouter();
 
   	useEffect(() => {
       console.log("EDITING:", plateNum);
@@ -122,6 +124,10 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
     setCancel(true);
   }
 
+  function goBack() {
+     router.push('/vehicles')
+  }
+
   function checkYear() {
     return (
       parseInt(manufacturingYear) < 1900 ||
@@ -178,7 +184,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           <div className="form-item">
             <label className="form-labels">
               Vehicle Type:{" "}
-              <label  className="required" disabled={isEditable}>
+              <label className="required" disabled={isEditable}>
                 {" "}
                 *{" "}
               </label>{" "}
@@ -190,6 +196,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                 setName("VEHICLE TYPE");
                 setOType(vtype);
                 setvTypeOpen(true);
+                setCategoryID("vehicleTypeID");
               }}
             >
               {" "}
@@ -201,6 +208,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                 setTrigger={setvTypeOpen}
                 name={name}
                 type={otype}
+                id={categoryID}
               >
                 {" "}
               </VCatTable>
@@ -261,30 +269,25 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
               i{" "}
             </button>
             <br />
-         {isEditable == false ? (    
-            <LockedToggle
-              disabled={isDisabled}
-              setDisabled={setIsDisabled}
-            ></LockedToggle>
-        ) : (
-           <ToggleSwitch
-              disabled={isDisabled}
-              setDisabled={setIsDisabled}
-            ></ToggleSwitch>
-        )}
+            {isEditable == false ? (
+              <LockedToggle
+                disabled={isDisabled}
+                setDisabled={setIsDisabled}
+              ></LockedToggle>
+            ) : (
+              <ToggleSwitch
+                disabled={isDisabled}
+                setDisabled={setIsDisabled}
+              ></ToggleSwitch>
+            )}
           </div>
-
-      </div>
+        </div>
         {/* Second Field Group */}
         <br />
         <div className="form-container">
           <div className="form-item">
             <label className="form-labels">
-              Brand:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              Brand: <label className="required"> * </label>{" "}
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button"
@@ -293,6 +296,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                 setName("VEHICLE BRAND");
                 setOType(brand);
                 setvTypeOpen(true);
+                setCategoryID("brandID");
               }}
             >
               {" "}
@@ -330,11 +334,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
 
           <div className="form-item">
             <label className="form-labels">
-              Manufacturing Year:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              Manufacturing Year: <label className="required"> * </label>{" "}
             </label>{" "}
             <br />
             <input
@@ -366,6 +366,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                 setName("TRANSMISSION TYPES");
                 setOType(transmission);
                 setvTypeOpen(true);
+                setCategoryID("transmissionID");
               }}
             >
               {" "}
@@ -418,11 +419,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
         <div className="form-container">
           <div className="form-item">
             <label className="form-labels">
-              Engine Number:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              Engine Number: <label className="required"> * </label>{" "}
             </label>{" "}
             <br />
             <input
@@ -442,11 +439,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
 
           <div className="form-item">
             <label className="form-labels">
-              Engine Type:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              Engine Type: <label className="required"> * </label>{" "}
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
@@ -455,6 +448,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                 setName("ENGINE TYPES");
                 setOType(engine);
                 setvTypeOpen(true);
+                setCategoryID("engineTypeID");
               }}
             >
               {" "}
@@ -499,11 +493,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
 
           <div className="form-item">
             <label className="form-labels">
-              Chassis:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              Chassis: <label className="required"> * </label>{" "}
             </label>{" "}
             <br />
             <input
@@ -527,11 +517,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
         <div className="form-container">
           <div className="form-item">
             <label className="form-labels">
-              Insurance Amount:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              Insurance Amount: <label className="required"> * </label>{" "}
             </label>{" "}
             <label className="label-format"> Format: "0000.00" </label> <br />
             <input
@@ -555,11 +541,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
 
           <div className="form-item">
             <label className="form-labels">
-              Insurance Expiry Date:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              Insurance Expiry Date: <label className="required"> * </label>{" "}
             </label>{" "}
             <br />
             <input
@@ -584,11 +566,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
         <div className="form-container">
           <div className="form-item">
             <label className="form-labels">
-              GPS Provider Name:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              GPS Provider Name: <label className="required"> * </label>{" "}
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
@@ -597,6 +575,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                 setName("GPS PROVIDER");
                 setOType(gpsDATA);
                 setvTypeOpen(true);
+                setCategoryID("GPSProviderID");
               }}
             >
               {" "}
@@ -643,11 +622,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
 
           <div className="form-item">
             <label className="form-labels">
-              Fuel Level Sensor Name:{" "}
-              <label  className="required">
-                {" "}
-                *{" "}
-              </label>{" "}
+              Fuel Level Sensor Name: <label className="required"> * </label>{" "}
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
@@ -656,6 +631,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                 setName("FUEL LEVEL SENSOR");
                 setOType(sensor);
                 setvTypeOpen(true);
+                setCategoryID("FuelSensorID");
               }}
             >
               {" "}
@@ -703,12 +679,21 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
         </div>
         <div className="form-container">
           <span className="form-item-buttons">
-            <BasicButton
-              label={"Cancel"}
-              color={"gray"}
-              type={"reset"}
-              clickFunction={cancelForm}
-            ></BasicButton>
+            {isEditable ? (
+              <BasicButton
+                label={"Cancel"}
+                color={"gray"}
+                type={"reset"}
+                clickFunction={cancelForm}
+              ></BasicButton>
+            ) : (
+              <BasicButton
+                label={"Back"}
+                color={"gray"}
+                type={"reset"}
+                clickFunction={goBack}
+              ></BasicButton>
+            )}
             {isEditable ? (
               <BasicButton
                 label={"Save"}

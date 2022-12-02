@@ -9,7 +9,7 @@ const GPSSchema = new mongoose.Schema({
     required: true,
   },
 
-  providerName: {
+  name: {
     type: String,
     required: true,
     maxLength: 50,

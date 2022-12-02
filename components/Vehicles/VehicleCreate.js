@@ -27,6 +27,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   const [insuranceExpDate, setInsuranceExpDate] = useState("");
   const [error, setError] = useState(false);
   const [plateNumError, setPlateNumError] = useState("");
+  const [categoryID, setCategoryID] = useState("");
   const currentUserID = "00000001";
   const dt = new Date();
  
@@ -194,25 +195,27 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               onClick={() => {
-                setName("VEHICLE TYPE");
+                setName("Vehicle Type");
                 setOType(vtype);
                 setvTypeOpen(true);
+                setCategoryID("vehicleTypeID")
               }}
             >
               {" "}
               ✎{" "}
             </button>
-            <Modal isOpen={vTypeOpen} className="modal">
+            <Modal isOpen={vTypeOpen} className="modal" ariaHideApp={false}>
               <VCatTable
                 trigger={vTypeOpen}
                 setTrigger={setvTypeOpen}
                 name={name}
                 type={otype}
+                id={categoryID}
               >
                 {" "}
               </VCatTable>
             </Modal>
-            <Modal isOpen={cancel} className="modal">
+            <Modal isOpen={cancel} className="modal" ariaHideApp={false}>
               <Cancel
                 trigger={cancel}
                 setTrigger={setCancel}
@@ -273,9 +276,10 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               onClick={() => {
-                setName("VEHICLE BRAND");
+                setName("Vehicle Brand");
                 setOType(brand);
                 setvTypeOpen(true);
+                setCategoryID("brandID");
               }}
             >
               {" "}
@@ -286,7 +290,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               className="select-form"
               onChange={(e) => setBrandID(e.target.value)}
               required
-            > 
+            >
               <option value="" defaultValue hidden>
                 {" "}
                 Select Brand{" "}
@@ -332,9 +336,10 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               onClick={() => {
-                setName("TRANSMISSION TYPES");
+                setName("Transmission Types");
                 setOType(transmission);
                 setvTypeOpen(true);
+                setCategoryID("transmissionID");
               }}
             >
               {" "}
@@ -399,9 +404,10 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               onClick={() => {
-                setName("ENGINE TYPES");
+                setName("Engine Types");
                 setOType(engine);
                 setvTypeOpen(true);
+                setCategoryID("engineTypeID");
               }}
             >
               {" "}
@@ -507,9 +513,10 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               onClick={() => {
-                setName("GPS PROVIDER");
+                setName("GPS Provider");
                 setOType(gpsDATA);
                 setvTypeOpen(true);
+                setCategoryID("GPSProviderID");
               }}
             >
               {" "}
@@ -554,6 +561,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 setName("FUEL LEVEL SENSOR");
                 setOType(sensor);
                 setvTypeOpen(true);
+                setCategoryID("FuelSensorID");
               }}
             >
               {" "}
