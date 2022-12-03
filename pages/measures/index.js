@@ -11,48 +11,72 @@ import dbConnect from "../../lib/dbConnect";
 import Measure from "../../models/MeasureSchema";
 import UnitType from "../../models/UnitTypeSchema";
 import UnitConvertion from "../../models/UnitConvertionSchema";
+import { withIronSessionSsr } from "iron-session/next";
+import { ironOptions } from "../../lib/config";
 
-export async function getServerSideProps() {
-	await dbConnect();
-	//get measures
-	const measureList = await Measure.find(
-	  {},
-	  {
-		unitID: 1,
-		unitName: 1,
-		unitTypeID: 1,
-		disabled: 1,
-	  }
-	);
-	
-	const unitTypeList = await UnitType.find(
-	  {},
-	  {
-		UnitTypeID: 1,
-		UnitTypeName: 1,
-		disabled: 1,
-	   }
-	);
-	
-	 const unitConversionList = await UnitConvertion.find(
-	  {},
-	  {
-		parentUnit: 1,
-		childUnit: 1,
-		disabled: 1,
-	  }
-	);
-  
-   let measureData = JSON.stringify(measureList);
-   let unitTypeData = JSON.stringify(unitTypeList);
-   let unitConversionData = JSON.stringify(unitConversionList);
-  
-	return { props: { measureData, unitTypeData, unitConversionData } };
-  }
+export const getServerSideProps = withIronSessionSsr(
+	async function getServerSideProps({ req }) {
+		if (req.session.user) {
+			let currentUser = req.session.user;
+			if (currentUser.roleID === "0002") {
+				//if employee
+				return {
+					redirect: { destination: "/vehicles", permanent: true },
+					props: {},
+				};
+			} else {
+				await dbConnect();
+				//get measures
+				const measureList = await Measure.find(
+					{},
+					{
+						unitID: 1,
+						unitName: 1,
+						unitTypeID: 1,
+						disabled: 1,
+					}
+				);
 
-function Users({ userData, roleData }) {
-	const users = JSON.parse(userData);
-	const roles = JSON.parse(roleData);
+				const unitTypeList = await UnitType.find(
+					{},
+					{
+						UnitTypeID: 1,
+						UnitTypeName: 1,
+						disabled: 1,
+					}
+				);
+
+				const unitConversionList = await UnitConvertion.find(
+					{},
+					{
+						parentUnit: 1,
+						childUnit: 1,
+						disabled: 1,
+					}
+				);
+
+				let measureData = JSON.stringify(measureList);
+				let unitTypeData = JSON.stringify(unitTypeList);
+				let unitConversionData = JSON.stringify(unitConversionList);
+
+				return {
+					props: { measureData, unitTypeData, unitConversionData, currentUser },
+				};
+			}
+		}
+
+		return {
+			redirect: { destination: "/signin", permanent: true },
+			props: {},
+		};
+	},
+	ironOptions
+);
+
+function Users({ measureData, unitTypeData, unitConversionData, currentUser }) {
+	const measures = JSON.parse(measureData);
+	const unitTypes = JSON.parse(unitTypeData);
+	const unitConversions = JSON.parse(unitConversionData);
 
 	const [search, setSearch] = useState("");
 	const [filter, setFilter] = useState("All");
@@ -92,7 +116,9 @@ function Users({ userData, roleData }) {
 				setShow={setRightShow}
 			></MeasureEdit>
 		),
-		create: <MeasureCreate roles={roles} setShow={setRightShow}></MeasureCreate>,
+		create: (
+			<MeasureCreate roles={roles} setShow={setRightShow}></MeasureCreate>
+		),
 		button: (
 			<BasicButton
 				label={"Create Measure"}
@@ -105,7 +131,7 @@ function Users({ userData, roleData }) {
 
 	return (
 		<>
-			<Header page={"MEASURES"} subPage={"HOME"} user={"Example N. Name"}></Header>
+			<Header page={"MEASURES"} subPage={"HOME"} user={currentUser}></Header>
 			<NavBar></NavBar>
 			<div id="main-container">
 				<div className="user-main-container">
