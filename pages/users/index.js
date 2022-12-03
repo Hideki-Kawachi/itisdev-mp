@@ -1,4 +1,5 @@
-import { Router, useRouter } from "next/router";
+import { withIronSessionSsr } from "iron-session/next";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import BasicButton from "../../components/BasicButton";
 import Header from "../../components/Header";
@@ -6,48 +7,61 @@ import NavBar from "../../components/NavBar";
 import UserCard from "../../components/Users/UserCard";
 import UserCreate from "../../components/Users/UserCreate";
 import UserEdit from "../../components/Users/UserEdit";
+import { ironOptions } from "../../lib/config";
 import dbConnect from "../../lib/dbConnect";
 import Role from "../../models/RoleSchema";
 import User from "../../models/UserSchema";
 
-export async function getServerSideProps() {
-	await dbConnect();
+export const getServerSideProps = withIronSessionSsr(
+	async function getServerSideProps({ req }) {
+		if (req.session.user) {
+			const currentUser = req.session.user;
 
-	const userList = await User.find(
-		{},
-		{ userID: 1, firstName: 1, lastName: 1, roleID: 1, disabled: 1 }
-	);
-	const roleList = await Role.find({}, { roleID: 1, roleName: 1 });
+			if (currentUser.roleID === "0000") {
+				await dbConnect();
 
-	var tempUserData = [];
+				const userList = await User.find(
+					{},
+					{ userID: 1, firstName: 1, lastName: 1, roleID: 1, disabled: 1 }
+				);
+				const roleList = await Role.find({}, { roleID: 1, roleName: 1 });
 
-	userList.forEach((user) => {
-		let isFound = false;
-		let roleName = "";
-		while (!isFound) {
-			roleList.forEach((role) => {
-				if (role.roleID == user.roleID) {
-					roleName = role.roleName;
-					isFound = true;
-				}
-			});
+				var tempUserData = [];
+
+				userList.forEach((user) => {
+					let isFound = false;
+					let roleName = "";
+					while (!isFound) {
+						roleList.forEach((role) => {
+							if (role.roleID == user.roleID) {
+								roleName = role.roleName;
+								isFound = true;
+							}
+						});
+					}
+					tempUserData.push({
+						userID: user.userID,
+						firstName: user.firstName,
+						lastName: user.lastName,
+						roleName: roleName,
+						disabled: user.disabled,
+					});
+				});
+
+				let userData = JSON.stringify(tempUserData);
+				let roleData = JSON.stringify(roleList);
+				return { props: { userData, roleData, currentUser } };
+			}
 		}
-		tempUserData.push({
-			userID: user.userID,
-			firstName: user.firstName,
-			lastName: user.lastName,
-			roleName: roleName,
-			disabled: user.disabled,
-		});
-	});
+		return {
+			redirect: { destination: "/signin", permanent: true },
+			props: {},
+		};
+	},
+	ironOptions
+);
 
-	let userData = JSON.stringify(tempUserData);
-	let roleData = JSON.stringify(roleList);
-
-	return { props: { userData, roleData } };
-}
-
-function Users({ userData, roleData }) {
+function Users({ userData, roleData, currentUser }) {
 	const users = JSON.parse(userData);
 	const roles = JSON.parse(roleData);
 
@@ -99,7 +113,13 @@ function Users({ userData, roleData }) {
 				setNotifResult={setNotifResult}
 			></UserEdit>
 		),
-		create: <UserCreate roles={roles} setShow={setRightShow}></UserCreate>,
+		create: (
+			<UserCreate
+				roles={roles}
+				setShow={setRightShow}
+				currentUser={currentUser}
+			></UserCreate>
+		),
 		button: (
 			<BasicButton
 				label={"Create User"}
@@ -124,8 +144,8 @@ function Users({ userData, roleData }) {
 
 	return (
 		<>
-			<Header page={"USERS"} subPage={"HOME"} user={"Example N. Name"}></Header>
-			<NavBar></NavBar>
+			<Header page={"USERS"} subPage={"HOME"} user={currentUser}></Header>
+			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				{showResult()}
 				<div className="user-main-container">

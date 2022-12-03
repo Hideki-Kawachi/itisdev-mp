@@ -3,8 +3,6 @@ import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
 import Modal from "react-modal";
 
-Modal.setAppElement("#main-container");
-
 function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
@@ -13,7 +11,6 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [error, setError] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
-	const currentUserID = "00000000";
 
 	useEffect(() => {
 		console.log("EDITING:", userID);

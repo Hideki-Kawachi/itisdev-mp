@@ -9,79 +9,91 @@ import Vehicle from "../../models/VehicleSchema";
 import Brand from "../../models/BrandSchema";
 import Transmission from "../../models/TransmissionSchema";
 import VehicleType from "../../models/VehicleTypeSchema";
+import { ironOptions } from "../../lib/config";
+import { withIronSessionSsr } from "iron-session/next";
 
+export const getServerSideProps = withIronSessionSsr(
+	async function getServerSideProps({ req }) {
+		if (req.session.user) {
+			let currentUser = req.session.user;
+			await dbConnect();
 
-export async function getServerSideProps() {
-  await dbConnect();
+			const vehicleList = await Vehicle.find(
+				{},
+				{
+					plateNum: 1,
+					transmissionID: 1,
+					brandID: 1,
+					vehicleTypeID: 1,
+					insuranceExpDate: 1,
+					disabled: 1,
+				}
+			);
+			const typeList = await VehicleType.find(
+				{},
+				{
+					vehicleTypeID: 1,
+					name: 1,
+					disabled: 1,
+				}
+			);
+			const brandList = await Brand.find(
+				{},
+				{
+					brandID: 1,
+					name: 1,
+					disabled: 1,
+				}
+			);
 
-  const vehicleList = await Vehicle.find(
-    {},
-    {
-      plateNum: 1,
-      transmissionID: 1,
-      brandID: 1,
-      vehicleTypeID: 1,
-      insuranceExpDate: 1,
-      disabled: 1,
-    }
-  );
-   const typeList = await VehicleType.find(
-     {},
-     {
-       vehicleTypeID: 1,
-       name: 1,
-       disabled: 1,
-     }
-   );
-   const brandList = await Brand.find(
-     {},
-     {
-       brandID: 1,
-       name: 1,
-       disabled: 1,
-     }
-   );
+			const transmissionList = await Transmission.find(
+				{},
+				{
+					transmissionID: 1,
+					name: "1",
+					disabled: 1,
+				}
+			);
 
-   const transmissionList = await Transmission.find(
-     {},
-     {
-       transmissionID: 1,
-       name: "1",
-       disabled: 1,
-     }
-   );
+			let vehicleData = JSON.stringify(vehicleList);
+			let typeData = JSON.stringify(typeList);
+			let brandData = JSON.stringify(brandList);
+			let transmissionData = JSON.stringify(transmissionList);
 
+			return {
+				props: {
+					vehicleData,
+					typeData,
+					brandData,
+					transmissionData,
+					currentUser,
+				},
+			};
+		}
 
- let vehicleData = JSON.stringify(vehicleList);
- let typeData = JSON.stringify(typeList);
- let brandData = JSON.stringify(brandList);
- let transmissionData = JSON.stringify(transmissionList);
+		return {
+			redirect: { destination: "/signin", permanent: true },
+			props: {},
+		};
+	},
+	ironOptions
+);
 
-  return { props: { vehicleData, typeData, brandData, transmissionData} };
-}
+function Vehicles({ vehicleData, currentUser }) {
+	const vehicles = JSON.parse(vehicleData);
 
-function Vehicles({vehicleData}) {
-  const vehicles = JSON.parse(vehicleData);
-
-
-  return (
-    <>
-      <Header
-        page={"VEHICLES"}
-        subPage={"HOME"}
-        user={"Example N. Name"}
-      ></Header>
-      <NavBar></NavBar>
-      <div id="main-container">
-        <div className="main-container-bg">
-          <br />
-          <BasicTable vehicle={vehicles}>
-            {" "}
-          </BasicTable>
-        </div>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<Header page={"VEHICLES"} subPage={"HOME"} user={currentUser}></Header>
+			<NavBar user={currentUser}></NavBar>
+			<div id="main-container">
+				<div className="main-container-bg">
+					<br />
+					<BasicTable vehicle={vehicles}> </BasicTable>
+				</div>
+			</div>
+		</>
+	);
 }
 
 export default Vehicles;

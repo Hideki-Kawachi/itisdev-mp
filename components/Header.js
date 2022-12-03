@@ -1,15 +1,21 @@
+import { withIronSessionSsr } from "iron-session/next";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { ironOptions } from "../lib/config";
 import BasicButton from "./BasicButton";
 
 function Header({ page, subPage, user }) {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-	useEffect(() => {
-		console.log("IS LOGGED IN:" + isLoggedIn);
-	}, [isLoggedIn]);
+	const router = useRouter();
 
 	function logout() {
-		setIsLoggedIn(!isLoggedIn);
+		fetch("/api/logout", {
+			method: "GET",
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				console.log("DATA FROM LOGOUT IS:", data);
+				router.replace("/signin");
+			});
 	}
 
 	return (
@@ -22,7 +28,9 @@ function Header({ page, subPage, user }) {
 				<div id="user-container">
 					<div id="text">
 						<span>Hello,</span>
-						<span>{user}</span>
+						<span>
+							{user.lastName}, {user.firstName}
+						</span>
 					</div>
 					<BasicButton
 						label={"Log Out"}

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
 
-function UserCreate({ roles, setShow }) {
+function UserCreate({ roles, setShow, currentUser }) {
 	const [employeeID, setEmployeeID] = useState("");
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
@@ -11,7 +11,6 @@ function UserCreate({ roles, setShow }) {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [error, setError] = useState(false);
 	const [employeeIDError, setEmployeeIDError] = useState("");
-	const currentUserID = "00000001";
 
 	function submitForm() {
 		if (
@@ -29,7 +28,7 @@ function UserCreate({ roles, setShow }) {
 				lastName: lastName,
 				password: password,
 				roleID: roleID,
-				creatorID: currentUserID,
+				creatorID: currentUser.userID,
 				creationDate: new Date(),
 				disabled: isDisabled,
 			};
