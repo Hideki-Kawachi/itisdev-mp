@@ -30,7 +30,6 @@ function SignIn() {
 	// useEffect(()=>console.log(employeeID),[employeeID])
 
 	function submitForm() {
-		//Put BCrypt here
 
 		let userData = {
 			employeeID: employeeID,
@@ -58,15 +57,9 @@ function SignIn() {
 			});
 	}
 
-	function showEmployeeIDError() {
-		if (error && employeeID.length == 0) {
-			return <span className="login-error">Invalid User</span>;
-		}
-	}
-
-	function showPasswordIDError() {
-		if (error && password.length == 0) {
-			return <span className="login-error">Invalid Password</span>;
+	function showInvalidCredsError() {
+		if (error) {
+			return <span className="login-error">Invalid credentials</span>;
 		}
 	}
 
@@ -79,6 +72,7 @@ function SignIn() {
 					</div>
 					<div className="input-container">Milaor Trading Corporation</div>
 				</h1>
+				{showInvalidCredsError()}
 				<form className="signin-form">
 					<div className="input-container">
 						<div className="label-cont">Employee ID:</div>
@@ -88,7 +82,6 @@ function SignIn() {
 							placeholder="Enter Employee ID"
 							onChange={(e) => setEmployeeID(e.target.value)}
 						></input>
-						{showEmployeeIDError()}
 					</div>
 					<div className="input-container">
 						<div className="label-cont">Password:</div>
@@ -98,7 +91,6 @@ function SignIn() {
 							placeholder="Enter Password"
 							onChange={(e) => setPassword(e.target.value)}
 						></input>
-						{showPasswordIDError()}
 					</div>
 					<div className="input-container">
 						<input
