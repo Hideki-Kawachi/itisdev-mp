@@ -11,6 +11,7 @@ function EditVehicleCategory({ trigger, setTrigger, name, type, id, selected }) 
   const [error, setError] = useState(false);
   const [nameError, setNameError] = useState("");
   const [notifResult, setNotifResult] = useState("");
+  const [reason, setReason] = useState("(Required field not filled up.)");
   const[cancel, setCancel] = useState(false);
 
   	useEffect(() => {
@@ -34,8 +35,8 @@ function EditVehicleCategory({ trigger, setTrigger, name, type, id, selected }) 
           console.log("RECEIVED id:", id);
           console.log("RECEIVED DATA:", data);
           setDefaultID(selected);
-          setCategoryName(data.name);
           setCurrentName(data.name);
+          setCategoryName(data.name);
           setIsDisabled(data.disabled);
         });
     }, [selected]);
@@ -51,10 +52,12 @@ function EditVehicleCategory({ trigger, setTrigger, name, type, id, selected }) 
     }
   function submitForm() {
     // console.log("1. Error is " + error + ", Data is " + data);
+    console.log("name " + categoryName);
     if (
      categoryName.length == 0
     ) {
       setError(true);
+      setReason("(Name cannot be blank)")
     } else {
       let categoryData = {
         [id]: selected,
@@ -72,14 +75,23 @@ function EditVehicleCategory({ trigger, setTrigger, name, type, id, selected }) 
         .then((res) => res.json())
         .then((data) => {
           setNotifResult(data);
-        //   if (data != "No Fields Edited") {
-        //     setTimeout(() => window.location.reload(), 800);
-        //   }
+          if (data == categoryName) {
+            setError(true);
+            setNameError(data);
+            setReason("(Name already exists or no changes detected)");
+            console.log("Duplicate Name is" + data);
+          } else if (data == "Successfully Edited!") {
+            setError(false);
+            setTimeout(() => window.location.reload(), 800);
+          } else {
+            setError(true);
+            setReason("(No changes detected)");
+          }
+
         });
       //     console.log("2. Error is " + error + ", Data is " + data);
     }
   }
-
 
   return (
     <>
@@ -103,15 +115,25 @@ function EditVehicleCategory({ trigger, setTrigger, name, type, id, selected }) 
             {" "}
             <b> {currentName} </b>
           </label>
-          <br/>
-          
-          <label htmlFor="itemName">New Category Name:</label>
-          
+          <br />
+
+          <label htmlFor="itemName">
+            New Category Name: <label className="required"> * </label>
+          </label>
+
           <input
             type="text"
             className="form-fields"
+            value = {categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
           />
+          {error ? (
+            <span className="vehiclecat-create-error">
+              Input new category name. {reason}
+            </span>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="item-input" id="item-status">
           <label htmlFor="disabled">Status:</label>
