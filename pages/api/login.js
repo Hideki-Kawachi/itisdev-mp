@@ -23,7 +23,7 @@ async function login(req, res) {
 		const retrievedHash = user.get("password");
 		const isMatch = await bcrypt.compare(password, retrievedHash);
 
-		if (!isMatch) {
+		if (isMatch) {
 			req.session.user = {
 				userID: user.userID,
 				firstName: user.firstName,
