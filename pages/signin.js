@@ -30,7 +30,6 @@ function SignIn() {
 	// useEffect(()=>console.log(employeeID),[employeeID])
 
 	function submitForm() {
-		//Put BCrypt here
 
 		let userData = {
 			employeeID: employeeID,
