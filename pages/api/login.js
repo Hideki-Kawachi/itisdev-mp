@@ -15,9 +15,11 @@ async function login(req, res) {
 		"User: " + employeeID + " Pass: " + password + " Disabled:" + disabled
 	);
 
-	const user = await User.findOne({ userID: employeeID, disabled: disabled });
+	const user = await User.findOne({ userID: employeeID});
 
-	if (!user || user.disabled) {
+	const isDisabled = user.get("disabled");
+
+	if (!user || isDisabled) {
 		return res.json("Invalid userID");
 	} else {
 		const retrievedHash = user.get("password");
