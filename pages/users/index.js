@@ -7,6 +7,7 @@ import NavBar from "../../components/NavBar";
 import UserCard from "../../components/Users/UserCard";
 import UserCreate from "../../components/Users/UserCreate";
 import UserEdit from "../../components/Users/UserEdit";
+import UserView from "../../components/Users/UserView";
 import { ironOptions } from "../../lib/config";
 import dbConnect from "../../lib/dbConnect";
 import Role from "../../models/RoleSchema";
@@ -69,6 +70,7 @@ function Users({ userData, roleData, currentUser }) {
 	const [filter, setFilter] = useState("All");
 	const [rightShow, setRightShow] = useState("button");
 	const [isEditing, setIsEditing] = useState("");
+	const [isViewing, setIsViewing] = useState("");
 	const [userShow, setUserShow] = useState(users);
 	const [notifResult, setNotifResult] = useState("");
 
@@ -93,8 +95,14 @@ function Users({ userData, roleData, currentUser }) {
 	useEffect(() => {
 		if (isEditing.length > 0) {
 			setRightShow("edit");
+			setIsViewing("");
+		} else if (isViewing.length > 0) {
+			setRightShow("view");
+			setIsEditing("");
+		} else {
+			setRightShow("button");
 		}
-	}, [isEditing]);
+	}, [isEditing, isViewing]);
 
 	useEffect(() => {
 		if (notifResult.length > 0) {
@@ -119,6 +127,15 @@ function Users({ userData, roleData, currentUser }) {
 				setShow={setRightShow}
 				currentUser={currentUser}
 			></UserCreate>
+		),
+		view: (
+			<UserView
+				roles={roles}
+				userID={isViewing}
+				setShow={setRightShow}
+				setViewing={setIsViewing}
+				setEditing={setIsEditing}
+			></UserView>
 		),
 		button: (
 			<BasicButton
@@ -189,6 +206,7 @@ function Users({ userData, roleData, currentUser }) {
 									lastName={user.lastName}
 									roleName={user.roleName}
 									disabled={user.disabled}
+									setViewing={setIsViewing}
 									setEditing={setIsEditing}
 								></UserCard>
 							))}
