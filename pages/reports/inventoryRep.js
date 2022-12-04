@@ -28,17 +28,17 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-function Reports({ currentUser }) {
+
+function InventoryReports({ currentUser }) {
 	return (
 		<>
 			<Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
-				<p>reports</p>
-				<ReportTabs></ReportTabs>
+				<ReportTabs tab="2"></ReportTabs>
 			</div>
 		</>
 	);
 }
 
-export default Reports;
+export default InventoryReports;
