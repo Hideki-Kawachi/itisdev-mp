@@ -9,9 +9,8 @@ export default async (req, res) => {
   let invalidName = await Brand.findOne({
     name: brandInfo.name,
   });
-    console.log("NAME " + brandInfo.name + "Found " + invalidName);
-  if (invalidName != null) {
-    console.log("NAME EXISTS " + brandInfo.name);
+
+  if (invalidName != null && brandInfo.brandID != invalidName.brandID) {
     res.json(brandInfo.name);
   } else {
     let result = await Brand.updateOne(

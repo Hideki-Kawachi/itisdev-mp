@@ -10,7 +10,7 @@ export default async (req, res) => {
     name: sensorInfo.name,
   });
 
-  if (invalidName != null) {
+  if (invalidName != null && sensorInfo.FuelSensorID != invalidName.FuelSensorID) {
     console.log("NAME EXISTS " + sensorInfo.name);
     res.json(sensorInfo.name);
   } else {

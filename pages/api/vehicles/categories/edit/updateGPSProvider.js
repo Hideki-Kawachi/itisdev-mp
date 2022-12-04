@@ -10,7 +10,7 @@ export default async (req, res) => {
     name: gpsInfo.name,
   });
 
-  if (invalidName != null) {
+  if (invalidName != null && gpsInfo.GPSProviderID != invalidName.GPSProviderID) {
     console.log("NAME EXISTS " + gpsInfo.name);
     res.json(gpsInfo.name);
   } else {

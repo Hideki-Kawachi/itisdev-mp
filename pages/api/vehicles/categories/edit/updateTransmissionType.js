@@ -10,7 +10,7 @@ export default async (req, res) => {
     name: transmissionInfo.name,
   });
 
-  if (invalidName != null) {
+  if (invalidName != null && transmissionInfo.transmissionID != invalidName.transmissionID) {
     console.log("NAME EXISTS " + transmissionInfo.name);
     res.json(transmissionInfo.name);
   } else {

@@ -10,9 +10,12 @@ export default async (req, res) => {
     name: engineTypeInfo.name,
   });
 
-  if (invalidName != null) {
+  if (
+    invalidName != null &&
+    engineTypeInfo.engineTypeID != invalidName.engineTypeID
+  ) {
     console.log("NAME EXISTS " + engineTypeInfo.name);
-        res.json(engineTypeInfo.name);
+    res.json(engineTypeInfo.name);
   } else {
     let result = await EngineType.updateOne(
       { engineTypeID: engineTypeInfo.engineTypeID },

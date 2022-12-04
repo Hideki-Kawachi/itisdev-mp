@@ -10,7 +10,7 @@ const vehicleTypeInfo = req.body;
    name: vehicleTypeInfo.name,
  });
 
-  if (invalidName != null) {
+  if (invalidName != null && vehicleTypeInfo.vehicleTypeID != invalidName.vehicleTypeID) {
     console.log("NAME EXISTS " + vehicleTypeInfo.name);
     res.json(vehicleTypeInfo.name);
   } 
