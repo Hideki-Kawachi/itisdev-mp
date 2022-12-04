@@ -192,8 +192,9 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               disabled={!isEditable}
+              type="button"
               onClick={() => {
-                setName("VEHICLE TYPE");
+                setName("Vehicle Type");
                 setOType(vtype);
                 setvTypeOpen(true);
                 setCategoryID("vehicleTypeID");
@@ -202,7 +203,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
               {" "}
               ✎{" "}
             </button>
-            <Modal isOpen={vTypeOpen} className="modal">
+            <Modal isOpen={vTypeOpen} className="modal" ariaHideApp={false}>
               <VCatTable
                 trigger={vTypeOpen}
                 setTrigger={setvTypeOpen}
@@ -213,7 +214,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                 {" "}
               </VCatTable>
             </Modal>
-            <Modal isOpen={cancel} className="modal">
+            <Modal isOpen={cancel} className="modal" ariaHideApp={false}>
               <Cancel
                 trigger={cancel}
                 setTrigger={setCancel}
@@ -292,8 +293,9 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <button
               className="vehicle-icon-button vehicle-add-option-button"
               disabled={!isEditable}
+              type="button"
               onClick={() => {
-                setName("VEHICLE BRAND");
+                setName("Vehicle Brand");
                 setOType(brand);
                 setvTypeOpen(true);
                 setCategoryID("brandID");
@@ -362,8 +364,9 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               disabled={!isEditable}
+              type="button"
               onClick={() => {
-                setName("TRANSMISSION TYPES");
+                setName("Transmission Type");
                 setOType(transmission);
                 setvTypeOpen(true);
                 setCategoryID("transmissionID");
@@ -444,8 +447,9 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               disabled={!isEditable}
+              type="button"
               onClick={() => {
-                setName("ENGINE TYPES");
+                setName("Engine Type");
                 setOType(engine);
                 setvTypeOpen(true);
                 setCategoryID("engineTypeID");
@@ -571,8 +575,9 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               disabled={!isEditable}
+              type="button"
               onClick={() => {
-                setName("GPS PROVIDER");
+                setName("GPS Provider");
                 setOType(gpsDATA);
                 setvTypeOpen(true);
                 setCategoryID("GPSProviderID");
@@ -627,8 +632,9 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <button
               className="vehicle-icon-button vehicle-add-option-button "
               disabled={!isEditable}
+              type="button"
               onClick={() => {
-                setName("FUEL LEVEL SENSOR");
+                setName("Fuel Level Sensor");
                 setOType(sensor);
                 setvTypeOpen(true);
                 setCategoryID("FuelSensorID");
