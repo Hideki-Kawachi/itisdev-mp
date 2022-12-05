@@ -86,11 +86,7 @@ export const BasicTable = ({vehicle} ) => {
               <tr
                 id="btable"
                 {...row.getRowProps()}
-                onClick={() =>
-                  router.push(
-                    "vehicles/" + row.original.plateNum
-                  )
-                }
+                onClick={() => router.push("vehicles/" + row.original.plateNum)}
               >
                 {row.cells.map((cell) => {
                   return (
@@ -105,32 +101,52 @@ export const BasicTable = ({vehicle} ) => {
 
       <br />
       <div className="page-buttons">
-        <span>
-          Page{" "}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>
-        </span>
-        <input
+        {/* <input
           type="number"
           defaultValue={pageIndex + 1}
           onChange={(e) => {
             const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0;
             gotoPage(pageNumber);
           }}
-        />
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {"<<"}
-        </button>
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {"<"}
-        </button>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {">"}
-        </button>
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {">>"}
-        </button>
+        /> */}
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>
+        </span>
+        
+        <span className="vehicle-nav-buttons-div">
+          <button
+            className="navigate-page"
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+          >
+            {"<<"}
+          </button>
+
+          <button
+            className="navigate-page"
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+          >
+            {"<"}
+          </button>
+          <button
+            className="navigate-page"
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+          >
+            {">"}
+          </button>
+          <button
+            className="navigate-page"
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+          >
+            {">>"}
+          </button>
+        </span>
       </div>
     </>
   );

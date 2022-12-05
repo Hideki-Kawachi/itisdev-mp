@@ -783,6 +783,12 @@ svg{
   margin-left: 35px;
   margin-top: 10px;
 }
+.required-text{
+  margin-top: 10px;
+  margin-left: 30px;
+  font-size: 24px;
+  font-style: italic;
+}
 .form-fields-remarks{
   font-size: 25px;
   border-radius: 5px;
@@ -822,10 +828,18 @@ svg{
 }
 .page-buttons{
  font-size: 18px;
- margin: auto;
+ margin-left: 30px;
  display: inline-block;
+ margin-bottom: 30px;
 }
 
+.page-indicator{
+  font-size: 18px;
+}
+.vehicle-nav-buttons-div{
+  display: inline;
+  margin-left: 20px;
+}
 .navigate-page-group{
   margin: auto;
   margin-bottom: 10px;

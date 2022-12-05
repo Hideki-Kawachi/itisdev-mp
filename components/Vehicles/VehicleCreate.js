@@ -198,7 +198,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 setName("Vehicle Type");
                 setOType(vtype);
                 setvTypeOpen(true);
-                setCategoryID("vehicleTypeID")
+                setCategoryID("vehicleTypeID");
               }}
             >
               {" "}
@@ -233,14 +233,23 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select Vehicle Type{" "}
               </option>
-              {vtype.map((vehicleType) => (
-                <option
-                  key={vehicleType.vehicleTypeID}
-                  value={vehicleType.vehicleTypeID}
-                >
-                  {vehicleType.name}
-                </option>
-              ))}
+              {vtype.map((vehicleType) => {
+                if (vehicleType.disabled == false) {
+                  return (
+                    <option
+                      key={vehicleType.vehicleTypeID}
+                      value={vehicleType.vehicleTypeID}
+                    >
+                      {vehicleType.name}
+                    </option>
+                  );
+                }
+                else{
+                  return (
+                    <></>
+                  )
+                }
+              })}         
             </select>
             {error && vehicleTypeID.length == 0 ? (
               <span className="vehicle-create-error">Select Vehicle Type</span>
@@ -295,11 +304,18 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select Brand{" "}
               </option>
-              {brand.map((brand) => (
-                <option key={brand.brandID} value={brand.brandID}>
-                  {brand.name}
-                </option>
-              ))}
+              {brand.map((brand) => {
+                if(brand.disabled==false){
+                 return (
+                   <option key={brand.brandID} value={brand.brandID}>
+                     {brand.name}
+                   </option>
+                 );
+                }
+                else{
+                  return <></>
+                }
+              })}
             </select>
             {error && brandID.length == 0 ? (
               <span className="vehicle-create-error">Select Vehicle Brand</span>
@@ -355,14 +371,21 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select Transmission{" "}
               </option>
-              {transmission.map((transmission) => (
+              {transmission.map((transmission) => {
+              if(transmission.disabled==false){
+              return(
                 <option
                   key={transmission.transmissionID}
                   value={transmission.transmissionID}
                 >
                   {transmission.name}
                 </option>
-              ))}
+              );
+             }
+             else {
+              return(<></>)
+             }
+          })}
             </select>
             {error && transmissionID.length == 0 ? (
               <span className="vehicle-create-error">
@@ -423,14 +446,18 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select Engine Type{" "}
               </option>
-              {engine.map((engineType) => (
+              {engine.map((engineType) => {
+              if(engineType.disabled == false){
+              return (
                 <option
                   key={engineType.engineTypeID}
                   value={engineType.engineTypeID}
                 >
                   {engineType.name}
-                </option>
-              ))}
+                </option>)  
+              }
+              else return(<></>)
+              })}
             </select>
             {error && engineTypeID.length == 0 ? (
               <span className="vehicle-create-error">Select Engine Type</span>
@@ -533,14 +560,19 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select GPS Provider{" "}
               </option>
-              {gpsDATA.map((gpsProvider) => (
+              {gpsDATA.map((gpsProvider) => {
+              if(gpsProvider.disabled == false){
+              return (
                 <option
                   key={gpsProvider.GPSProviderID}
                   value={gpsProvider.GPSProviderID}
                 >
                   {gpsProvider.name}
                 </option>
-              ))}
+                );
+              }
+              else return (<></>)
+              })}
             </select>
             {error && gpsID.length == 0 ? (
               <span className="vehicle-create-error">
@@ -578,14 +610,19 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 {" "}
                 Select Fuel Level Sensor{" "}
               </option>
-              {sensor.map((fuelSensor) => (
+              {sensor.map((fuelSensor) => {
+              if(fuelSensor.disabled == false){
+              return (
                 <option
                   key={fuelSensor.FuelSensorID}
                   value={fuelSensor.FuelSensorID}
                 >
                   {fuelSensor.name}
                 </option>
-              ))}
+              );
+              }
+              else return (<></>)
+              })}
             </select>
             {error && fuelSensorID.length == 0 ? (
               <span className="vehicle-create-error">
@@ -597,7 +634,14 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
           </div>
           <br />
         </div>
+
+       <br/>
+
         <div className="form-container">
+          <span className="required-text">
+            Fields marked with <label className="required"> * </label> are
+            required.
+          </span>
           <span className="form-item-buttons">
             <BasicButton
               label={"Cancel"}
@@ -613,6 +657,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             ></BasicButton>
           </span>
         </div>
+        <br/>
       </form>
     </>
   );

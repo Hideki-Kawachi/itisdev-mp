@@ -226,28 +226,31 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
               type="text"
               className="select-form"
               disabled={!isEditable}
+              value={vehicleTypeID}
               onChange={(e) => setVehicleTypeID(e.target.value)}
               required
             >
               {vtype.map((vehicleType) => {
-                if (vtype.vehicleTypeID == vehicleTypeID) {
-                  return (
-                    <option
-                      key={vehicleType.vehicleTypeID}
-                      value={vehicleType.vehicleTypeID}
-                    >
-                      {vehicleType.name}
-                    </option>
-                  );
+                if (vehicleType.vehicleTypeID == vehicleTypeID) {
+                    return (
+                      <option key={vehicleType.vehicleTypeID} value={vehicleType.vehicleTypeID}
+                        hidden={vehicleType.disabled}
+                      >
+                        {vehicleType.name}
+                      </option>
+                    )
                 } else {
-                  return (
-                    <option
-                      key={vehicleType.vehicleTypeID}
-                      value={vehicleType.vehicleTypeID}
-                    >
-                      {vehicleType.name}
-                    </option>
-                  );
+                  if (vehicleType.disabled == false
+                  ) {
+                    return (
+                      <option
+                        key={vehicleType.vehicleTypeID}
+                        value={vehicleType.vehicleTypeID}
+                      >
+                        {vehicleType.name}
+                      </option>
+                    );
+                  } else return <></>;
                 }
               })}
             </select>
@@ -308,22 +311,31 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <select
               className="select-form"
               disabled={!isEditable}
+              value={brandID}
               onChange={(e) => setBrandID(e.target.value)}
               required
             >
               {brand.map((brand) => {
                 if (brand.brandID == brandID) {
-                  return (
-                    <option key={brand.brandID} value={brand.brandID} selected>
-                      {brand.name}
-                    </option>
-                  );
+                    return (
+                      <option
+                        key={brand.brandID}
+                        value={brand.brandID}
+                        hidden={brand.disabled}
+                      >
+                        {brand.name}
+                      </option>
+                    );
+
                 } else {
-                  return (
-                    <option key={brand.brandID} value={brand.brandID}>
-                      {brand.name}
-                    </option>
-                  );
+                  if(brand.disabled == false){
+                    return (
+                      <option key={brand.brandID} value={brand.brandID}>
+                        {brand.name}
+                      </option>
+                    );
+                  }
+                  else return <></>;
                 }
               })}
             </select>
@@ -379,6 +391,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <select
               className="select-form"
               disabled={!isEditable}
+              value={transmissionID}
               onChange={(e) => setTransmissionID(e.target.value)}
               required
             >
@@ -388,20 +401,23 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                     <option
                       key={transmission.transmissionID}
                       value={transmission.transmissionID}
-                      selected
+                      hidden={transmission.disabled}
                     >
                       {transmission.name}
                     </option>
                   );
                 } else {
-                  return (
-                    <option
-                      key={transmission.transmissionID}
-                      value={transmission.transmissionID}
-                    >
-                      {transmission.name}
-                    </option>
-                  );
+                  if(transmission.disabled == false){
+                    return (
+                      <option
+                        key={transmission.transmissionID}
+                        value={transmission.transmissionID}
+                      >
+                        {transmission.name}
+                      </option>
+                    );
+                  }
+                  else return <></>;
                 }
               })}
             </select>
@@ -462,6 +478,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <select
               className="select-form"
               disabled={!isEditable}
+              value={engineTypeID}
               onChange={(e) => setEngineTypeID(e.target.value)}
               required
             >
@@ -471,20 +488,22 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                     <option
                       key={engine.engineTypeID}
                       value={engine.engineTypeID}
-                      selected
+                      hidden={engine.disabled}
                     >
                       {engine.name}
                     </option>
                   );
                 } else {
-                  return (
-                    <option
-                      key={engine.engineTypeID}
-                      value={engine.engineTypeID}
-                    >
-                      {engine.name}
-                    </option>
-                  );
+                  if(engine.disabled == false){
+                    return (
+                      <option
+                        key={engine.engineTypeID}
+                        value={engine.engineTypeID}
+                      >
+                        {engine.name}
+                      </option>
+                    );
+                  } else return <></>;
                 }
               })}
             </select>
@@ -590,29 +609,32 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <select
               className="select-form"
               disabled={!isEditable}
+              value={gpsID}
               onChange={(e) => setGpsID(e.target.value)}
               required
             >
               {gpsDATA.map((gpsProvider) => {
-                if (brand.brandID == brandID) {
+                if (gpsProvider.GPSProviderID == gpsID) {
                   return (
                     <option
                       key={gpsProvider.GPSProviderID}
                       value={gpsProvider.GPSProviderID}
-                      selected
+                      hidden={gpsProvider.disabled}
                     >
                       {gpsProvider.name}
                     </option>
                   );
                 } else {
-                  return (
-                    <option
-                      key={gpsProvider.GPSProviderID}
-                      value={gpsProvider.GPSProviderID}
-                    >
-                      {gpsProvider.name}
-                    </option>
-                  );
+                  if (gpsProvider.disabled == false){
+                    return (
+                      <option
+                        key={gpsProvider.GPSProviderID}
+                        value={gpsProvider.GPSProviderID}
+                      >
+                        {gpsProvider.name}
+                      </option>
+                    );
+                  } else return <></>
                 }
               })}
             </select>
@@ -647,6 +669,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             <select
               className="select-form"
               disabled={!isEditable}
+              value={fuelSensorID}
               onChange={(e) => setFuelSensorID(e.target.value)}
               required
             >
@@ -657,20 +680,22 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                     <option
                       key={fuelSensor.FuelSensorID}
                       value={fuelSensor.FuelSensorID}
-                      selected
+                      hidden={fuelSensor.disabled}
                     >
                       {fuelSensor.name}
                     </option>
                   );
                 } else {
-                  return (
-                    <option
-                      key={fuelSensor.FuelSensorID}
-                      value={fuelSensor.FuelSensorID}
-                    >
-                      {fuelSensor.name}
-                    </option>
-                  );
+                  if(fuelSensor.disabled == false){
+                    return (
+                      <option
+                        key={fuelSensor.FuelSensorID}
+                        value={fuelSensor.FuelSensorID}
+                      >
+                        {fuelSensor.name}
+                      </option>
+                    );
+                  } else return <></>
                 }
               })}
             </select>
