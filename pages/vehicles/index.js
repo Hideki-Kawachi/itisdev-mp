@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
@@ -80,17 +80,17 @@ export const getServerSideProps = withIronSessionSsr(
 );
 
 function Vehicles({ vehicleData, currentUser, typeData, brandData, transmissionData}) {
-  const [isBusy, setBusy] = useState(true);
   const vehicles = JSON.parse(vehicleData);
   const vTypes = JSON.parse(typeData);
   const brands = JSON.parse(brandData);
   const transmissions = JSON.parse(transmissionData);
 
-  useEffect(() =>{
+	//converts vehicle IDs to names for the table
+  useMemo(() =>{
    vehicles.forEach((vehicle) => {
 	vTypes.forEach((vtype) =>{
 				if (vehicle.vehicleTypeID == vtype.vehicleTypeID) {
-				//return{...vehicle, vehicleTypeID:{ ...vehicle.vehicleTypeID, vehicleTypeID: vtype.name}}
+				vehicle.vehicleTypeID = vtype.name;
 				}
 	});
 	brands.forEach((brand) => {
@@ -105,13 +105,14 @@ function Vehicles({ vehicleData, currentUser, typeData, brandData, transmissionD
       }
     });
 
-	vehicle.insuranceExpDate = vehicle.insuranceExpDate
+	vehicle.insuranceExpDate = new Date(vehicle.insuranceExpDate).toISOString().split("T")[0];
   })
 }, [])
 
 useEffect(() => {
 	  vehicles.forEach((vehicle) => {
       console.log(vehicle);
+	  console.log(vehicle.insuranceExpDate);
     });
 })
 
