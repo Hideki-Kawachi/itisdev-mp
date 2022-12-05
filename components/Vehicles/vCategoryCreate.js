@@ -7,6 +7,7 @@ function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
   const [categoryName, setCategoryName] = useState("");
   const [error, setError] = useState(false);
   const [nameError, setNameError] = useState("");
+  const [notifResult, setNotifResult] = useState("")
 
   function submitForm(){
 
@@ -32,6 +33,7 @@ function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
             console.log(JSON.stringify(categoryData));
           if (data == "created") {
             console.log("SUCCESS");
+            setNotifResult("Successfully created!")
             setError(false);
             window.location.reload();
           } else {
@@ -42,6 +44,18 @@ function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
         });
     }
   }
+
+  	function showResult() {
+      if (notifResult.length > 0) {
+        return (
+          <div className="top-notification-container">
+            <span>{notifResult}</span>
+          </div>
+        );
+      } else {
+        return <></>;
+      }
+    }
 
   useEffect(() => {
   if (JSON.stringify(type) === "{}") {
@@ -56,6 +70,7 @@ function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
   return (
     <>
       <div className="item-modal">
+        {showResult()}
         <div className="item-header item-modal-header">
           <div className="item-column-container">
             <h1>{name}</h1>
@@ -71,7 +86,12 @@ function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
 
         <div className="item-input">
           <label htmlFor="itemName">Category Name:</label>
-          <input type="text" className="form-fields" placeholder = "Enter Category Name" onChange={(e) => setCategoryName(e.target.value)}/>
+          <input
+            type="text"
+            className="form-fields"
+            placeholder="Enter Category Name"
+            onChange={(e) => setCategoryName(e.target.value)}
+          />
         </div>
         <div className="item-input" id="item-status">
           <label htmlFor="disabled">Status:</label>

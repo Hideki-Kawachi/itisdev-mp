@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import {
 	useTable,
 	useSortBy,
@@ -6,7 +6,6 @@ import {
 	useFilters,
 	usePagination,
 } from "react-table";
-import V_MOCK_DATA from "../V_MOCK_DATA.json";
 import { COLUMNS } from "./VehicleColumns";
 import GlobalFilter from "../GlobalFilter";
 import Link from "next/link";
@@ -47,7 +46,12 @@ export const BasicTable = ({vehicle} ) => {
   const { globalFilter } = state;
   const { pageIndex } = state;
  
-    
+    // useEffect(() =>{
+    //   vehicle.map((vehicle) => {
+        
+    //   })
+      
+    // });
   return (
     <>
       <div className="user-left-container">

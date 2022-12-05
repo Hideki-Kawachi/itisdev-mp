@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import Link from "next/link";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
@@ -50,7 +50,7 @@ export const getServerSideProps = withIronSessionSsr(
 				{},
 				{
 					transmissionID: 1,
-					name: "1",
+					name: 1,
 					disabled: 1,
 				}
 			);
@@ -79,21 +79,55 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-function Vehicles({ vehicleData, currentUser }) {
-	const vehicles = JSON.parse(vehicleData);
+function Vehicles({ vehicleData, currentUser, typeData, brandData, transmissionData}) {
+  const [isBusy, setBusy] = useState(true);
+  const vehicles = JSON.parse(vehicleData);
+  const vTypes = JSON.parse(typeData);
+  const brands = JSON.parse(brandData);
+  const transmissions = JSON.parse(transmissionData);
 
-	return (
-		<>
-			<Header page={"VEHICLES"} subPage={"HOME"} user={currentUser}></Header>
-			<NavBar user={currentUser}></NavBar>
-			<div id="main-container">
-				<div className="main-container-bg">
-					<br />
-					<BasicTable vehicle={vehicles}> </BasicTable>
-				</div>
-			</div>
-		</>
-	);
+  useEffect(() =>{
+   vehicles.forEach((vehicle) => {
+	vTypes.forEach((vtype) =>{
+				if (vehicle.vehicleTypeID == vtype.vehicleTypeID) {
+				//return{...vehicle, vehicleTypeID:{ ...vehicle.vehicleTypeID, vehicleTypeID: vtype.name}}
+				}
+	});
+	brands.forEach((brand) => {
+      if (vehicle.brandID == brand.brandID) {
+		vehicle.brandID = brand.name;
+      }
+    });
+
+	transmissions.forEach((transmission) => {
+      if (vehicle.transmissionID == transmission.transmissionID) {
+        vehicle.transmissionID = transmission.name;
+      }
+    });
+
+	vehicle.insuranceExpDate = vehicle.insuranceExpDate
+  })
+}, [])
+
+useEffect(() => {
+	  vehicles.forEach((vehicle) => {
+      console.log(vehicle);
+    });
+})
+
+  return (
+    <>
+      <Header page={"VEHICLES"} subPage={"HOME"} user={currentUser}></Header>
+      <NavBar user={currentUser}></NavBar>
+      <div id="main-container">
+        <div className="main-container-bg">
+          <br />
+          <BasicTable vehicle={vehicles}> </BasicTable>
+          {/* // vtype={vTypes} brand={brands} transmission={transmissions} */}
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default Vehicles;

@@ -7,6 +7,10 @@ export const COLUMNS = [
     accessor: (/** @type {any} */ _row, /** @type {number} */ i) => i + 1,
   },
   {
+    Header: "Status",
+    accessor: "disabled",
+  },
+  {
     Header: "Plate Number",
     accessor: "plateNum",
     Filter: GlobalFilter,

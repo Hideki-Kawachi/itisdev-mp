@@ -48,8 +48,9 @@ function VCatTable({ trigger, setTrigger, name, type, id}) {
     usePagination
   );
 
-  function clickRow(rowdata){
-    setSelected(rowdata);
+  function clickRow(rowid){
+    setSelected(rowid);
+    console.log("row id: " + rowid)
     setvEditOpen(true);
   }
   const { globalFilter } = state;

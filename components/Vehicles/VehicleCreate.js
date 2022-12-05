@@ -28,6 +28,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   const [error, setError] = useState(false);
   const [plateNumError, setPlateNumError] = useState("");
   const [categoryID, setCategoryID] = useState("");
+  const [notifResult, setNotifResult] = useState("");
   const currentUserID = "00000001";
   const dt = new Date();
  
@@ -82,6 +83,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
         .then((data) => {
           if (data == "created") {
             console.log("SUCCESS");
+            setNotifResult("Successfully created!")
             setError(false);
             window.location.reload();
           } else  {
@@ -146,7 +148,17 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             } 
       }
   }
-
+  	function showResult() {
+      if (notifResult.length > 0) {
+        return (
+          <div className="top-notification-container">
+            <span>{notifResult}</span>
+          </div>
+        );
+      } else {
+        return <></>;
+      }
+    }
   function ShowInsuranceError(){
     if(error){
       if (insuranceAmount < 0){
@@ -164,6 +176,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
       {/* First Field Group */}
       <form>
         <div className="form-container">
+          {showResult()}
           <div className="form-item">
             <label className="form-labels">
               Plate Number: <label className="required"> * </label>{" "}
@@ -194,6 +207,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              type="button"
               onClick={() => {
                 setName("Vehicle Type");
                 setOType(vtype);
@@ -243,13 +257,10 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                       {vehicleType.name}
                     </option>
                   );
+                } else {
+                  return <></>;
                 }
-                else{
-                  return (
-                    <></>
-                  )
-                }
-              })}         
+              })}
             </select>
             {error && vehicleTypeID.length == 0 ? (
               <span className="vehicle-create-error">Select Vehicle Type</span>
@@ -284,6 +295,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              type="button"
               onClick={() => {
                 setName("Vehicle Brand");
                 setOType(brand);
@@ -305,15 +317,14 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 Select Brand{" "}
               </option>
               {brand.map((brand) => {
-                if(brand.disabled==false){
-                 return (
-                   <option key={brand.brandID} value={brand.brandID}>
-                     {brand.name}
-                   </option>
-                 );
-                }
-                else{
-                  return <></>
+                if (brand.disabled == false) {
+                  return (
+                    <option key={brand.brandID} value={brand.brandID}>
+                      {brand.name}
+                    </option>
+                  );
+                } else {
+                  return <></>;
                 }
               })}
             </select>
@@ -351,6 +362,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              type="button"
               onClick={() => {
                 setName("Transmission Type");
                 setOType(transmission);
@@ -372,20 +384,19 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 Select Transmission{" "}
               </option>
               {transmission.map((transmission) => {
-              if(transmission.disabled==false){
-              return(
-                <option
-                  key={transmission.transmissionID}
-                  value={transmission.transmissionID}
-                >
-                  {transmission.name}
-                </option>
-              );
-             }
-             else {
-              return(<></>)
-             }
-          })}
+                if (transmission.disabled == false) {
+                  return (
+                    <option
+                      key={transmission.transmissionID}
+                      value={transmission.transmissionID}
+                    >
+                      {transmission.name}
+                    </option>
+                  );
+                } else {
+                  return <></>;
+                }
+              })}
             </select>
             {error && transmissionID.length == 0 ? (
               <span className="vehicle-create-error">
@@ -426,6 +437,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              type="button"
               onClick={() => {
                 setName("Engine Type");
                 setOType(engine);
@@ -447,16 +459,16 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 Select Engine Type{" "}
               </option>
               {engine.map((engineType) => {
-              if(engineType.disabled == false){
-              return (
-                <option
-                  key={engineType.engineTypeID}
-                  value={engineType.engineTypeID}
-                >
-                  {engineType.name}
-                </option>)  
-              }
-              else return(<></>)
+                if (engineType.disabled == false) {
+                  return (
+                    <option
+                      key={engineType.engineTypeID}
+                      value={engineType.engineTypeID}
+                    >
+                      {engineType.name}
+                    </option>
+                  );
+                } else return <></>;
               })}
             </select>
             {error && engineTypeID.length == 0 ? (
@@ -539,6 +551,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              type="button"
               onClick={() => {
                 setName("GPS Provider");
                 setOType(gpsDATA);
@@ -561,17 +574,16 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 Select GPS Provider{" "}
               </option>
               {gpsDATA.map((gpsProvider) => {
-              if(gpsProvider.disabled == false){
-              return (
-                <option
-                  key={gpsProvider.GPSProviderID}
-                  value={gpsProvider.GPSProviderID}
-                >
-                  {gpsProvider.name}
-                </option>
-                );
-              }
-              else return (<></>)
+                if (gpsProvider.disabled == false) {
+                  return (
+                    <option
+                      key={gpsProvider.GPSProviderID}
+                      value={gpsProvider.GPSProviderID}
+                    >
+                      {gpsProvider.name}
+                    </option>
+                  );
+                } else return <></>;
               })}
             </select>
             {error && gpsID.length == 0 ? (
@@ -589,6 +601,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             </label>{" "}
             <button
               className="vehicle-icon-button vehicle-add-option-button "
+              type="button"
               onClick={() => {
                 setName("Fuel Level Sensor");
                 setOType(sensor);
@@ -611,17 +624,16 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
                 Select Fuel Level Sensor{" "}
               </option>
               {sensor.map((fuelSensor) => {
-              if(fuelSensor.disabled == false){
-              return (
-                <option
-                  key={fuelSensor.FuelSensorID}
-                  value={fuelSensor.FuelSensorID}
-                >
-                  {fuelSensor.name}
-                </option>
-              );
-              }
-              else return (<></>)
+                if (fuelSensor.disabled == false) {
+                  return (
+                    <option
+                      key={fuelSensor.FuelSensorID}
+                      value={fuelSensor.FuelSensorID}
+                    >
+                      {fuelSensor.name}
+                    </option>
+                  );
+                } else return <></>;
               })}
             </select>
             {error && fuelSensorID.length == 0 ? (
@@ -635,7 +647,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
           <br />
         </div>
 
-       <br/>
+        <br />
 
         <div className="form-container">
           <span className="required-text">
@@ -657,7 +669,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             ></BasicButton>
           </span>
         </div>
-        <br/>
+        <br />
       </form>
     </>
   );

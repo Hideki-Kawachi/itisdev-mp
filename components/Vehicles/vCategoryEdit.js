@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ToggleSwitch from "../ToggleSwitch";
 import BasicButton from "../BasicButton";
 
-function EditVehicleCategory({ trigger, setTrigger, name, type, id, selected }) {
+function EditVehicleCategory({ trigger, setTrigger, name, cName, id, selected }) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [defaultID, setDefaultID] = useState("");
   const [categoryName, setCategoryName] = useState("");
@@ -92,10 +92,21 @@ function EditVehicleCategory({ trigger, setTrigger, name, type, id, selected }) 
       //     console.log("2. Error is " + error + ", Data is " + data);
     }
   }
-
+	function showResult() {
+    if (notifResult.length > 0) {
+      return (
+        <div className="top-notification-container">
+          <span>{notifResult}</span>
+        </div>
+      );
+    } else {
+      return <></>;
+    }
+  }
   return (
     <>
       <div className="item-modal">
+        {showResult()}
         <div className="item-header item-modal-header">
           <div className="item-column-container">
             <h1>{name}</h1>
@@ -113,7 +124,7 @@ function EditVehicleCategory({ trigger, setTrigger, name, type, id, selected }) 
           <label htmlFor="itemName">Current Category Name:</label>
           <label className="itemName">
             {" "}
-            <b> {currentName} </b>
+            <b> {cName} </b>
           </label>
           <br />
 

@@ -67,6 +67,17 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
           setTimeout(() => setNotifResult(""), 3000);
         }
       }, [notifResult]);
+	function showResult() {
+    if (notifResult.length > 0) {
+      return (
+        <div className="top-notification-container">
+          <span>{notifResult}</span>
+        </div>
+      );
+    } else {
+      return <></>;
+    }
+  }
 
   function submitForm() {
     // console.log("1. Error is " + error + ", Data is " + data);
@@ -170,6 +181,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
       {/* First Field Group */}
       <form>
         <div className="form-container">
+          {showResult()}
           <div className="form-item">
             <label className="form-labels">Plate Number:</label> <br />
             <input
@@ -232,16 +244,17 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             >
               {vtype.map((vehicleType) => {
                 if (vehicleType.vehicleTypeID == vehicleTypeID) {
-                    return (
-                      <option key={vehicleType.vehicleTypeID} value={vehicleType.vehicleTypeID}
-                        hidden={vehicleType.disabled}
-                      >
-                        {vehicleType.name}
-                      </option>
-                    )
+                  return (
+                    <option
+                      key={vehicleType.vehicleTypeID}
+                      value={vehicleType.vehicleTypeID}
+                      hidden={vehicleType.disabled}
+                    >
+                      {vehicleType.name}
+                    </option>
+                  );
                 } else {
-                  if (vehicleType.disabled == false
-                  ) {
+                  if (vehicleType.disabled == false) {
                     return (
                       <option
                         key={vehicleType.vehicleTypeID}
@@ -317,25 +330,23 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             >
               {brand.map((brand) => {
                 if (brand.brandID == brandID) {
-                    return (
-                      <option
-                        key={brand.brandID}
-                        value={brand.brandID}
-                        hidden={brand.disabled}
-                      >
-                        {brand.name}
-                      </option>
-                    );
-
+                  return (
+                    <option
+                      key={brand.brandID}
+                      value={brand.brandID}
+                      hidden={brand.disabled}
+                    >
+                      {brand.name}
+                    </option>
+                  );
                 } else {
-                  if(brand.disabled == false){
+                  if (brand.disabled == false) {
                     return (
                       <option key={brand.brandID} value={brand.brandID}>
                         {brand.name}
                       </option>
                     );
-                  }
-                  else return <></>;
+                  } else return <></>;
                 }
               })}
             </select>
@@ -407,7 +418,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                     </option>
                   );
                 } else {
-                  if(transmission.disabled == false){
+                  if (transmission.disabled == false) {
                     return (
                       <option
                         key={transmission.transmissionID}
@@ -416,8 +427,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                         {transmission.name}
                       </option>
                     );
-                  }
-                  else return <></>;
+                  } else return <></>;
                 }
               })}
             </select>
@@ -494,7 +504,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                     </option>
                   );
                 } else {
-                  if(engine.disabled == false){
+                  if (engine.disabled == false) {
                     return (
                       <option
                         key={engine.engineTypeID}
@@ -625,7 +635,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                     </option>
                   );
                 } else {
-                  if (gpsProvider.disabled == false){
+                  if (gpsProvider.disabled == false) {
                     return (
                       <option
                         key={gpsProvider.GPSProviderID}
@@ -634,7 +644,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                         {gpsProvider.name}
                       </option>
                     );
-                  } else return <></>
+                  } else return <></>;
                 }
               })}
             </select>
@@ -686,7 +696,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                     </option>
                   );
                 } else {
-                  if(fuelSensor.disabled == false){
+                  if (fuelSensor.disabled == false) {
                     return (
                       <option
                         key={fuelSensor.FuelSensorID}
@@ -695,7 +705,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
                         {fuelSensor.name}
                       </option>
                     );
-                  } else return <></>
+                  } else return <></>;
                 }
               })}
             </select>
