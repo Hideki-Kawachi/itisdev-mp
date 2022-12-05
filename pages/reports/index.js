@@ -2,6 +2,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import React from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
+import { BasicTable } from "../../components/Reports/BasicTable";
 import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
 
@@ -41,6 +42,7 @@ function TransactionReports({ currentUser }) {
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				<ReportTabs tab="1"></ReportTabs>
+				<BasicTable></BasicTable>
 			</div>
 		</>
 	);
