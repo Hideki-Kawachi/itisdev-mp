@@ -26,12 +26,6 @@ function Tabs() {
 					className={toggleState === 1 ? "content  active-content" : "content"}
 				>
 					<InventoryCreate> </InventoryCreate>
-
-					{/* Button */}
-					<div className="item-footer">
-						<button className="gray-button-container">Cancel</button>
-						<button className="green-button-container">Save</button>
-					</div>
 				</div>
 
 				<div
@@ -156,12 +150,6 @@ function Tabs() {
 					<div className="form-item">
 						<label className="form-labels">Remarks:</label> <br />
 						<input type="textarea" className="form-fields-remarks" />
-					</div>
-
-					{/* Buttons */}
-					<div className="item-footer">
-						<button className="gray-button-container">Cancel</button>
-						<button className="green-button-container">Save</button>
 					</div>
 				</div>
 		</div>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import BasicTableAdd from "../../components/Inventory/InventoryTable";
 import BasicTablePull from "../../components/Inventory/InventoryTablePull";
+import BasicButton from "../../components/BasicButton";
+import Cancel from "../../components/Pop-up/cancel";
 
 function InventoryCreate({unit, brand, supplier}) {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -21,6 +23,8 @@ function InventoryCreate({unit, brand, supplier}) {
   const [supplierID, setSupplierID] = useState("");
   const [remarks, setRemarks] = useState("");
   const [notifResult, setNotifResult] = useState("");
+  const [error, setError] = useState(false);
+  const [invoiceNumberError, setInvoiceNumberError] = useState("");
   const currentUserID = "00000001";
   const dt = new Date();
   const [toggleState, setToggleState] = useState(1);
@@ -68,6 +72,37 @@ function InventoryCreate({unit, brand, supplier}) {
   function cancelForm(){
     setCancel(true);
   }
+
+  function checkSpecial(){
+    const specialChars = `/[!@#$%^&* ()_+\-=\[\]{};':"\\|,.<>\/?]+/;`;
+    return specialChars.split("").some((char) => addRecordID.includes(char)); // true if present and false if not
+  }
+
+  function showInvoiceNumberError() {
+
+    console.log("Record ID has special chars: " + checkSpecial()); 
+
+    if (error) {
+      //Invoice Number is Empty
+      if (addRecordID.length == 0) {
+        return <span className="vehicle-create-error">Input Record ID</span>;
+      } else if (checkSpecial()) {
+        return (
+          <span className="vehicle-create-error">
+            Must not contain spaces, letters, or special characters.
+          </span>
+        );
+      }
+      //Invoice Number reached max char length
+      else if (addRecordID.length > 15 || addRecordID.length < 15) {
+        return (
+          <span className="vehicle-create-error">
+            Record ID must be 15 numbers long.
+          </span>
+        );
+      } 
+    } 
+  }
  
   	function showResult() {
       if (notifResult.length > 0) {
@@ -83,6 +118,18 @@ function InventoryCreate({unit, brand, supplier}) {
   function ShowPriceError(){
     if(error){
       if (unitPrice < 0){
+        return (
+          <span className="vehicle-create-error">
+            Input must not be negative.
+          </span>
+        )
+      }
+    }
+  }
+
+  function ShowQuantityError(){
+    if(error){
+      if (quantity < 0){
         return (
           <span className="vehicle-create-error">
             Input must not be negative.
@@ -121,8 +168,10 @@ function InventoryCreate({unit, brand, supplier}) {
 					{/* First Field Row */}
 
 					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">Record ID: <label className="required"> * </label>{" "}
+                    {showResult()}
+                    <div className="form-item">
+							<label className="form-labels">
+								Record ID: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<br />
 							<input
@@ -145,17 +194,30 @@ function InventoryCreate({unit, brand, supplier}) {
 					<br />
 
 					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Invoice Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Invoice Number"
-							/>
-						</div>
+					<div className="form-item">
+                        <label className="form-labels">
+                        Invoice Number: <label className="required"> * </label>{" "}
+                        </label>{" "}
+                        <label className="label-format">
+                        {" "}
+                        Format: Numbers only.{" "}
+                        </label>{" "}
+                        <br />
+                        <input
+                        type="text"
+                        className="form-fields"
+                        placeholder="Enter Invoice Number"
+                        onChange={(e) => setRecordID(e.target.value)}
+                        />
+                        {showInvoiceNumberError()}
+                        {invoiceNumberError == invoiceNumber && invoiceNumber.length > 0 ? (
+                        <span className="vehicle-create-error">
+                            Invoice Number has already been registered.
+                        </span>
+                        ) : (
+                        <></>
+                        )}
+                    </div>
 
 						<div className="form-item">
 							<label className="form-labels">
@@ -193,14 +255,22 @@ function InventoryCreate({unit, brand, supplier}) {
 					<div className="form-container">
 						<div className="form-item">
 							<label className="form-labels">
-								Quantity: <label className="required"> * </label>{" "}
+							Quantity: <label className="required"> * </label>{" "}
 							</label>{" "}
-							<br />
 							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Quantity"
+							type="number"
+							className="form-fields"
+							placeholder="Enter Quantity"
+							onChange={(e) => setQuantity(e.target.value)}
 							/>
+							{ShowQuantityError()}
+							{error && quantity.length == 0 ? (
+							<span className="vehicle-create-error">
+								Input Quantity
+							</span>
+							) : (
+							<></>
+							)}
 						</div>
 
 						<div className="form-item">
@@ -220,14 +290,24 @@ function InventoryCreate({unit, brand, supplier}) {
 
 						<div className="form-item">
 							<label className="form-labels">
-								Unit Price: <label className="required"> * </label>{" "}
+							Unit Price: <label className="required"> * </label>{" "}
 							</label>{" "}
-							<br />
+							<label className="label-format"> Format: "0000.00" </label> <br />
 							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Unit Price"
+							type="number"
+							step=".01"
+							className="form-fields"
+							placeholder="Enter Unit Price"
+							onChange={(e) => setUnitPrice(e.target.value)}
 							/>
+							{ShowPriceError()}
+							{error && unitPrice.length == 0 ? (
+							<span className="vehicle-create-error">
+								Input Unit Price
+							</span>
+							) : (
+							<></>
+							)}
 						</div>
 					</div>
 
@@ -388,10 +468,23 @@ function InventoryCreate({unit, brand, supplier}) {
 					<div className="form-container">
 						<div className="form-item">
 							<label className="form-labels">
-								Quantity: <label className="required"> * </label>{" "}
+							Quantity: <label className="required"> * </label>{" "}
 							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
+							<label className="label-format"> Format: "0000.00" </label> <br />
+							<input
+							type="number"
+							className="form-fields"
+							placeholder="Enter Quantity"
+							onChange={(e) => setQuantity(e.target.value)}
+							/>
+							{ShowPriceError()}
+							{error && quantity.length == 0 ? (
+							<span className="vehicle-create-error">
+								Input Quantity
+							</span>
+							) : (
+							<></>
+							)}
 						</div>
 
 						<div className="form-item">
@@ -402,6 +495,7 @@ function InventoryCreate({unit, brand, supplier}) {
 							<input type="text" className="form-fields" />
 						</div>
 					</div>
+
 					<br />
 					<button className="gray-button-container1"> Add to Pull Cart</button>
 					<hr />
@@ -413,6 +507,29 @@ function InventoryCreate({unit, brand, supplier}) {
 				</div>
 			</div>
 		</div>
+		<br />
+
+		{/* Buttons */}
+		<div className="form-container">
+			<span className="required-text">
+				Fields marked with <label className="required"> * </label> are
+				required.
+			</span>
+			<span className="form-item-buttons">
+				<BasicButton
+				label={"Cancel"}
+				color={"gray"}
+				type={"reset"}
+				clickFunction={cancelForm}
+				></BasicButton>
+				<BasicButton
+				label={"Save"}
+				color={"green"}
+				type={"button"}
+				clickFunction={submitForm}
+				></BasicButton>
+			</span>
+        </div>
     </>
   );
 }
