@@ -10,6 +10,7 @@ import BasicTablePull from "../../components/Inventory/InventoryTablePull";
 import React from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/config";
+import InventoryCreate from "../../components/Inventory/InventoryCreate";
 
 function Tabs() {
 	const [isDisabled, setIsDisabled] = useState(false);
@@ -21,183 +22,10 @@ function Tabs() {
 
 	return (
 		<div className="container">
-			<div className="bloc-tabs">
-				<button
-					className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-					onClick={() => toggleTab(1)}
-				>
-					ADD
-				</button>
-				<button
-					className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-					onClick={() => toggleTab(2)}
-				>
-					PULL-OUT
-				</button>
-			</div>
-
-			<div className="content-tabs">
 				<div
 					className={toggleState === 1 ? "content  active-content" : "content"}
 				>
-					<BasicTableAdd> </BasicTableAdd>
-					<br />
-					<br />
-
-					{/* First Field Group */}
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">Acquired Date: </label> <br />
-							<input
-								type="date"
-								className="form-fields"
-								placeholder="Acquired Date"
-							/>
-						</div>
-					</div>
-					<br />
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Invoice Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Invoice Number"
-							/>
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Item Name: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Item Name"
-							/>
-						</div>
-
-						<div className="form-item form-toggle">
-							{" "}
-							Status:{" "}
-							<button
-								className="item-icon-button item-info-option-button "
-								onClick={() => setTrigger(!trigger)}
-							>
-								{" "}
-								i{" "}
-							</button>
-							<br />
-							<ToggleSwitch
-								disabled={isDisabled}
-								setDisabled={setIsDisabled}
-							></ToggleSwitch>
-						</div>
-					</div>
-					<hr />
-
-					{/* Second Field Group */}
-					<br />
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Quantity: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Quantity"
-							/>
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Unit: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<button
-								className="vehicle-icon-button vehicle-add-option-button "
-								onClick={() => setTrigger(!trigger)}
-							>
-								{" "}
-								✎{" "}
-							</button>
-							<br />
-							<select className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Unit Price: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Unit Price"
-							/>
-						</div>
-					</div>
-
-					<br />
-
-					{/* Third Field Row */}
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Brand: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<button
-								className="vehicle-icon-button vehicle-add-option-button "
-								onClick={() => setTrigger(!trigger)}
-							>
-								{" "}
-								✎{" "}
-							</button>
-							<br />
-							<select className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">Part Number: </label> <br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Part Number"
-							/>
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Supplier: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<button
-								className="vehicle-icon-button vehicle-add-option-button "
-								onClick={() => setTrigger(!trigger)}
-							>
-								{" "}
-								✎{" "}
-							</button>
-							<br />
-							<select className="form-fields" />
-						</div>
-					</div>
-					<br />
-					<hr />
-
-					{/*Remarks */}
-
-					<div className="form-item">
-						<label className="form-labels">Remarks:</label> <br />
-						<input type="textarea" className="form-fields-remarks" />
-					</div>
+					<InventoryCreate> </InventoryCreate>
 
 					{/* Button */}
 					<div className="item-footer">
@@ -336,7 +164,6 @@ function Tabs() {
 						<button className="green-button-container">Save</button>
 					</div>
 				</div>
-			</div>
 		</div>
 	);
 }
