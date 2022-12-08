@@ -10,7 +10,8 @@ import BasicTablePull from "../../components/Inventory/InventoryTablePull";
 import React from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/config";
-import InventoryCreate from "../../components/Inventory/InventoryCreate";
+import AddInventoryCreate from "../../components/Inventory/AddInventoryCreate";
+import PullInventoryCreate from "../../components/Inventory/PullInventoryCreate";
 
 function Tabs() {
 	const [isDisabled, setIsDisabled] = useState(false);
@@ -22,135 +23,32 @@ function Tabs() {
 
 	return (
 		<div className="container">
+			<div className="bloc-tabs">
+				<button
+					className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+					onClick={() => toggleTab(1)}
+				>
+					ADD
+				</button>
+				<button
+					className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+					onClick={() => toggleTab(2)}
+				>
+					PULL-OUT
+				</button>
+			</div>
+
 				<div
 					className={toggleState === 1 ? "content  active-content" : "content"}
 				>
-					<InventoryCreate> </InventoryCreate>
+					<AddInventoryCreate> </AddInventoryCreate>
 				</div>
 
 				<div
 					className={toggleState === 2 ? "content  active-content" : "content"}
 				>
-					<BasicTablePull> </BasicTablePull>
+					<PullInventoryCreate> </PullInventoryCreate>
 
-					{/* First Field Group */}
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">Pull-out Date: </label> <br />
-							<input
-								type="date"
-								className="form-fields"
-								placeholder="Acquired Date"
-							/>
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Job Order Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Job Order Number"
-							/>
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Plate Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<button
-								className="vehicle-icon-button vehicle-add-option-button "
-								onClick={() => setTrigger(!trigger)}
-							>
-								{" "}
-								✎{" "}
-							</button>
-							<br />
-							<select className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Mechanic Name: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<button
-								className="vehicle-icon-button vehicle-add-option-button "
-								onClick={() => setTrigger(!trigger)}
-							>
-								{" "}
-								✎{" "}
-							</button>
-							<br />
-							<select className="form-fields" />
-						</div>
-					</div>
-					<hr />
-
-					<br />
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Item Code: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Item Name: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Brand: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Part Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Quantity: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Unit: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
-					<br />
-					<button className="gray-button-container1"> Add to Pull Cart</button>
-					<hr />
-					<br />
-					<div className="form-item">
-						<label className="form-labels">Remarks:</label> <br />
-						<input type="textarea" className="form-fields-remarks" />
-					</div>
 				</div>
 		</div>
 	);

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import ToggleSwitch from "../../components/ToggleSwitch";
-import BasicTableAdd from "../../components/Inventory/InventoryTable";
-import BasicTablePull from "../../components/Inventory/InventoryTablePull";
-import BasicButton from "../../components/BasicButton";
-import Cancel from "../../components/Pop-up/cancel";
+import ToggleSwitch from "../ToggleSwitch";
+import BasicTableAdd from "./InventoryTable";
+import BasicTablePull from "./InventoryTablePull";
+import BasicButton from "../BasicButton";
+import Cancel from "../Pop-up/cancel";
 
-function InventoryCreate({unit, brand, supplier}) {
+function AddInventoryCreate({unit, brand, supplier}) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [vTypeOpen, setvTypeOpen] = useState(false);
   const [otype, setOType] = useState();
   const [name, setName] = useState("");
   const [cancel, setCancel] = useState(false);
   const [acquireDate, setAcquireDate] = useState("");
-  const [addRecordID, setRecordID] = useState("");
+  const [addRecordID, setAddRecordID] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [itemID, setItemID] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -85,7 +85,7 @@ function InventoryCreate({unit, brand, supplier}) {
     if (error) {
       //Invoice Number is Empty
       if (addRecordID.length == 0) {
-        return <span className="vehicle-create-error">Input Record ID</span>;
+        return <span className="vehicle-create-error">Input Invoice Number</span>;
       } else if (checkSpecial()) {
         return (
           <span className="vehicle-create-error">
@@ -103,7 +103,7 @@ function InventoryCreate({unit, brand, supplier}) {
       } 
     } 
   }
- 
+
   	function showResult() {
       if (notifResult.length > 0) {
         return (
@@ -142,25 +142,8 @@ function InventoryCreate({unit, brand, supplier}) {
   return (
     <>
       <div className="container">
-			<div className="bloc-tabs">
-				<button
-					className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-					onClick={() => toggleTab(1)}
-				>
-					ADD
-				</button>
-				<button
-					className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-					onClick={() => toggleTab(2)}
-				>
-					PULL-OUT
-				</button>
-			</div>
 
 			<div className="content-tabs">
-				<div
-					className={toggleState === 1 ? "content  active-content" : "content"}
-				>
 					<BasicTableAdd> </BasicTableAdd>
 					<br />
 					<br />
@@ -194,30 +177,30 @@ function InventoryCreate({unit, brand, supplier}) {
 					<br />
 
 					<div className="form-container">
-					<div className="form-item">
-                        <label className="form-labels">
-                        Invoice Number: <label className="required"> * </label>{" "}
-                        </label>{" "}
-                        <label className="label-format">
-                        {" "}
-                        Format: Numbers only.{" "}
-                        </label>{" "}
-                        <br />
-                        <input
-                        type="text"
-                        className="form-fields"
-                        placeholder="Enter Invoice Number"
-                        onChange={(e) => setRecordID(e.target.value)}
-                        />
-                        {showInvoiceNumberError()}
-                        {invoiceNumberError == invoiceNumber && invoiceNumber.length > 0 ? (
-                        <span className="vehicle-create-error">
-                            Invoice Number has already been registered.
-                        </span>
-                        ) : (
-                        <></>
-                        )}
-                    </div>
+						<div className="form-item">
+							<label className="form-labels">
+							Invoice Number: <label className="required"> * </label>{" "}
+							</label>{" "}
+							<label className="label-format">
+							{" "}
+							Format: Numbers only.{" "}
+							</label>{" "}
+							<br />
+							<input
+							type="text"
+							className="form-fields"
+							placeholder="Enter Invoice Number"
+							onChange={(e) => setAddRecordID(e.target.value)}
+							/>
+							{showInvoiceNumberError()}
+							{invoiceNumberError == invoiceNumber && invoiceNumber.length > 0 ? (
+							<span className="vehicle-create-error">
+								Invoice Number has already been registered.
+							</span>
+							) : (
+							<></>
+							)}
+                   		</div>
 
 						<div className="form-item">
 							<label className="form-labels">
@@ -247,6 +230,7 @@ function InventoryCreate({unit, brand, supplier}) {
 								setDisabled={setIsDisabled}
 							></ToggleSwitch>
 						</div>
+
 					</div>
 					<hr />
 
@@ -364,174 +348,33 @@ function InventoryCreate({unit, brand, supplier}) {
 						<label className="form-labels">Remarks:</label> <br />
 						<input type="textarea" className="form-fields-remarks" />
 					</div>
-
-				</div>
-
-				<div
-					className={toggleState === 2 ? "content  active-content" : "content"}
-				>
-					<BasicTablePull> </BasicTablePull>
-
-					{/* First Field Group */}
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">Pull-out Date: </label> <br />
-							<input
-								type="date"
-								className="form-fields"
-								placeholder="Acquired Date"
-							/>
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Job Order Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Job Order Number"
-							/>
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Plate Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<button
-								className="vehicle-icon-button vehicle-add-option-button "
-								onClick={() => setTrigger(!trigger)}
-							>
-								{" "}
-								✎{" "}
-							</button>
-							<br />
-							<select className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Mechanic Name: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<button
-								className="vehicle-icon-button vehicle-add-option-button "
-								onClick={() => setTrigger(!trigger)}
-							>
-								{" "}
-								✎{" "}
-							</button>
-							<br />
-							<select className="form-fields" />
-						</div>
-					</div>
-					<hr />
-
-					<br />
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Item Code: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Item Name: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Brand: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Part Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
-
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-							Quantity: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<label className="label-format"> Format: "0000.00" </label> <br />
-							<input
-							type="number"
-							className="form-fields"
-							placeholder="Enter Quantity"
-							onChange={(e) => setQuantity(e.target.value)}
-							/>
-							{ShowPriceError()}
-							{error && quantity.length == 0 ? (
-							<span className="vehicle-create-error">
-								Input Quantity
-							</span>
-							) : (
-							<></>
-							)}
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">
-								Unit: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
-
-					<br />
-					<button className="gray-button-container1"> Add to Pull Cart</button>
-					<hr />
-					<br />
-					<div className="form-item">
-						<label className="form-labels">Remarks:</label> <br />
-						<input type="textarea" className="form-fields-remarks" />
-					</div>
+				
+				<br />
+				{/* Buttons */}
+				<div className="form-container">
+					<span className="required-text">
+						Fields marked with <label className="required"> * </label> are
+						required.
+					</span>
+					<span className="form-item-buttons">
+						<BasicButton
+						label={"Cancel"}
+						color={"gray"}
+						type={"reset"}
+						clickFunction={cancelForm}
+						></BasicButton>
+						<BasicButton
+						label={"Save"}
+						color={"green"}
+						type={"button"}
+						clickFunction={submitForm}
+						></BasicButton>
+					</span>
 				</div>
 			</div>
 		</div>
-		<br />
-
-		{/* Buttons */}
-		<div className="form-container">
-			<span className="required-text">
-				Fields marked with <label className="required"> * </label> are
-				required.
-			</span>
-			<span className="form-item-buttons">
-				<BasicButton
-				label={"Cancel"}
-				color={"gray"}
-				type={"reset"}
-				clickFunction={cancelForm}
-				></BasicButton>
-				<BasicButton
-				label={"Save"}
-				color={"green"}
-				type={"button"}
-				clickFunction={submitForm}
-				></BasicButton>
-			</span>
-        </div>
     </>
   );
 }
 
-export default InventoryCreate;
+export default AddInventoryCreate;

@@ -1,61 +1,42 @@
 import mongoose from "mongoose";
 
-const AddInventorySchema = new mongoose.Schema({
-  addRecordID: {
+const PullInventorySchema = new mongoose.Schema({
+  lessRecordID: {
     type: String,
     minlength: 5,
     maxlength: 15,
     unique: true,
     required: true,
   },
-  invoiceNumber: {
+  pullDate: {
+    type: Date,
+    required: true,
+    default: new Date(),
+  },
+  JOnumber: {
     type: String,
     minlength: 5,
     maxlength: 15,
-    unique: true,
-    required: true,
-  },
-  partNumber: {
-    type: String,
-    minlength: 5,
-    maxlength: 15,
-  },
-  supplierID: {
-    type: String,
-    minlength: 4,
-    maxlength: 4,
-    required: true,
-  },
-  brandID: {
-    type: String,
-    minlength: 5,
-    maxlength: 5,
     required: true,
   },
   itemID: {
     type: String,
-    minlength: 10,
+    minlength: 5,
     maxlength: 10,
+    required: true,
+  },
+  plateNum: {
+    type: String,
+    minlength: 5,
+    maxlength: 8,
     unique: true,
     required: true,
   },
-  quantity: {
-    type: Number,
-    required: true,
-  },
-  unitID: {
+  mechanicName: {
     type: String,
-    minlength: 5,
-    maxlength: 5,
+    minlength: 30,
+    maxlength: 100,
     required: true,
-  },
-  unitPrice: {
-    type: Number,
-  },
-  acquireDate: {
-    type: Date,
-    required: true,
-    default: new Date(),
   },
   remarks: {
     type: String,
@@ -66,6 +47,12 @@ const AddInventorySchema = new mongoose.Schema({
     type: String,
     minlength: 8,
     maxlength: 8,
+    required: true,
+  },
+  recordDate: {
+    type: Date,
+    required: true,
+    default: new Date(),
     required: true,
   },
   editorID: {
@@ -79,10 +66,6 @@ const AddInventorySchema = new mongoose.Schema({
     required: true,
     default: new Date(),
   },
-  itemModel: {
-    type: String,
-    maxLength: 50,
-  },
   disabled: {
     type: Boolean,
     required: true,
@@ -90,6 +73,6 @@ const AddInventorySchema = new mongoose.Schema({
   },
 });
 
-const AddInventory = mongoose.models.AddInventory || mongoose.model("AddInventory", AddInventorySchema);
+const PullInventory = mongoose.models.PullInventory || mongoose.model("PullInventory", PullInventorySchema);
 
-export default AddInventory;
+export default PullInventory;
