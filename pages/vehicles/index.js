@@ -1,8 +1,6 @@
-import React, { useState, useMemo, useEffect } from "react";
-import Link from "next/link";
+import React, {useMemo} from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
-import Dropdown from "../../components/Dropdown";
 import BasicTable from "../../components/Vehicles/VehicleTable";
 import dbConnect from "../../lib/dbConnect";
 import Vehicle from "../../models/VehicleSchema";
@@ -109,12 +107,7 @@ function Vehicles({ vehicleData, currentUser, typeData, brandData, transmissionD
   })
 }, [])
 
-useEffect(() => {
-	  vehicles.forEach((vehicle) => {
-      console.log(vehicle);
-	  console.log(vehicle.insuranceExpDate);
-    });
-})
+
 
   return (
     <>

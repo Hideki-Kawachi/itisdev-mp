@@ -4,15 +4,12 @@ import {
   useTable,
   useSortBy,
   useGlobalFilter,
-  useFilters,
   usePagination,
 } from "react-table";
-import VCAT_MOCK_DATA from "../VCAT_MOCK_DATA.json";
 import { VCAT_COLUMNS } from "./VCategoryColumns";
 import GlobalFilter from "../GlobalFilter";
 import AddVehicleCategory from "./vCategoryCreate";
 import EditVehicleCategory from "./vCategoryEdit";
-import Link from "next/link";
 
 function VCatTable({ trigger, setTrigger, name, type, id}) {
   const columns = useMemo(() => VCAT_COLUMNS, []);
@@ -20,6 +17,8 @@ function VCatTable({ trigger, setTrigger, name, type, id}) {
   const [vAddOpen, setvAddOpen] = useState(false);
   const [vEditOpen, setvEditOpen] = useState(false);
   const [selected, setSelected] = useState("");
+  const [catname, setCatName] = useState("");
+  const [status, setStatus] = useState("");
 
   const {
     getTableProps,
@@ -48,8 +47,10 @@ function VCatTable({ trigger, setTrigger, name, type, id}) {
     usePagination
   );
 
-  function clickRow(rowid){
+  function clickRow(rowid, rowname, rowstatus){
     setSelected(rowid);
+    setCatName(rowname);
+    setStatus(rowstatus)
     console.log("row id: " + rowid)
     setvEditOpen(true);
   }
@@ -104,7 +105,13 @@ function VCatTable({ trigger, setTrigger, name, type, id}) {
                 <tr
                   id="btable"
                   {...row.getRowProps()}
-                  onClick={() => clickRow(row.original[id])}
+                  onClick={() =>
+                    clickRow(
+                      row.original[id],
+                      row.original.name,
+                      row.original.disabled
+                    )
+                  }
                 >
                   {row.cells.map((cell) => {
                     return (
@@ -176,12 +183,14 @@ function VCatTable({ trigger, setTrigger, name, type, id}) {
             id={id}
           />{" "}
         </Modal>
-        <Modal isOpen={vEditOpen} className="modal">
+        <Modal isOpen={vEditOpen} className="modal" ariaHideApp={false}>
           <EditVehicleCategory
             trigger={vEditOpen}
             setTrigger={setvEditOpen}
             name={name}
             type={type}
+            status={status}
+            catname={catname}
             id={id}
             selected={selected}
           />
