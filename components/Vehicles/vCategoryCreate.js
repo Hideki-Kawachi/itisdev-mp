@@ -30,7 +30,7 @@ function AddVehicleCategory({ trigger, setTrigger, name, type, catname, id }) {
       })
         .then((res) => res.json())
         .then((data) => {
-            console.log(JSON.stringify(categoryData));
+        //    console.log(JSON.stringify(categoryData));
           if (data == "created") {
             console.log("SUCCESS");
             setNotifResult("Successfully created!")

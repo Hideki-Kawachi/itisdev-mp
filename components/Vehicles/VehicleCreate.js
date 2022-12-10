@@ -90,7 +90,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
           } else  {
             setError(true);
             setPlateNumError(data);
-            console.log("Duplicate Plate Num is" + plateNumError);
+         //   console.log("Duplicate Plate Num is" + plateNumError);
           }
         });
 
@@ -106,7 +106,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   }
   function showPlateNumError() {
 
-    console.log("Plate Number has special chars: " + checkSpecial()); 
+   // console.log("Plate Number has special chars: " + checkSpecial()); 
 
     if (error) {
       //plateNum is Empty

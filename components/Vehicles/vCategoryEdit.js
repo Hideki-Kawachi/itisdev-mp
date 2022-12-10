@@ -5,17 +5,15 @@ import BasicButton from "../BasicButton";
 function EditVehicleCategory({ trigger, setTrigger, name,  catname, id, selected, status}) {
   const [isDisabled, setIsDisabled] = useState(status);
   const [defaultID, setDefaultID] = useState("");
-  const [categoryName, setCategoryName] = useState("");
-
+  const [categoryName, setCategoryName] = useState(catname);
   const [error, setError] = useState(false);
   const [nameError, setNameError] = useState("");
   const [notifResult, setNotifResult] = useState("");
   const [reason, setReason] = useState("(Required field not filled up.)");
-  const[cancel, setCancel] = useState(false);
 
   	useEffect(() => {
-      console.log("EDITING:", selected);
-      console.log("/api/vehicles/Edit" + name.replace(/ /g, ""));
+    //  console.log("EDITING:", selected);
+    //  console.log("/api/vehicles/Edit" + name.replace(/ /g, ""));
     //   console.log("/api/vehicles/categories" + "/find/" + name.replace(/ /g, "") + "/" + selected);
       fetch(
         "/api/vehicles/categories" +
@@ -34,6 +32,7 @@ function EditVehicleCategory({ trigger, setTrigger, name,  catname, id, selected
           console.log("RECEIVED id:", id);
           console.log("RECEIVED DATA:", data);
           setDefaultID(selected);
+          setCategoryName(data.name)
         });
     }, [selected]);
 
@@ -44,11 +43,11 @@ function EditVehicleCategory({ trigger, setTrigger, name,  catname, id, selected
       }
     }, [notifResult]);
     function cancelForm() {
-      setCancel(true);
+      setTrigger(!trigger);
     }
   function submitForm() {
     // console.log("1. Error is " + error + ", Data is " + data);
-    console.log("name " + categoryName);
+    //console.log("name " + categoryName);
     if (
      categoryName.length == 0
     ) {
@@ -60,7 +59,7 @@ function EditVehicleCategory({ trigger, setTrigger, name,  catname, id, selected
         name: categoryName,
         disabled: isDisabled,
       };
-      console.log(JSON.stringify(categoryData));
+      //console.log(JSON.stringify(categoryData));
       fetch("/api/vehicles/categories/edit/update" + name.replace(/ /g, ""), {
         method: "POST",
         headers: {
@@ -75,7 +74,7 @@ function EditVehicleCategory({ trigger, setTrigger, name,  catname, id, selected
             setError(true);
             setNameError(data);
             setReason("(Name already exists or no changes detected)");
-            console.log("Duplicate Name is" + data);
+         //   console.log("Duplicate Name is" + data);
           } else if (data == "Successfully Edited!") {
             setError(false);
             setTimeout(() => window.location.reload(), 800);
