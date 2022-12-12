@@ -41,7 +41,7 @@ function AuditReports({ currentUser }) {
       <Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
       <NavBar user={currentUser}></NavBar>
       <div id="main-container">
-        <ReportTabs tab="5" ></ReportTabs>
+        <ReportTabs tab="5" roleID={currentUser.roleID}></ReportTabs>
         <AuditTable></AuditTable>
       </div>
     </>

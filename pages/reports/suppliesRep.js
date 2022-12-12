@@ -35,7 +35,7 @@ function VehicleReports({ currentUser }) {
 			<Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
-				<ReportTabs tab="4"></ReportTabs>
+				<ReportTabs tab="4" roleID={currentUser.roleID}></ReportTabs>
 			</div>
 		</>
 	);
