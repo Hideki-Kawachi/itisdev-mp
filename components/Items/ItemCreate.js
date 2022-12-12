@@ -7,13 +7,13 @@ import TempCategoryFilter from './Temp/TempCategoryFilter'
 import ItemCatTable from './CategoryList';
 
 // TO-DO: add dropdown options as parameters
-function ItemCreate() {
+function ItemCreate({categories, brands}) {
     // Item Identification
-    const [itemID, setItemID] = useState("60000000000");
-    const [categoryID, setCategoryID] = useState("10000");
+    const [itemID, setItemID] = useState("");
+    const [categoryID, setCategoryID] = useState("");
     const [name, setName] = useState("");
     const [model, setModel] = useState("");
-    const [unitID, setUnitID] = useState("10000");
+    const [unitID, setUnitID] = useState("");
     const [quantity, setQuantity] = useState(0);
     const [minQuantity, setMinQuantity] = useState(0);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -29,14 +29,91 @@ function ItemCreate() {
     })
     const [detailsArray, setDetailsArray] = useState([])
 
-    // Popups
+    // Modals
     const [modStatus, setModStatus] = useState(false)
     const [modType, setModType] = useState("")
     const [modName, setModName] = useState("")
     const [modID, setModID] = useState("")
 
+    // Others
+    const [error, setError] = useState(false);
+    const [notifResult, setNotifResult] = useState("");
+    const [infoPop, setInfoPop] = useState(false);
+    const [cancel, setCancel] = useState(false);
+
+    // Submit Form
+    function submitForm() {
+        // console.log("1. Error is " + error + ", Data is " + data);
+        if (
+          categoryID.length == 0 ||
+          name.length == 0 ||
+          brandID.length == 0 ||
+          unitID.length == 0 ||
+          quantity == 0 ||
+          minQuantity == 0 ||
+          detailsArray.length == 0    
+        ) {
+          setError(true);
+        } else {
+          let itemData = {
+            itemID: "6000000000",
+            categoryID: categoryID,
+            itemName: name,
+            itemModel: model,
+            unitID: unitID,
+            quantity: quantity,
+            minQuantity: minQuantity,
+            disabled: isDisabled,
+          }
+    
+          fetch("/api/items/createItem", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(itemData),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data == "created") {
+                console.log("SUCCESS");
+                setNotifResult("Successfully created!")
+                setError(false);
+                window.location.reload();
+              } else  {
+                setError(true);
+              }
+            });
+        }}
+
+        function cancelForm() {
+            setCancel(true);
+          }
+
+        function showResult() {
+            if (notifResult.length > 0) {
+              return (
+                <div className="top-notification-container">
+                  <span>{notifResult}</span>
+                </div>
+              );
+            } else {
+              return <></>;
+            }
+          }
   return (
     <>
+        <Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
+            <ItemCatTable
+                trigger={modStatus}
+                setTrigger={setModStatus}
+                name={modName}
+                type={modType}
+                id={modID}
+            >
+                {" "}
+            </ItemCatTable>
+        </Modal>
         <form className="item-column-container" id="item-add-main-container">
             <h1>IDENTIFICATION</h1>
 
@@ -48,22 +125,18 @@ function ItemCreate() {
                             <button className="item-icon-button item-add-option-button " type="button" onClick={() => {
                                 setModStatus(true);
                                 setModName("Select Category");
-                                setModType(categoryID);
+                                setModType(categories);
                                 setModID("categoryID");
                                 }}>✎</button>
                         </div>
-                        <Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
-                            <ItemCatTable
-                                trigger={modStatus}
-                                setTrigger={setModStatus}
-                                name={modName}
-                                type={modType}
-                                id={modID}
-                            >
-                                {" "}
-                            </ItemCatTable>
-                        </Modal>
-                        <TempCategoryFilter identifier="user-create-role"></TempCategoryFilter>
+                        <select className="sort-dropdown" id="user-create-role">
+                            {categories.map((category) => (
+                                <option key={category.categoryID} value={category.categoryName}>
+                                    {category.categoryName}
+                                </option>
+                            ))}
+                        </select>
+                        
                     </div>
                     <div className="item-input">
                         <label htmlFor="itemID">Item Code: <label className="required"> * </label></label>
@@ -194,4 +267,5 @@ function ItemCreate() {
   )
 }
 
-export default ItemCreate
+
+export default ItemCreate;
