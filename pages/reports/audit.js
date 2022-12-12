@@ -10,7 +10,7 @@ export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     if (req.session.user) {
       let currentUser = req.session.user;
-      if (currentUser.roleID === "0002") {
+      if (currentUser.roleID === "0002" || currentUser.roleID === "0001") {
         //if user is only an employee
         return {
           redirect: { destination: "/reports", permanent: true },
