@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import { AuditTable } from "../../components/Reports/AuditTable";
 import { ironOptions } from "../../lib/config";
-import AuditTabs from "../../components/Reports/AuditTabs";
+import ReportTabs from "./ReportTabs";
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
@@ -41,7 +41,7 @@ function AuditReports({ currentUser }) {
       <Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
       <NavBar user={currentUser}></NavBar>
       <div id="main-container">
-        <AuditTabs tab="1" ></AuditTabs>
+        <ReportTabs tab="5" ></ReportTabs>
         <AuditTable></AuditTable>
       </div>
     </>
