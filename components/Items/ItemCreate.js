@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Link from "next/link";
 import Modal from 'react-modal';
 
@@ -14,7 +14,7 @@ function ItemCreate({categories, brands}) {
     const [name, setName] = useState("");
     const [model, setModel] = useState("");
     const [unitID, setUnitID] = useState("");
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const [minQuantity, setMinQuantity] = useState(0);
     const [isDisabled, setIsDisabled] = useState(false);
 
@@ -27,7 +27,7 @@ function ItemCreate({categories, brands}) {
         partNum: "",
         initialQty: 0,
     })
-    const [detailsArray, setDetailsArray] = useState([])
+    const [detailsArray, setDetailsArray] = useState([{}])
 
     // Modals
     const [modStatus, setModStatus] = useState(false)
@@ -41,17 +41,35 @@ function ItemCreate({categories, brands}) {
     const [infoPop, setInfoPop] = useState(false);
     const [cancel, setCancel] = useState(false);
 
+    // Handle details input
+    function handleDetails (e) {
+        const { name, value } = e.target
+        setDetails(prevState => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }
+
+    function addDetails () {
+        detailsArray.push(details);
+        setDetails(prevState => ({
+            ...prevState,
+            brand: "",
+            partNum: "",
+            initialQty: 0,
+        }));
+    }
+
     // Submit Form
     function submitForm() {
         // console.log("1. Error is " + error + ", Data is " + data);
         if (
           categoryID.length == 0 ||
           name.length == 0 ||
-          brandID.length == 0 ||
           unitID.length == 0 ||
           quantity == 0 ||
-          minQuantity == 0 ||
-          detailsArray.length == 0    
+          minQuantity == 0 
+        //   detailsArray.length == 0    
         ) {
           setError(true);
         } else {
@@ -146,12 +164,18 @@ function ItemCreate({categories, brands}) {
                         <label htmlFor="itemID">Item Code: <label className="required"> * </label></label>
                         <input 
                             type="text"
+                            name="itemID"
+                            value={itemID}
+                            onChange={(e) => setItemID(e.target.value)}
                         />
                     </div>
                     <div className="item-input">
                         <label htmlFor="itemName">Item Name: <label className="required"> * </label></label>
                         <input 
                             type="text"
+                            name="itemName"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                     </div>
 
@@ -169,6 +193,9 @@ function ItemCreate({categories, brands}) {
                         <label htmlFor="itemModel">Item Model:</label>
                         <input 
                             type="text"
+                            name="itemModel"
+                            value={model}
+                            onChange={(e) => setModel(e.target.value)}
                         />
                     </div>
 
@@ -176,6 +203,9 @@ function ItemCreate({categories, brands}) {
                         <label htmlFor="minQuantity">Min. Quantity:</label>
                         <input 
                             type="number"
+                            name="minQuantity"
+                            value={minQuantity}
+                            onChange={(e) => setMinQuantity(e.target.valueAsNumber)}
                         />
                     </div>
 
@@ -194,13 +224,14 @@ function ItemCreate({categories, brands}) {
                             className="sort-dropdown"
                             id="user-create-role"
                             defaultValue={"0000"}
+                            onChange={(e) => setUnitID(e.target.value)}
                         >
                             <option value="" key="00001" defaultValue hidden>
                                 {" "}
                                 Select Unit{" "}
                             </option>
-                            <option key="Pieces" value="Pieces">Pieces</option>
-                            <option key="Sets" value="Sets">Sets</option>
+                            <option key="Pieces" value="10001">Pieces</option>
+                            <option key="Sets" value="10002">Sets</option>
 
                         {/* {units.map((unit) => (
                             <option key={unit.unitID} value={unit.unitName}>
@@ -230,6 +261,7 @@ function ItemCreate({categories, brands}) {
                             className="sort-dropdown"
                             id="user-create-role"
                             defaultValue={"0000"}
+                            onChange={(e) => handleDetails(e)}
                         >
                             <option value="" key="00003" defaultValue hidden>
                                 {" "}
@@ -247,6 +279,9 @@ function ItemCreate({categories, brands}) {
                         <label htmlFor="partNum">Part Number:</label>
                         <input 
                             type="text"
+                            name="partNum"
+                            value={partNum}
+                            onChange={(e) => handleDetails(e)}
                         />
                     </div>
 
@@ -254,10 +289,13 @@ function ItemCreate({categories, brands}) {
                         <label htmlFor="quantity">Initial Quantity:</label>
                         <input 
                             type="number"
+                            name="quantity"
+                            value={quantity}
+                            onChange={(e) => handleDetails(e)}
                         />
                     </div>
 
-                    <button className="green-button-container add-button">
+                    <button type="button" className="green-button-container add-button">
                         Add 
                     </button>
                 </div>

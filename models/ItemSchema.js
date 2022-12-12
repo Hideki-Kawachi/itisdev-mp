@@ -41,7 +41,7 @@ const ItemSchema = new mongoose.Schema({
     type: String,
     minlength: 5,
     maxlength: 5,
-    required: true,
+    required: false,
   },
   disabled: {
     type: Boolean,
