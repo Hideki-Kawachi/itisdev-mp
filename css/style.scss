@@ -790,6 +790,15 @@ svg{
   width: 400px;
   margin-left: 35px;
   margin-top: 10px;
+
+  &.form-fields-calendar-range{
+   width: 200px;
+    margin-left: 5px;
+  }
+}
+
+.calendar-range-container{
+  margin-left: 750px;
 }
 .required-text{
   margin-top: 10px;
@@ -1274,3 +1283,6 @@ input:disabled+label {
   padding: 5px 22px 5px 25px;
   margin-right: 10px;
 }
+
+
+

@@ -1,7 +1,7 @@
 import React, {useMemo} from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
-import BasicTable from "../../components/Vehicles/VehicleTable";
+import VehicleTable from "../../components/Vehicles/VehicleTable";
 import dbConnect from "../../lib/dbConnect";
 import Vehicle from "../../models/VehicleSchema";
 import Brand from "../../models/BrandSchema";
@@ -116,7 +116,7 @@ function Vehicles({ vehicleData, currentUser, typeData, brandData, transmissionD
       <div id="main-container">
         <div className="main-container-bg">
           <br />
-          <BasicTable vehicle={vehicles}> </BasicTable>
+          <VehicleTable vehicle={vehicles}> </VehicleTable>
           {/* // vtype={vTypes} brand={brands} transmission={transmissions} */}
         </div>
       </div>

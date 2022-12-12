@@ -1,77 +1,60 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import {
-	useTable,
-	useSortBy,
-	useGlobalFilter,
-	usePagination,
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
 } from "react-table";
-import { COLUMNS } from "./VehicleColumns";
+import { COLUMNS } from "./AuditColumns";
 import GlobalFilter from "../GlobalFilter";
-import Link from "next/link";
-import { useRouter }  from 'next/router';
-import Modal from "react-modal";
-import Info from "../../components/Pop-up/info";
+import AUDIT_MOCK_DATA from "./AUDIT_MOCK_DATA.json";
 
-export const VehicleTable = ({vehicle} ) => {
-  const [infoPop, setInfoPop] = useState(false);
+export const AuditTable = () => {
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => vehicle, []);
-  const router = useRouter();
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    nextPage,
-    canNextPage,
-    previousPage,
-    canPreviousPage,
-    gotoPage,
-    pageOptions,
-    pageCount,
-    prepareRow,
-    setPageSize,
-    state,
-    setGlobalFilter,
-  } = useTable(
-    {
-      columns,
-      data,
-    },
+  const data = useMemo(() => AUDIT_MOCK_DATA, []);
 
-    useGlobalFilter,
-    useSortBy,
-    usePagination
-  );
+ const {
+  getTableProps,
+  getTableBodyProps,
+   headerGroups,
+   page,
+   nextPage,
+   canNextPage,
+   previousPage,
+   canPreviousPage,
+   gotoPage,
+   pageOptions,
+   pageCount,
+   prepareRow,
+   setPageSize,
+   state,
+   setGlobalFilter,
+ } = useTable(
+   {
+     columns,
+     data,
+   },
 
-  const { globalFilter } = state;
-  const { pageIndex } = state;
-  const onHeaderClick = () => {
-    return {
-    onClick: () => {
-          setInfoPop(!infoPop);
-      },
-    };
-  }
+   useGlobalFilter,
+   useSortBy,
+   usePagination
+ );
+
+   const { globalFilter } = state;
+   const { pageIndex } = state;
 
   return (
-    <>
-      <Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
-        <Info trigger={infoPop} setTrigger={setInfoPop}></Info>
-      </Modal>
-      <div className="user-left-container">
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-        <button type="button" className="table-info-button" onClick={() => setInfoPop(!infoPop)}>i</button>
-        <span className="user-right-container">
-          <button className="add-button">
-            {" "}
-            <Link href="vehicles/addvehicle">Add Vehicle + </Link>
-          </button>{" "}
-        </span>
-      </div>
+    <div>
       <br />
+      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      <span className="calendar-range-container">
+        <input type="date" className="form-fields form-fields-calendar-range" />{" "}
+        to{" "}
+        <input type="date" className="form-fields form-fields-calendar-range"/>
+      </span>
       <table id="btable" {...getTableProps()}>
         <thead>
+          <br />
           {headerGroups.map((headerGroup) => (
             <tr
               id="btable"
@@ -110,6 +93,7 @@ export const VehicleTable = ({vehicle} ) => {
       </table>
 
       <br />
+
       <div className="page-buttons">
         {/* <input
           type="number"
@@ -158,8 +142,6 @@ export const VehicleTable = ({vehicle} ) => {
           </button>
         </span>
       </div>
-    </>
+    </div>
   );
 };
-
-export default VehicleTable;
