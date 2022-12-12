@@ -19,6 +19,9 @@ function ItemCreate() {
     const [isDisabled, setIsDisabled] = useState(false);
 
     // Item Details
+    const [brandID, setBrandID] = useState("")
+    const [partNum, setPartNum] = useState("")
+    const [initialQty, setInitialQty] = useState("")
     const [details, setDetails] = useState({
         brand: "",
         partNum: "",
@@ -44,7 +47,7 @@ function ItemCreate() {
                             <label htmlFor="categoryID">Item Category: <label className="required"> * </label></label>
                             <button className="item-icon-button item-add-option-button " type="button" onClick={() => {
                                 setModStatus(true);
-                                setModName("Create Item Category");
+                                setModName("Select Category");
                                 setModType(categoryID);
                                 setModID("categoryID");
                                 }}>✎</button>
@@ -100,7 +103,16 @@ function ItemCreate() {
                     </div>
 
                     <div className="item-input">
-                        <label htmlFor="unitID">Unit:<label className="required"> * </label></label>
+                        <div className="item-label-with-buttons">
+                            <label htmlFor="unitID">Unit: <label className="required"> * </label></label>
+                            <button className="item-icon-button item-add-option-button " type="button" onClick={() => {
+                                setModStatus(true);
+                                setModName("Select Unit");
+                                setModType(unitID);
+                                setModID("unitID");
+                                }}>✎</button>
+                        </div>
+                        {/* Insert Modal Here */}
                         <select
                             className="sort-dropdown"
                             id="user-create-role"
@@ -108,7 +120,7 @@ function ItemCreate() {
                         >
 
                             <option key="Pieces" value="Pieces">Pieces</option>
-                            <option key="Sets" value="Sets">Pieces</option>
+                            <option key="Sets" value="Sets">Sets</option>
 
                         {/* {units.map((unit) => (
                             <option key={unit.unitID} value={unit.unitName}>
@@ -123,9 +135,17 @@ function ItemCreate() {
             <h1>ITEM DETAILS</h1>
 
             <div id="add-item-form-details">
-                <div className="details-left-container">
+                <div className="details-left-container" >
                     <div className="item-input">
-                        <label htmlFor="itemBrand">Brand:</label>
+                        <div className="item-label-with-buttons">
+                            <label htmlFor="brandID">Brand: <label className="required"> * </label></label>
+                            <button id="select-brand" className="item-icon-button item-add-option-button " type="button" onClick={() => {
+                                setModStatus(true);
+                                setModName("Select Brand");
+                                setModType(brandID);
+                                setModID("brandID");
+                                }}>✎</button>
+                        </div>
                         <input 
                             type="text"
                         />

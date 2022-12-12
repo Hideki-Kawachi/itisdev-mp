@@ -1111,6 +1111,14 @@ a {
       width: 100%;
       margin-top: 15px;
     }
+    
+    #select-brand {
+      width: 0px;
+      margin-left: 15px;
+      margin-top: 0px;
+
+    }
+
   }
 
   .details-right-container {
@@ -1120,6 +1128,8 @@ a {
     color: map-get($colors-neutral, 400)
     
   }
+
+  
 }
 
 .item-footer {
