@@ -8,7 +8,7 @@ import {
   usePagination,
 } from "react-table";
 import ITEM_CAT_MOCK_DATA from "./Temp/ITEM_CAT_MOCK_DATA.json"
-import { COLUMNS } from "./ItemCatColumns";
+import { COLUMNS } from "./CategoryColumns";
 import GlobalFilter from "../GlobalFilter";
 import AddItemCategory from "./CategoryCreate";
 import Link from "next/link";

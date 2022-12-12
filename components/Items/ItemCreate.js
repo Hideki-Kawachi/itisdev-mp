@@ -3,8 +3,8 @@ import Link from "next/link";
 import Modal from 'react-modal';
 
 import ToggleSwitch from '../ToggleSwitch'
-import TempCategoryFilter from './Temp/TempCategoryFilter'
 import ItemCatTable from './CategoryList';
+import BrandTable from './BrandTable';
 
 // TO-DO: add dropdown options as parameters
 function ItemCreate({categories, brands}) {
@@ -244,11 +244,12 @@ function ItemCreate({categories, brands}) {
                 </div>
 
                 <div className="details-right-container">
-                    { detailsArray.length == 0 ? (
+                    <BrandTable></BrandTable>
+                    {/* { detailsArray.length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <h1>Insert table here</h1>
-                    )}
+                        <<h1>Insert table here</h1>>
+                    )} */}
                 </div>
             </div>
 
