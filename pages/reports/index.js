@@ -36,12 +36,13 @@ export const getServerSideProps = withIronSessionSsr(
 // ];
 
 function TransactionReports({ currentUser }) {
+
 	return (
 		<>
 			<Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
-				<ReportTabs tab="1"></ReportTabs>
+				<ReportTabs tab="1" roleID={currentUser.roleID}></ReportTabs>
 				<BasicTable></BasicTable>
 			</div>
 		</>

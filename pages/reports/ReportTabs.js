@@ -12,10 +12,28 @@ import { ironOptions } from "../../lib/config";
 function ReportTabs(props) {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [toggleState, setToggleState] = useState(props.tab);
+	const [currentRole, setRole] = useState(props.roleID);
 
 	const toggleTab = (index) => {
 		setToggleState(index);
 	};
+
+	function showAudit() {
+		if (currentRole == "0000"){
+			return (
+				<Link href="/reports/audit">
+					<button
+						className={toggleState == 5 ? "tabs active-tabs" : "tabs"}
+						onClick={() => 
+							toggleTab(5)
+						}
+					>
+						Audit
+					</button>
+				</Link>
+			)
+		}
+	}
 
 	return (
 		<div className="container">
@@ -55,6 +73,7 @@ function ReportTabs(props) {
 						Supplier
 					</button>
 				</Link>
+				{showAudit()}
 			</div>
 
 		</div>
