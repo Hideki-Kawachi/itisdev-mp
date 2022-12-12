@@ -35,28 +35,8 @@ function Items({ currentUser }) {
 			<Header page={"ITEMS"} subPage={"ADD ITEM"} user={currentUser}></Header>
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
-				{categoryPopupOn ? (
-					<>
-						<div className="item-modal-bg">
-							<AddItemCategory
-								trigger={categoryPopupOn}
-								setTrigger={setCategoryPopupOn}
-							></AddItemCategory>
-						</div>
-						<ItemCreate
-							trigger={categoryPopupOn}
-							setTrigger={setCategoryPopupOn}
-						/>
-					</>
-				) : (
-					<div className="main-container-bg">
-						<ItemCreate
-							trigger={categoryPopupOn}
-							setTrigger={setCategoryPopupOn}
-						/>
-					</div>
-				)}
-			</div>
+				<ItemCreate />
+			</div>	
 		</>
 	);
 }

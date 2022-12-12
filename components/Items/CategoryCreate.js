@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 
 import ToggleSwitch from '../ToggleSwitch';
 
-function AddItemCategory({trigger, setTrigger}) {
+function AddItemCategory({trigger, setTrigger, name, type, id}) {
     const [isDisabled, setIsDisabled] = useState(false);
 
   return (
@@ -13,7 +13,7 @@ function AddItemCategory({trigger, setTrigger}) {
                     <h1>ITEM CATEGORY</h1>
                     <h2>ADD OPTION</h2>
                 </div>
-                <button className="item-icon-button item-x-button" onClick={() => setTrigger(!trigger)}>X</button>
+                <button className="item-icon-button item-x-button" onClick={() => setTrigger(false)}>X</button>
             </div>
 
             <div className="item-input">

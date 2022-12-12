@@ -1,18 +1,36 @@
 import React, {useState} from 'react'
 import Link from "next/link";
+import Modal from 'react-modal';
 
 import ToggleSwitch from '../ToggleSwitch'
 import TempCategoryFilter from './Temp/TempCategoryFilter'
+import ItemCatTable from './CategoryList';
 
-function ItemCreate({trigger, setTrigger}) {
+// TO-DO: add dropdown options as parameters
+function ItemCreate() {
+    // Item Identification
+    const [itemID, setItemID] = useState("60000000000");
+    const [categoryID, setCategoryID] = useState("10000");
+    const [name, setName] = useState("");
+    const [model, setModel] = useState("");
+    const [unitID, setUnitID] = useState("10000");
+    const [quantity, setQuantity] = useState(0);
+    const [minQuantity, setMinQuantity] = useState(0);
     const [isDisabled, setIsDisabled] = useState(false);
 
+    // Item Details
     const [details, setDetails] = useState({
         brand: "",
         partNum: "",
         initialQty: 0,
     })
     const [detailsArray, setDetailsArray] = useState([])
+
+    // Popups
+    const [modStatus, setModStatus] = useState(false)
+    const [modType, setModType] = useState("")
+    const [modName, setModName] = useState("")
+    const [modID, setModID] = useState("")
 
   return (
     <>
@@ -24,8 +42,24 @@ function ItemCreate({trigger, setTrigger}) {
                     <div className="item-input">
                         <div className="item-label-with-buttons">
                             <label htmlFor="categoryID">Item Category: <label className="required"> * </label></label>
-                            <button className="item-icon-button item-add-option-button " onClick={() => setTrigger(!trigger)}>✎</button>
+                            <button className="item-icon-button item-add-option-button " type="button" onClick={() => {
+                                setModStatus(true);
+                                setModName("Create Item Category");
+                                setModType(categoryID);
+                                setModID("categoryID");
+                                }}>✎</button>
                         </div>
+                        <Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
+                            <ItemCatTable
+                                trigger={modStatus}
+                                setTrigger={setModStatus}
+                                name={modName}
+                                type={modType}
+                                id={modID}
+                            >
+                                {" "}
+                            </ItemCatTable>
+                        </Modal>
                         <TempCategoryFilter identifier="user-create-role"></TempCategoryFilter>
                     </div>
                     <div className="item-input">
