@@ -1,18 +1,19 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import {
 	useTable,
 	useSortBy,
 	useGlobalFilter,
-	useFilters,
 	usePagination,
 } from "react-table";
 import { COLUMNS } from "./VehicleColumns";
 import GlobalFilter from "../GlobalFilter";
 import Link from "next/link";
 import { useRouter }  from 'next/router';
-
+import Modal from "react-modal";
+import Info from "../../components/Pop-up/info";
 
 export const BasicTable = ({vehicle} ) => {
+  const [infoPop, setInfoPop] = useState(false);
   const columns = useMemo(() => COLUMNS, []);
   const data = useMemo(() => vehicle, []);
   const router = useRouter();
@@ -45,17 +46,22 @@ export const BasicTable = ({vehicle} ) => {
 
   const { globalFilter } = state;
   const { pageIndex } = state;
- 
-    // useEffect(() =>{
-    //   vehicle.map((vehicle) => {
-        
-    //   })
-      
-    // });
+  const onHeaderClick = () => {
+    return {
+    onClick: () => {
+          setInfoPop(!infoPop);
+      },
+    };
+  }
+
   return (
     <>
+      <Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
+        <Info trigger={infoPop} setTrigger={setInfoPop}></Info>
+      </Modal>
       <div className="user-left-container">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+        <button type="button" className="table-info-button" onClick={() => setInfoPop(!infoPop)}>i</button>
         <span className="user-right-container">
           <button className="add-button">
             {" "}
@@ -119,7 +125,7 @@ export const BasicTable = ({vehicle} ) => {
             {pageIndex + 1} of {pageOptions.length}
           </strong>
         </span>
-        
+
         <span className="vehicle-nav-buttons-div">
           <button
             className="navigate-page"

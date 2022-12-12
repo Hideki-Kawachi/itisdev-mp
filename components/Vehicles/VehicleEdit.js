@@ -6,6 +6,7 @@ import VCatTable from "../../components/Vehicles/vCategoryList";
 import Modal from "react-modal";
 import Cancel from "../../components/Pop-up/cancel";
 import { useRouter } from "next/router";
+import Info from "../../components/Pop-up/info";
 
 function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gpsDATA }) {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -28,6 +29,7 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
   const [isEditable, setEditable] = useState(false)
   const [notifResult, setNotifResult] = useState("");
   const [categoryID, setCategoryID] = useState("");
+   const [infoPop, setInfoPop] = useState(false);
   const dt = new Date();
   const router = useRouter();
 
@@ -178,6 +180,27 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
   }
   return (
     <>
+      <Modal isOpen={vTypeOpen} className="modal" ariaHideApp={false}>
+        <VCatTable
+          trigger={vTypeOpen}
+          setTrigger={setvTypeOpen}
+          name={name}
+          type={otype}
+          id={categoryID}
+        >
+          {" "}
+        </VCatTable>
+      </Modal>
+      <Modal isOpen={cancel} className="modal" ariaHideApp={false}>
+        <Cancel
+          trigger={cancel}
+          setTrigger={setCancel}
+          transaction={" Editing of Vehicle"}
+        ></Cancel>
+      </Modal>
+      <Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
+        <Info trigger={infoPop} setTrigger={setInfoPop}></Info>
+      </Modal>
       {/* First Field Group */}
       <form>
         <div className="form-container">
@@ -215,24 +238,6 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
               {" "}
               ✎{" "}
             </button>
-            <Modal isOpen={vTypeOpen} className="modal" ariaHideApp={false}>
-              <VCatTable
-                trigger={vTypeOpen}
-                setTrigger={setvTypeOpen}
-                name={name}
-                type={otype}
-                id={categoryID}
-              >
-                {" "}
-              </VCatTable>
-            </Modal>
-            <Modal isOpen={cancel} className="modal" ariaHideApp={false}>
-              <Cancel
-                trigger={cancel}
-                setTrigger={setCancel}
-                transaction={" Editing of Vehicle"}
-              ></Cancel>
-            </Modal>
             <br />
             <select
               type="text"
@@ -278,12 +283,11 @@ function VehicleEdit({ plateNum, vtype, brand, engine, sensor, transmission, gps
             {" "}
             Status:{" "}
             <button
-              className="item-icon-button item-info-option-button "
-              disabled={!isEditable}
-              onClick={() => setTrigger(!trigger)}
+              type="button"
+              className="table-info-button"
+              onClick={() => setInfoPop(!infoPop)}
             >
-              {" "}
-              i{" "}
+              i
             </button>
             <br />
             {isEditable == false ? (

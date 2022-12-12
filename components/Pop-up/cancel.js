@@ -1,4 +1,4 @@
-import React, { useNavigate } from "react";
+
 import BasicButton from "../../components/BasicButton";
 import Link from "next/link";
 

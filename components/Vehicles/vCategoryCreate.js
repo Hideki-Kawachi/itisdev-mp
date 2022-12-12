@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ToggleSwitch from "../ToggleSwitch";
 
-function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
+function AddVehicleCategory({ trigger, setTrigger, name, type, catname, id }) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [defaultID, setDefaultID] = useState("");
   const [categoryName, setCategoryName] = useState("");
@@ -30,7 +30,7 @@ function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
       })
         .then((res) => res.json())
         .then((data) => {
-            console.log(JSON.stringify(categoryData));
+        //    console.log(JSON.stringify(categoryData));
           if (data == "created") {
             console.log("SUCCESS");
             setNotifResult("Successfully created!")
@@ -59,8 +59,19 @@ function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
 
   useEffect(() => {
   if (JSON.stringify(type) === "{}") {
-    setDefaultID("60000");
-    console.log(defaultID + " WALA LAMAN " + name.replace(/ /g, ""));
+    if(name == "Vehicle Type")
+      setDefaultID("60000");
+    else if (name == "Vehicle Brand")
+      setDefaultID("70000");
+    else if (name == "Transmission Type")
+      setDefaultID("21000");
+    else if(name == "Engine Type")
+      setDefaultID("31000");
+    else if(name == "GPS Provider")
+      setDefaultID("51000");
+    else if(name =="Fuel Level Sensor")
+      setDefaultID("61000");
+    console.log(defaultID + " Empty Collection: " + name.replace(/ /g, ""));
   } else {
     setDefaultID(Math.max(...type.map((type) => JSON.parse(type[id]))) + 1);
     console.log(defaultID + " " + name.replace(/ /g, ""));

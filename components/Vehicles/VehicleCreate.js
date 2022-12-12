@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import BasicButton from "../../components/BasicButton";
 import VCatTable from "../../components/Vehicles/vCategoryList";
 import Modal from 'react-modal';
 import Cancel from "../../components/Pop-up/cancel";
+import Info from "../../components/Pop-up/info";
 
 
 function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
@@ -29,6 +29,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   const [plateNumError, setPlateNumError] = useState("");
   const [categoryID, setCategoryID] = useState("");
   const [notifResult, setNotifResult] = useState("");
+  const [infoPop, setInfoPop] = useState(false);
   const currentUserID = "00000001";
   const dt = new Date();
  
@@ -89,7 +90,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
           } else  {
             setError(true);
             setPlateNumError(data);
-            console.log("Duplicate Plate Num is" + plateNumError);
+         //   console.log("Duplicate Plate Num is" + plateNumError);
           }
         });
 
@@ -105,7 +106,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
   }
   function showPlateNumError() {
 
-    console.log("Plate Number has special chars: " + checkSpecial()); 
+   // console.log("Plate Number has special chars: " + checkSpecial()); 
 
     if (error) {
       //plateNum is Empty
@@ -173,6 +174,28 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
 
   return (
     <>
+      {" "}
+      <Modal isOpen={vTypeOpen} className="modal" ariaHideApp={false}>
+        <VCatTable
+          trigger={vTypeOpen}
+          setTrigger={setvTypeOpen}
+          name={name}
+          type={otype}
+          id={categoryID}
+        >
+          {" "}
+        </VCatTable>
+      </Modal>
+      <Modal isOpen={cancel} className="modal" ariaHideApp={false}>
+        <Cancel
+          trigger={cancel}
+          setTrigger={setCancel}
+          transaction={" Creation of Vehicle"}
+        ></Cancel>
+      </Modal>
+      <Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
+        <Info trigger={infoPop} setTrigger={setInfoPop}></Info>
+      </Modal>
       {/* First Field Group */}
       <form>
         <div className="form-container">
@@ -218,24 +241,6 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               {" "}
               ✎{" "}
             </button>
-            <Modal isOpen={vTypeOpen} className="modal" ariaHideApp={false}>
-              <VCatTable
-                trigger={vTypeOpen}
-                setTrigger={setvTypeOpen}
-                name={name}
-                type={otype}
-                id={categoryID}
-              >
-                {" "}
-              </VCatTable>
-            </Modal>
-            <Modal isOpen={cancel} className="modal" ariaHideApp={false}>
-              <Cancel
-                trigger={cancel}
-                setTrigger={setCancel}
-                transaction={" Creation of Vehicle"}
-              ></Cancel>
-            </Modal>
             <br />
             <select
               type="text"
@@ -243,7 +248,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               onChange={(e) => setVehicleTypeID(e.target.value)}
               required
             >
-              <option value="" defaultValue hidden>
+              <option value="" key="00003" defaultValue hidden>
                 {" "}
                 Select Vehicle Type{" "}
               </option>
@@ -272,11 +277,11 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
             {" "}
             Status:{" "}
             <button
-              className="item-icon-button item-info-option-button "
-              onClick={() => setTrigger(!trigger)}
+              type="button"
+              className="table-info-button"
+              onClick={() => setInfoPop(!infoPop)}
             >
-              {" "}
-              i{" "}
+              i
             </button>
             <br />
             <ToggleSwitch
@@ -312,7 +317,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               onChange={(e) => setBrandID(e.target.value)}
               required
             >
-              <option value="" defaultValue hidden>
+              <option value="" key="00004" defaultValue hidden>
                 {" "}
                 Select Brand{" "}
               </option>
@@ -379,7 +384,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               onChange={(e) => setTransmissionID(e.target.value)}
               required
             >
-              <option value="" defaultValue hidden>
+              <option value="" key="00006" defaultValue hidden>
                 {" "}
                 Select Transmission{" "}
               </option>
@@ -454,7 +459,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               onChange={(e) => setEngineTypeID(e.target.value)}
               required
             >
-              <option value="" defaultValue hidden>
+              <option value="" key="00001" defaultValue hidden>
                 {" "}
                 Select Engine Type{" "}
               </option>
@@ -569,7 +574,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               required
             >
               {" "}
-              <option value="" defaultValue hidden>
+              <option value="" key="00005" defaultValue hidden>
                 {" "}
                 Select GPS Provider{" "}
               </option>
@@ -619,7 +624,7 @@ function VehicleCreate({vtype, brand, engine, sensor, transmission, gpsDATA}) {
               required
             >
               {" "}
-              <option value="" defaultValue hidden>
+              <option value="" key="00002" defaultValue hidden>
                 {" "}
                 Select Fuel Level Sensor{" "}
               </option>
