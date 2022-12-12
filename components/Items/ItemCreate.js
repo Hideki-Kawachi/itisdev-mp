@@ -222,7 +222,7 @@ function ItemCreate({categories, brands}) {
                             <button id="select-brand" className="item-icon-button item-add-option-button " type="button" onClick={() => {
                                 setModStatus(true);
                                 setModName("Add Brand");
-                                setModType(itemBrandID);
+                                setModType(brands);
                                 setModID("itemBrandID");
                                 }}>✎</button>
                         </div>
