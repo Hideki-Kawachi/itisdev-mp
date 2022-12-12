@@ -7,7 +7,7 @@ import {
 	usePagination,
 } from "react-table";
 import Link from "next/link";
-import { COLUMNS } from "./ItemColumns";
+import { COLUMNS } from "./BrandColumns";
 
 // Temporary Assets
 import ITEM_BRAND_MOCK_DATA from "./Temp/ITEM_BRAND_MOCK_DATA.json";

@@ -8,7 +8,7 @@ export const COLUMNS = [
   },
   {
     Header: "Category",
-    accessor: "name",
+    accessor: "categoryID",
     disableGlobalFilter: true,
   },
 ];

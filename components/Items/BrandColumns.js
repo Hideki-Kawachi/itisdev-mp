@@ -7,8 +7,8 @@ export const COLUMNS = [
     accessor: (/** @type {any} */ _row, /** @type {number} */ i) => i + 1,
   },
   {
-    Header: "Item Code",
-    accessor: "itemCode",
+    Header: "Brand",
+    accessor: "brand",
     disableGlobalFilter: true,
   },
   {

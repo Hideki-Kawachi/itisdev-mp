@@ -1,5 +1,5 @@
-import dbConnect from "../../../lib/dbConnect";
-import ItemCategory from "../../../models/ItemCategorySchema";
+import dbConnect from "../../../../lib/dbConnect";
+import ItemCategory from "../../../../models/ItemCategorySchema";
 
 export default async (req, res) => {
     await dbConnect();
@@ -11,15 +11,15 @@ export default async (req, res) => {
     });
   
     let invalidName = await ItemCategory.findOne({
-      categoryName: categoryInfo.categoryName,
+        name: categoryInfo.name,
     });
   
     if (invalidID != null) {
       console.log("INVALID ID " + categoryInfo.categoryID);
       res.json(categoryInfo.categoryID);
     } else if (invalidName != null) {
-      console.log("INVALID NAME " + categoryInfo.categoryName);
-      res.json(categoryInfo.categoryName);
+      console.log("INVALID NAME " + categoryInfo.name);
+      res.json(categoryInfo.name);
     } else {
       await ItemCategory.create(categoryInfo);
       res.json("created");

@@ -12,6 +12,7 @@ import ItemTable from "../../components/Items/ItemTable";
 import dbConnect from "../../lib/dbConnect";
 import Item from "../../models/ItemSchema";
 import ItemCategory from "../../models/ItemCategorySchema"
+import ItemBrand from "../../models/ItemBrandSchema";
 
 import { ironOptions } from "../../lib/config";
 import { withIronSessionSsr } from "iron-session/next";
@@ -40,7 +41,7 @@ export const getServerSideProps = withIronSessionSsr(
 				{},
 				{
 					categoryID: 1,
-					categoryName: 1,
+					name: 1,
 					disabled: 1,
 				}
 			);
@@ -50,12 +51,12 @@ export const getServerSideProps = withIronSessionSsr(
 					
 			// 	}
 			// )
-			const brandList = await ItemCategory.find(
+			const brandList = await ItemBrand.find(
 				{},
 				{
-					itemID: 1,
 					itemBrandID: 1,
-					// disabled: 1,
+					name: 1,
+					disabled: 1,
 				}
 			);
 

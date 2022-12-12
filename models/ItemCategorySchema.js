@@ -8,7 +8,7 @@ const ItemCategorySchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  categoryName: {
+  name: {
     type: String,
     unique: true,
     required: true,

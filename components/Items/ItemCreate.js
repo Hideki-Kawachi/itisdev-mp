@@ -19,7 +19,7 @@ function ItemCreate({categories, brands}) {
     const [isDisabled, setIsDisabled] = useState(false);
 
     // Item Details
-    const [brandID, setBrandID] = useState("")
+    const [itemBrandID, setBrandID] = useState("")
     const [partNum, setPartNum] = useState("")
     const [initialQty, setInitialQty] = useState("")
     const [details, setDetails] = useState({
@@ -114,7 +114,7 @@ function ItemCreate({categories, brands}) {
                 {" "}
             </ItemCatTable>
         </Modal>
-        <form className="item-column-container" id="item-add-main-container">
+        <form onSubmit={submitForm} className="item-column-container" id="item-add-main-container">
             <h1>IDENTIFICATION</h1>
 
             <div id="add-item-form-identification">
@@ -129,10 +129,14 @@ function ItemCreate({categories, brands}) {
                                 setModID("categoryID");
                                 }}>✎</button>
                         </div>
-                        <select className="sort-dropdown" id="user-create-role">
+                        <select className="sort-dropdown" id="user-create-role" onChange={(e) => setCategoryID(e.target.value)}>
+                            <option value="" key="00000" defaultValue hidden>
+                                {" "}
+                                Select Category{" "}
+                            </option>
                             {categories.map((category) => (
-                                <option key={category.categoryID} value={category.categoryName}>
-                                    {category.categoryName}
+                                <option key={category.categoryID} value={category.categoryID}>
+                                    {category.name}
                                 </option>
                             ))}
                         </select>
@@ -191,7 +195,10 @@ function ItemCreate({categories, brands}) {
                             id="user-create-role"
                             defaultValue={"0000"}
                         >
-
+                            <option value="" key="00001" defaultValue hidden>
+                                {" "}
+                                Select Unit{" "}
+                            </option>
                             <option key="Pieces" value="Pieces">Pieces</option>
                             <option key="Sets" value="Sets">Sets</option>
 
@@ -214,14 +221,26 @@ function ItemCreate({categories, brands}) {
                             <label htmlFor="brandID">Brand: <label className="required"> * </label></label>
                             <button id="select-brand" className="item-icon-button item-add-option-button " type="button" onClick={() => {
                                 setModStatus(true);
-                                setModName("Select Brand");
-                                setModType(brandID);
-                                setModID("brandID");
+                                setModName("Add Brand");
+                                setModType(itemBrandID);
+                                setModID("itemBrandID");
                                 }}>✎</button>
                         </div>
-                        <input 
-                            type="text"
-                        />
+                        <select
+                            className="sort-dropdown"
+                            id="user-create-role"
+                            defaultValue={"0000"}
+                        >
+                            <option value="" key="00003" defaultValue hidden>
+                                {" "}
+                                Select Brand{" "}
+                            </option>
+                            {brands.map((brand) => (
+                                <option key={brand.itemBrandID} value={brand.name}>
+                                    {brand.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="item-input">
@@ -257,11 +276,7 @@ function ItemCreate({categories, brands}) {
                 <Link href="/items">
                     <button className="gray-button-container">Cancel</button>
                 </Link>
-                
-                <Link href="/items">
-                    <button className="green-button-container">Save</button>
-                </Link>
-                
+                <button type="submit" className="green-button-container">Save</button>
             </div>
         </form>
     </>
