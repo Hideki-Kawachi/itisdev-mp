@@ -9,39 +9,39 @@ import { COLUMNS } from "./AuditColumns";
 import GlobalFilter from "../GlobalFilter";
 import AUDIT_MOCK_DATA from "./AUDIT_MOCK_DATA.json";
 
-export const AuditTable = () => {
+export const AuditTabs = () => {
   const columns = useMemo(() => COLUMNS, []);
   const data = useMemo(() => AUDIT_MOCK_DATA, []);
 
- const {
-  getTableProps,
-  getTableBodyProps,
-   headerGroups,
-   page,
-   nextPage,
-   canNextPage,
-   previousPage,
-   canPreviousPage,
-   gotoPage,
-   pageOptions,
-   pageCount,
-   prepareRow,
-   setPageSize,
-   state,
-   setGlobalFilter,
- } = useTable(
-   {
-     columns,
-     data,
-   },
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    nextPage,
+    canNextPage,
+    previousPage,
+    canPreviousPage,
+    gotoPage,
+    pageOptions,
+    pageCount,
+    prepareRow,
+    setPageSize,
+    state,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
+      data,
+    },
 
-   useGlobalFilter,
-   useSortBy,
-   usePagination
- );
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
 
-   const { globalFilter } = state;
-   const { pageIndex } = state;
+  const { globalFilter } = state;
+  const { pageIndex } = state;
 
   return (
     <div>

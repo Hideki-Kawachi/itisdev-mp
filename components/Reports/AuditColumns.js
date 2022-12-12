@@ -10,6 +10,14 @@ export const COLUMNS = [
     Header: "Date",
     accessor: "auditDate",
     disableGlobalFilter: true,
+    filter: (rows, id, filterValue) => {
+      return rows.filter(
+        (row) =>
+          filterValue.length <= 0 ||
+          !filterValue ||
+          filterValue.includes(row.values[id])
+      );
+    },
   },
   {
     Header: "Item Name",

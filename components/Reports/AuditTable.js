@@ -5,17 +5,17 @@ import {
   useGlobalFilter,
   usePagination,
 } from "react-table";
-import { COLUMNS } from "./columns";
+import { COLUMNS } from "./AuditColumns";
 import GlobalFilter from "../GlobalFilter";
+import AUDIT_MOCK_DATA from "./AUDIT_MOCK_DATA.json";
 
-import ADDINV_MOCK_DATA from "../ADDINV_MOCK_DATA.json";
+export const AuditTable = () => {
+  const columns = useMemo(() => COLUMNS, []);
+  const data = useMemo(() => AUDIT_MOCK_DATA, []);
 
-export const BasicTable = () => {
-      const columns = useMemo(() => COLUMNS, []);
-      const data = useMemo(() => ADDINV_MOCK_DATA, []);
  const {
-   getTableProps,
-   getTableBodyProps,
+  getTableProps,
+  getTableBodyProps,
    headerGroups,
    page,
    nextPage,
@@ -40,8 +40,8 @@ export const BasicTable = () => {
    usePagination
  );
 
- const { globalFilter } = state;
- const { pageIndex } = state;
+   const { globalFilter } = state;
+   const { pageIndex } = state;
 
   return (
     <div>
@@ -50,7 +50,7 @@ export const BasicTable = () => {
       <span className="calendar-range-container">
         <input type="date" className="form-fields form-fields-calendar-range" />{" "}
         to{" "}
-        <input type="date" className="form-fields form-fields-calendar-range" />
+        <input type="date" className="form-fields form-fields-calendar-range"/>
       </span>
       <table id="btable" {...getTableProps()}>
         <thead>
