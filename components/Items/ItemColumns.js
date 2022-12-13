@@ -7,18 +7,33 @@ export const COLUMNS = [
     accessor: (/** @type {any} */ _row, /** @type {number} */ i) => i + 1,
   },
   {
+    Header: "Status",
+    id: "disabled",
+    accessor: "disabled",
+    Cell: (props) => {
+      return props.value == false ? (
+        <span className="btable-enabled">⬤</span>
+      ) : (
+        <span className="btable-disabled">⬤</span>
+      );
+    },
+    width: 50,
+    disableSortBy: true,
+  },
+  {
     Header: "Category",
     accessor: "categoryID",
-    disableGlobalFilter: true,
+
   },
   {
     Header: "Name",
     accessor: "itemName",
+    disableGlobalFilter: true,
   },
   {
     Header: "Model",
     accessor: "itemModel",
-    disableGlobalFilter: true,
+    Filter: GlobalFilter,
   },
   {
     Header: "Qty",

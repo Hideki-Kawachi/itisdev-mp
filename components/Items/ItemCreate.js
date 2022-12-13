@@ -47,11 +47,12 @@ function ItemCreate({items, categories, brands}) {
         }));
     }
 
+
     function addDetails () {
         if (Object.keys(detailsArray[0]).length == 0) {
             detailsArray.shift()
         }
-        detailsArray.push(details);
+        setDetailsArray(detailsArray => [...detailsArray, details])
         setQuantity(quantity+parseInt(details.quantity))
         setDetails(prevState => ({
             ...prevState,
@@ -59,7 +60,6 @@ function ItemCreate({items, categories, brands}) {
             partNum: "",
             quantity: 0,
         }));
-        console.log(detailsArray)
     }
 
     // useEffect(() => {

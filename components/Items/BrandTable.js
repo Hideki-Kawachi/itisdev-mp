@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import {
 	useTable,
 	useSortBy,
@@ -8,6 +8,7 @@ import {
 } from "react-table";
 import Link from "next/link";
 import { COLUMNS } from "./BrandColumns";
+import { useState } from "react";
 
 // Temporary Assets
 import ITEM_BRAND_MOCK_DATA from "./Temp/ITEM_BRAND_MOCK_DATA.json";
@@ -15,8 +16,8 @@ import ITEM_BRAND_MOCK_DATA from "./Temp/ITEM_BRAND_MOCK_DATA.json";
 
 export const BrandTable = ({detailsArray}) => {
 	const columns = useMemo(() => COLUMNS, []);
-	const data = useMemo(() => detailsArray, []);
-
+	const data = useMemo(() => detailsArray, [detailsArray]);
+  
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -92,10 +93,10 @@ export const BrandTable = ({detailsArray}) => {
             {pageIndex + 1} of {pageOptions.length} 
           </strong>
         </span>
-		<input type='number' defaultValue = {pageIndex + 1} onChange={e => {
+		{/* <input type='number' defaultValue = {pageIndex + 1} onChange={e => {
 			const pageNumber= e.target.value ? Number(e.target.value) - 1 : 0
 			gotoPage(pageNumber)}
-		}/>
+		}/> */}
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
         </button>
