@@ -21,8 +21,6 @@ const UnitTypeSchema = new mongoose.Schema({
   },
 });
 
-const unitType =
-  mongoose.models.unitType ||
-  mongoose.model("unitType", UnitTypeSchema);
+const unitType = mongoose.models.unitType || mongoose.model("unitType", UnitTypeSchema);
 
 export default unitType;

@@ -11,7 +11,7 @@ import { COLUMNS } from "./InventoryColumnsPull";
 import GlobalFilter from "../GlobalFilter";
 import Link from "next/link";
 
-export const BasicTable = () => {
+export const BasicTablePull = () => {
 	const columns = useMemo(() => COLUMNS, []);
 	const data = useMemo(() => PULLINV_MOCK_DATA, []);
 
@@ -115,4 +115,4 @@ export const BasicTable = () => {
   );
 };
 
-export default BasicTable;
+export default BasicTablePull;

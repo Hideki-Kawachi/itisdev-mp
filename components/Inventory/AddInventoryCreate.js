@@ -2,214 +2,254 @@ import React, { useState } from "react";
 import ToggleSwitch from "../ToggleSwitch";
 import BasicTableAdd from "./InventoryTable";
 import BasicTablePull from "./InventoryTablePull";
-import BasicButton from "../BasicButton";
+import BasicButton from "../../components/BasicButton";
 import Cancel from "../Pop-up/cancel";
 import { v4 as uuid } from 'uuid';
+import Modal from 'react-modal';
+import ItemCatTable from "../Items/CategoryList";
 
-function AddInventoryCreate({unit, brand, supplier}) {
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [vTypeOpen, setvTypeOpen] = useState(false);
-  const [otype, setOType] = useState();
-  const [name, setName] = useState("");
-  const [cancel, setCancel] = useState(false);
-  const [acquireDate, setAcquireDate] = useState("");
-  const [addRecordID, setAddRecordID] = useState("");
-  const [invoiceNumber, setInvoiceNumber] = useState("");
-  const [itemID, setItemID] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [unitID, setUnitID] = useState("");
-  const [unitPrice, setUnitPrice] = useState("");
-  const [brandID, setBrandID] = useState("");
-  const [partNumber, setpartNumber] = useState("");
-  const [supplierID, setSupplierID] = useState("");
-  const [remarks, setRemarks] = useState("");
-  const [notifResult, setNotifResult] = useState("");
-  const [error, setError] = useState(false);
-  const [invoiceNumberError, setInvoiceNumberError] = useState("");
-  const [partNumberError, setPartNumberError] = useState("");
-  const currentUserID = "00000001";
-  const curr = new Date();
-  curr.setDate(curr.getDate());
-  const date = curr.toISOString().substring(0,10);
-  const uniqueRecordID = uuid();
-  const autoRecordID = uniqueRecordID.slice(0,8)
-  const [toggleState, setToggleState] = useState(1);
+
+function AddInventoryCreate({ units, brands, suppliers }) {
+	const [isDisabled, setIsDisabled] = useState(false);
+	const [vTypeOpen, setvTypeOpen] = useState(false);
+	const [otype, setOType] = useState();
+	const [name, setName] = useState("");
+	const [cancel, setCancel] = useState(false);
+	const [acquireDate, setAcquireDate] = useState("");
+	const [addRecordID, setAddRecordID] = useState("");
+	const [invoiceNumber, setInvoiceNumber] = useState("");
+	const [itemID, setItemID] = useState("");
+	const [quantity, setQuantity] = useState("");
+	const [unitID, setUnitID] = useState("");
+	const [unitPrice, setUnitPrice] = useState("");
+	const [brandID, setBrandID] = useState("");
+	const [partNumber, setpartNumber] = useState("");
+	const [supplierID, setSupplierID] = useState("");
+	const [remarks, setRemarks] = useState("");
+	const [notifResult, setNotifResult] = useState("");
+	const [error, setError] = useState(false);
+	const [invoiceNumberError, setInvoiceNumberError] = useState("");
+	const [partNumberError, setPartNumberError] = useState("");
+	const currentUserID = "00000001";
+	const curr = new Date();
+	curr.setDate(curr.getDate());
+	const date = curr.toISOString().substring(0, 10);
+	const uniqueRecordID = uuid();
+	const autoRecordID = uniqueRecordID.slice(0, 8)
+	const [toggleState, setToggleState] = useState(1);
+
+	// Modals
+	const [modStatus, setModStatus] = useState(false)
+	const [modType, setModType] = useState("")
+	const [modName, setModName] = useState("")
+	const [modID, setModID] = useState("")
 
 	const toggleTab = (index) => {
 		setToggleState(index);
 	};
- 
+
 	function submitForm() {
-    // console.log("1. Error is " + error + ", Data is " + data);
-    if (
-      acquireDate.length == 0 ||
-      addRecordID.length == 0 ||
-      invoiceNumber.length == 0 ||
-      itemID.length == 0 ||
-      quantity.length == 0 ||
-      unitID.length == 0 ||
-      unitPrice.length == 0 ||
-      brandID.length == 0 ||
-     // partNumber.length == 0 ||
-      supplierID.length == 0 ||
-      checkSpecial() == true ||
-      checkYear() == true 
-    ) {
-      setError(true);
+		// console.log("1. Error is " + error + ", Data is " + data);
+		if (
+			acquireDate.length == 0 ||
+			addRecordID.length == 0 ||
+			invoiceNumber.length == 0 ||
+			itemID.length == 0 ||
+			quantity.length == 0 ||
+			unitID.length == 0 ||
+			unitPrice.length == 0 ||
+			brandID.length == 0 ||
+			// partNumber.length == 0 ||
+			supplierID.length == 0 ||
+			checkSpecial() == true ||
+			checkYear() == true
+		) {
+			setError(true);
 
-    } else {
-      let addInvData = {
-        acquireDate: acquireDate,
-        addRecordID: addRecordID,
-        invoiceNumber: invoiceNumber,
-        quantity: quantity,
-        unitID: unitID,
-        unitPrice: unitPrice,
-        brandID: brandID,
-        supplierID: supplierID,
-        creatorID: currentUserID,
-        creationDate: new Date(),
-        disabled: isDisabled,
-      }
+		} else {
+			let addInvData = {
+				acquireDate: acquireDate,
+				addRecordID: generateRandomID(),
+				invoiceNumber: invoiceNumber,
+				quantity: quantity,
+				unitID: unitID,
+				unitPrice: unitPrice,
+				brandID: brandID,
+				supplierID: supplierID,
+				creatorID: currentUserID,
+				creationDate: new Date(),
+				disabled: isDisabled,
+			};
 
-    //     console.log("2. Error is " + error + ", Data is " + data);
-    }
-  }
-  function cancelForm(){
-    setCancel(true);
-  }
+			fetch("/api/inventory/addInventory", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(addInvData),
+			})
 
-  function showInvoiceNumberError() {
+				.then((res) => res.json())
+				.then((data) => {
+					if (data == "created") {
+						console.log("SUCCESS");
+						setError(false);
+						window.location.reload();
+					} else {
+						setError(true);
+					}
+				});
 
-	if (error) {
-      //Invoice Number is Empty
-      if (invoiceNumber.length == 0) {
-        return <span className="vehicle-create-error">Input Invoice Number</span>;
-      } 
-      //Invoice Number reached max char length
-      else if (invoiceNumber.length > 15 || invoiceNumber.length < 15) {
-        return (
-          <span className="vehicle-create-error">
-            Invoice Number must be 15 numbers long.
-          </span>
-        );
-      } 
-    } 
-}
+			//     console.log("2. Error is " + error + ", Data is " + data);
+		}
+	}
+	function cancelForm() {
+		setCancel(true);
+	}
 
-  function showPartNumberError() {
+	function showInvoiceNumberError() {
 
-	if (error) {
-      //Part Number reached max char length
-    if (partNumber.length > 15 || partNumber.length < 15) {
-        return (
-          <span className="vehicle-create-error">
-            Part Number must be 15 numbers long.
-          </span>
-        );
-      } 
-    } 
-}
+		if (error) {
+			//Invoice Number is Empty
+			if (invoiceNumber.length == 0) {
+				return <span className="vehicle-create-error">Input Invoice Number</span>;
+			}
+			//Invoice Number reached max char length
+			else if (invoiceNumber.length > 15 || invoiceNumber.length < 15) {
+				return (
+					<span className="vehicle-create-error">
+						Invoice Number must be 15 numbers long.
+					</span>
+				);
+			}
+		}
+	}
 
-  	function showResult() {
-      if (notifResult.length > 0) {
-        return (
-          <div className="top-notification-container">
-            <span>{notifResult}</span>
-          </div>
-        );
-      } else {
-        return <></>;
-      }
-    }
-  function ShowPriceError(){
-    if(error){
-      if (unitPrice < 0){
-        return (
-          <span className="vehicle-create-error">
-            Input must not be negative.
-          </span>
-        )
-      }
-    }
-  }
+	function showPartNumberError() {
 
-  function ShowQuantityError(){
-    if(error){
-      if (quantity < 0){
-        return (
-          <span className="vehicle-create-error">
-            Input must not be negative.
-          </span>
-        )
-      }
-    }
-  }
+		if (error) {
+			//Part Number reached max char length
+			if (partNumber.length > 15 || partNumber.length < 15) {
+				return (
+					<span className="vehicle-create-error">
+						Part Number must be 15 numbers long.
+					</span>
+				);
+			}
+		}
+	}
 
-  function generateRandomID() {
-    var min = 100000000000000;
-    var max = 999999999999999;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+	function showResult() {
+		if (notifResult.length > 0) {
+			return (
+				<div className="top-notification-container">
+					<span>{notifResult}</span>
+				</div>
+			);
+		} else {
+			return <></>;
+		}
+	}
+	function ShowPriceError() {
+		if (error) {
+			if (unitPrice < 0) {
+				return (
+					<span className="vehicle-create-error">
+						Input must not be negative.
+					</span>
+				)
+			}
+		}
+	}
 
-  return (
-    <>
-      <div className="container">
+	function ShowQuantityError() {
+		if (error) {
+			if (quantity < 0) {
+				return (
+					<span className="vehicle-create-error">
+						Input must not be negative.
+					</span>
+				)
+			}
+		}
+	}
 
-			<div className="content-tabs">
+	function generateRandomID() {
+		var min = 100000000000000;
+		var max = 999999999999999;
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	return (
+		<>
+			<div className="container">
+
+				{/* <Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
+					<ItemCatTable
+						trigger={modStatus}
+						setTrigger={setModStatus}
+						name={modName}
+						type={modType}
+						id={modID}
+					>
+					</ItemCatTable>
+				</Modal> */}
+
+				<div className="content-tabs">
 					<BasicTableAdd> </BasicTableAdd>
 					<br />
 					<br />
 
 					{/* First Field Row */}
-
 					<div className="form-container">
 						<div className="form-item">
-								<label className="form-labels">
-									Record ID: {generateRandomID()} {" "}
-								</label>{" "}
-								<br />
+							<label className="form-labels">
+								Record ID: { } {" "}
+							</label>{" "}
+							<br />
 						</div>
-					</div>				
+					</div>
 					<br />
-					
+
 					{/*Second Field Row*/}
 					<div className="form-container">
 
 						<div className="form-item">
 							<label className="form-labels">Acquired Date: </label> <br />
 							<input
-								type= "date"
+								type="date"
+								id="acquireDate"
 								defaultValue={date}
 								className="form-fields"
 								placeholder="Acquired Date"
-							/>
+								required />
 						</div>
 
 						<div className="form-item">
 							<label className="form-labels">
-							Invoice Number: <label className="required"> * </label>{" "}
+								Invoice Number: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<label className="label-format">
-							{" "}
-							Format: Numbers only.{" "}
+								{" "}
+								Format: Numbers only.{" "}
 							</label>{" "}
 							<br />
 							<input
-							type="number"
-							className="form-fields"
-							placeholder="Enter Invoice Number"
-							onChange={(e) => setInvoiceNumber(e.target.value)}
-							/>
+								type="number"
+								id="invoiceNumber"
+								className="form-fields"
+								placeholder="Enter Invoice Number"
+								onChange={(e) => setInvoiceNumber(e.target.value)}
+								required />
 							{showInvoiceNumberError()}
 							{invoiceNumberError == invoiceNumber && invoiceNumber.length > 0 ? (
-							<span className="vehicle-create-error">
-								Invoice Number has already been registered.
-							</span>
+								<span className="inventory-add-invoiceNum-error">
+									Invoice Number has already been registered.
+								</span>
 							) : (
-							<></>
+								<></>
 							)}
-                   		</div>
+						</div>
 
 						<div className="form-item">
 							<label className="form-labels">
@@ -220,18 +260,18 @@ function AddInventoryCreate({unit, brand, supplier}) {
 								type="text"
 								className="form-fields"
 								placeholder="Enter Item Name"
-							/>
+								required />
 						</div>
 
 						<div className="form-item form-toggle">
 							{" "}
 							Status:{" "}
 							<button
-								className="item-icon-button item-info-option-button "
-								onClick={() => setTrigger(!trigger)}
+								type="button"
+								className="table-info-button"
+								onClick={() => setInfoPop(!infoPop)}
 							>
-								{" "}
-								i{" "}
+								i
 							</button>
 							<br />
 							<ToggleSwitch
@@ -248,21 +288,22 @@ function AddInventoryCreate({unit, brand, supplier}) {
 					<div className="form-container">
 						<div className="form-item">
 							<label className="form-labels">
-							Quantity: <label className="required"> * </label>{" "}
+								Quantity: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<input
-							type="number"
-							className="form-fields"
-							placeholder="Enter Quantity"
-							onChange={(e) => setQuantity(e.target.value)}
-							/>
+								type="number"
+								id="quantity"
+								className="form-fields"
+								placeholder="Enter Quantity"
+								onChange={(e) => setQuantity(e.target.value)}
+								required />
 							{ShowQuantityError()}
 							{error && quantity.length == 0 ? (
-							<span className="vehicle-create-error">
-								Input Quantity
-							</span>
+								<span className="vehicle-create-error">
+									Input Quantity
+								</span>
 							) : (
-							<></>
+								<></>
 							)}
 						</div>
 
@@ -270,36 +311,57 @@ function AddInventoryCreate({unit, brand, supplier}) {
 							<label className="form-labels">
 								Unit: <label className="required"> * </label>{" "}
 							</label>{" "}
+
 							<button
-								className="vehicle-icon-button vehicle-add-option-button "
+								className="item-icon-button item-add-option-button"
 								onClick={() => setTrigger(!trigger)}
 							>
 								{" "}
-								✎{" "}
-							</button>
+								✎{" "}</button>
+
+							{/*<button className="item-icon-button item-add-option-button " type="button" onClick={() => {
+									setModStatus(true);
+									setModName("Select Unit");
+									setModType(units);
+									setModID("unitID");
+								}}>✎</button>*/}
+
 							<br />
-							<select className="form-fields" />
+							<select
+								className="form-fields"
+								id="unitID"
+								defaultValue={"Unit"}
+								onChange={(e) => setUnitID(e.target.value)}
+								required >
+								<option value="">Select Unit</option>
+								{units.map((unit) => (
+									<option key={unit.UnitTypeID} value={unit.UnitTypeID}>
+										{unit.UnitTypeName}
+									</option>
+								))}
+							</select>
 						</div>
 
 						<div className="form-item">
 							<label className="form-labels">
-							Unit Price: <label className="required"> * </label>{" "}
+								Unit Price: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<label className="label-format"> Format: "0000.00" </label> <br />
 							<input
-							type="number"
-							step=".01"
-							className="form-fields"
-							placeholder="Enter Unit Price"
-							onChange={(e) => setUnitPrice(e.target.value)}
-							/>
+								type="number"
+								id="unitPrice"
+								step=".01"
+								className="form-fields"
+								placeholder="Enter Unit Price"
+								onChange={(e) => setUnitPrice(e.target.value)}
+								required />
 							{ShowPriceError()}
 							{error && unitPrice.length == 0 ? (
-							<span className="vehicle-create-error">
-								Input Unit Price
-							</span>
+								<span className="vehicle-create-error">
+									Input Unit Price
+								</span>
 							) : (
-							<></>
+								<></>
 							)}
 						</div>
 					</div>
@@ -314,38 +376,50 @@ function AddInventoryCreate({unit, brand, supplier}) {
 								Brand: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<button
-								className="vehicle-icon-button vehicle-add-option-button "
+								className="item-icon-button item-add-option-button"
 								onClick={() => setTrigger(!trigger)}
 							>
 								{" "}
 								✎{" "}
 							</button>
 							<br />
-							<select className="form-fields" />
+							<select
+								className="form-fields"
+								id="brandID"
+								defaultValue={"Brand"}
+								onChange={(e) => setBrandID(e.target.value)}
+								required>
+								<option value="">Select Brand</option>
+								{brands.map((brand) => (
+									<option key={brand.brandID} value={brand.brandID}>
+										{brand.name}
+									</option>
+								))}
+							</select>
 						</div>
 
 						<div className="form-item">
 							<label className="form-labels">
-							Part Number: {" "}
+								Part Number: {" "}
 							</label>{" "}
 							<label className="label-format">
-							{" "}
-							Format: Numbers only.{" "}
+								{" "}
+								Format: Numbers only.{" "}
 							</label>{" "}
 							<br />
 							<input
-							type="number"
-							className="form-fields"
-							placeholder="Enter Part Number"
-							onChange={(e) => setpartNumber(e.target.value)}
-							/>
+								type="number"
+								className="form-fields"
+								placeholder="Enter Part Number"
+								onChange={(e) => setpartNumber(e.target.value)}
+								required />
 							{showPartNumberError()}
 							{partNumberError == partNumber && partNumber.length > 0 ? (
-							<span className="vehicle-create-error">
-								Part Number has already been registered.
-							</span>
+								<span className="inventory-add-partNum-error">
+									Part Number has already been registered.
+								</span>
 							) : (
-							<></>
+								<></>
 							)}
 						</div>
 
@@ -354,14 +428,28 @@ function AddInventoryCreate({unit, brand, supplier}) {
 								Supplier: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<button
-								className="vehicle-icon-button vehicle-add-option-button "
+								className="item-icon-button item-add-option-button"
 								onClick={() => setTrigger(!trigger)}
 							>
 								{" "}
 								✎{" "}
 							</button>
 							<br />
-							<select className="form-fields" />
+
+							<select
+								className="form-fields"
+								id="supplierID"
+								defaultValue={"Supplier"}
+								onChange={(e) => setSupplierID(e.target.value)}
+								required
+							>
+								<option value="Select Supplier">Select Supplier</option>
+								{suppliers.map((supplier) => (
+									<option key={supplier.supplierID} value={supplier.supplierID}>
+										{supplier.supplierName}
+									</option>
+								))}
+							</select>
 						</div>
 					</div>
 					<br />
@@ -371,35 +459,35 @@ function AddInventoryCreate({unit, brand, supplier}) {
 
 					<div className="form-item">
 						<label className="form-labels">Remarks:</label> <br />
-						<input type="textarea" className="form-fields-remarks" />
+						<input type="textarea" className="form-fields-remarks" required />
 					</div>
-				
-				<br />
-				{/* Buttons */}
-				<div className="form-container">
-					<span className="required-text">
-						Fields marked with <label className="required"> * </label> are
-						required.
-					</span>
-					<span className="form-item-buttons">
-						<BasicButton
-						label={"Cancel"}
-						color={"gray"}
-						type={"reset"}
-						clickFunction={cancelForm}
-						></BasicButton>
-						<BasicButton
-						label={"Save"}
-						color={"green"}
-						type={"button"}
-						clickFunction={submitForm}
-						></BasicButton>
-					</span>
+
+					<br />
+					{/* Buttons */}
+					<div className="form-container">
+						<span className="required-text">
+							Fields marked with <label className="required"> * </label> are
+							required.
+						</span>
+						<span className="form-item-buttons">
+							<BasicButton
+								label={"Cancel"}
+								color={"gray"}
+								type={"reset"}
+								clickFunction={cancelForm}
+							></BasicButton>
+							<BasicButton
+								label={"Save"}
+								color={"green"}
+								type={"button"}
+								clickFunction={submitForm}
+							></BasicButton>
+						</span>
+					</div>
 				</div>
-			</div>
-		</div>
-    </>
-  );
+			</div >
+		</>
+	);
 }
 
 export default AddInventoryCreate;
