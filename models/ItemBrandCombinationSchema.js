@@ -13,6 +13,10 @@ const ItemBrandCombinationSchema = new mongoose.Schema({
     maxlength: 5,
     required: true,
   },
+  quantity: {
+    type: Number,
+    required: true,
+  },
 //   disabled: {
 //     type: Boolean,
 //     required: true,

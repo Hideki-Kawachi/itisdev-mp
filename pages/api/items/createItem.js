@@ -3,8 +3,9 @@ import Item from "../../../models/ItemSchema";
 
 export default async (req, res) => {
   await dbConnect();
-  console.log(req.body)
-  const itemInfo = req.body;
+  console.log(req.body.itemData)
+  console.log(req.body.details)
+  const itemInfo = req.body.itemData;
   let invalidCode = await Item.findOne({ itemID: itemInfo.itemID });
 
 	if (invalidCode != null) {
@@ -14,5 +15,4 @@ export default async (req, res) => {
     await Item.create(itemInfo);
     res.json("created");
   }
-
 };

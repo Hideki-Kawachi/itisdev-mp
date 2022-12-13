@@ -14,20 +14,17 @@ function ItemCreate({categories, brands}) {
     const [name, setName] = useState("");
     const [model, setModel] = useState("");
     const [unitID, setUnitID] = useState("");
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(0);
     const [minQuantity, setMinQuantity] = useState(0);
     const [isDisabled, setIsDisabled] = useState(false);
 
     // Item Details
-    const [itemBrandID, setBrandID] = useState("")
-    const [partNum, setPartNum] = useState("")
-    const [initialQty, setInitialQty] = useState("")
     const [details, setDetails] = useState({
         brand: "",
         partNum: "",
-        initialQty: 0,
+        quantity: 0,
     })
-    const [detailsArray, setDetailsArray] = useState([{}])
+    const [detailsArray, setDetailsArray] = useState([{}]);
 
     // Modals
     const [modStatus, setModStatus] = useState(false)
@@ -51,13 +48,18 @@ function ItemCreate({categories, brands}) {
     }
 
     function addDetails () {
+        if (Object.keys(detailsArray[0]).length == 0) {
+            detailsArray.shift()
+        }
         detailsArray.push(details);
+        setQuantity(quantity+parseInt(details.quantity))
         setDetails(prevState => ({
             ...prevState,
             brand: "",
             partNum: "",
-            initialQty: 0,
+            quantity: 0,
         }));
+        console.log(detailsArray)
     }
 
     // Submit Form
@@ -68,13 +70,13 @@ function ItemCreate({categories, brands}) {
           name.length == 0 ||
           unitID.length == 0 ||
           quantity == 0 ||
-          minQuantity == 0 
-        //   detailsArray.length == 0    
+          minQuantity == 0 ||
+          detailsArray.length == 0    
         ) {
           setError(true);
         } else {
           let itemData = {
-            itemID: "6000000000",
+            itemID: "6000000002",
             categoryID: categoryID,
             itemName: name,
             itemModel: model,
@@ -89,7 +91,7 @@ function ItemCreate({categories, brands}) {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(itemData),
+            body: JSON.stringify({itemData, details:detailsArray}),
           })
             .then((res) => res.json())
             .then((data) => {
@@ -261,6 +263,8 @@ function ItemCreate({categories, brands}) {
                             className="sort-dropdown"
                             id="user-create-role"
                             defaultValue={"0000"}
+                            name="brand"
+                            value={details.brand}
                             onChange={(e) => handleDetails(e)}
                         >
                             <option value="" key="00003" defaultValue hidden>
@@ -280,7 +284,7 @@ function ItemCreate({categories, brands}) {
                         <input 
                             type="text"
                             name="partNum"
-                            value={partNum}
+                            value={details.partNum}
                             onChange={(e) => handleDetails(e)}
                         />
                     </div>
@@ -290,12 +294,14 @@ function ItemCreate({categories, brands}) {
                         <input 
                             type="number"
                             name="quantity"
-                            value={quantity}
+                            value={details.quantity}
                             onChange={(e) => handleDetails(e)}
                         />
                     </div>
 
-                    <button type="button" className="green-button-container add-button">
+                    <button type="button" 
+                            className="green-button-container add-button"
+                            onClick={addDetails} >
                         Add 
                     </button>
                 </div>
