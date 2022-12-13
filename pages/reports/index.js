@@ -5,8 +5,8 @@ import NavBar from "../../components/NavBar";
 import { BasicTable } from "../../components/Reports/BasicTable";
 import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
-import { COLUMNS } from "../../components/Reports/InventoryColumns";
-import ADDINV_MOCK_DATA from "../../components/ADDINV_MOCK_DATA.json";
+import { COLUMNS } from "../../components/Reports/AddColumns";
+import ADDINV_MOCK_DATA from "../../components/Reports/ADD_INV.json";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {

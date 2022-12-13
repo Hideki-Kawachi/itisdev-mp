@@ -27,7 +27,7 @@ export const COLUMNS = [
   },
   {
     Header: "Item",
-    accessor: "itemID",
+    accessor: "itemName",
     disableGlobalFilter: true,
     disableSortBy: true,
   },
@@ -43,7 +43,7 @@ export const COLUMNS = [
   },
   {
     Header: "Unit",
-    accessor: "Unit",
+    accessor: "unit",
     disableGlobalFilter: true,
     disableSortBy: true,
   },
