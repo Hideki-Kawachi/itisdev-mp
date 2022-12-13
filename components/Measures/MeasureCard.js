@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import ToggleSwitch from "../ToggleSwitch";
 
 function UserCard({
-	userID,
-	lastName,
-	firstName,
-	roleName,
+	unitID,
+	unitName,
+	abbreviation,
+	unitTypeName,
+	classTypeName,
 	disabled,
 	setEditing,
 }) {
@@ -17,9 +18,9 @@ function UserCard({
 		<div className="user-card-main-container">
 			<div className="text-container">
 				<span style={{ fontWeight: 700 }}>
-					{lastName}, {firstName}
+					{unitName}
 				</span>
-				<span style={{ fontSize: "18px", fontWeight: 300 }}>{roleName}</span>
+				<span style={{ fontSize: "18px", fontWeight: 300 }}>{unitTypeName} | {classTypeName}</span>
 			</div>
 			<div className="buttons-container">
 				{

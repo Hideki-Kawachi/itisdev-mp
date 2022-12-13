@@ -10,6 +10,7 @@ import dbConnect from "../../lib/dbConnect";
 //schemas
 import Measure from "../../models/MeasureSchema";
 import UnitType from "../../models/UnitTypeSchema";
+import ClassType from "../../models/UnitClassTypeSchema";
 import UnitConvertion from "../../models/UnitConvertionSchema";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/config";
@@ -21,7 +22,7 @@ export const getServerSideProps = withIronSessionSsr(
 			if (currentUser.roleID === "0002") {
 				//if employee
 				return {
-					redirect: { destination: "/vehicles", permanent: true },
+					redirect: { destination: "/", permanent: true },
 					props: {},
 				};
 			} else {
@@ -46,6 +47,15 @@ export const getServerSideProps = withIronSessionSsr(
 					}
 				);
 
+				const classTypeList = await ClassType.find(
+					{},
+					{
+						ClassTypeID: 1,
+						ClassTypeName: 1,
+						disabled: 1,
+					}
+				);
+
 				const unitConversionList = await UnitConvertion.find(
 					{},
 					{
@@ -55,12 +65,15 @@ export const getServerSideProps = withIronSessionSsr(
 					}
 				);
 
+				
+
 				let measureData = JSON.stringify(measureList);
 				let unitTypeData = JSON.stringify(unitTypeList);
+				let classTypeData = JSON.stringify(classTypeList);
 				let unitConversionData = JSON.stringify(unitConversionList);
 
 				return {
-					props: { measureData, unitTypeData, unitConversionData, currentUser },
+					props: { measureData, unitTypeData, classTypeData, unitConversionData, currentUser },
 				};
 			}
 		}
@@ -73,33 +86,32 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-function Users({ measureData, unitTypeData, unitConversionData, currentUser }) {
+function Users({ measureData, unitTypeData, classTypeData, unitConversionData, currentUser }) {
 	const measures = JSON.parse(measureData);
 	const unitTypes = JSON.parse(unitTypeData);
+	const classTypes = JSON.parse(classTypeData);
 	const unitConversions = JSON.parse(unitConversionData);
 
 	const [search, setSearch] = useState("");
 	const [filter, setFilter] = useState("All");
 	const [rightShow, setRightShow] = useState("button");
 	const [isEditing, setIsEditing] = useState("");
-	const [userShow, setUserShow] = useState(users);
-
+	const [measureShow, setMeasureShow] = useState(measures);
 	useEffect(() => {
 		getSearch(search);
 	}, [filter]);
 
 	function getSearch(value) {
 		let tempList = [];
-		users.forEach((user) => {
+		measures.forEach((measure) => {
 			if (
-				(user.firstName.toLowerCase().includes(value) ||
-					user.lastName.toLowerCase().includes(value)) &&
-				(user.roleName == filter || filter == "All")
+				(measure.unitName.toLowerCase().includes(value)) &&
+				(measure.roleName == filter || filter == "All")
 			) {
-				tempList.push(user);
+				tempList.push(measure);
 			}
 		});
-		setUserShow(tempList);
+		setMeasureShow(tempList);
 	}
 
 	useEffect(() => {
@@ -109,15 +121,19 @@ function Users({ measureData, unitTypeData, unitConversionData, currentUser }) {
 	}, [isEditing]);
 
 	const rightContainerShow = {
-		edit: (
-			<MeasureEdit
-				roles={roles}
-				userID={isEditing}
-				setShow={setRightShow}
-			></MeasureEdit>
-		),
+		// edit: (
+		// 	<MeasureEdit
+		// 		unitTypes={roles}
+		// 		userID={isEditing}
+		// 		setShow={setRightShow}
+		// 	></MeasureEdit>
+		// ),
 		create: (
-			<MeasureCreate roles={roles} setShow={setRightShow}></MeasureCreate>
+			<MeasureCreate 
+				unitTypes={unitTypes}
+				classTypes={classTypes}
+				setShow={setRightShow}
+			></MeasureCreate>
 		),
 		button: (
 			<BasicButton
@@ -132,13 +148,13 @@ function Users({ measureData, unitTypeData, unitConversionData, currentUser }) {
 	return (
 		<>
 			<Header page={"MEASURES"} subPage={"HOME"} user={currentUser}></Header>
-			<NavBar></NavBar>
+			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				<div className="user-main-container">
 					<div className="user-left-container">
 						<input
 							type="search"
-							id="user"
+							id="unit"
 							className="search-bar"
 							placeholder="Search Unit"
 							onChange={(e) => {
@@ -160,21 +176,22 @@ function Users({ measureData, unitTypeData, unitConversionData, currentUser }) {
 							onChange={(e) => setFilter(e.target.value)}
 						>
 							<option value="All">All</option>
-							{roles.map((role) => (
-								<option key={role.roleID} value={role.roleName}>
-									{role.roleName}
+							{unitTypes.map((unitType) => (
+								<option key={unitType.UnitTypeID} value={unitType.UnitTypeName}>
+									{unitType.UnitTypeName}
 								</option>
 							))}
 						</select>
 						<div className="user-list-container">
-							{userShow.map((user) => (
+							{measureShow.map((measure) => (
 								<MeasureCard
-									key={user.userID}
-									userID={user.userID}
-									firstName={user.firstName}
-									lastName={user.lastName}
-									roleName={user.roleName}
-									disabled={user.disabled}
+									key={measure.unitID}
+									unitID={measure.unitID}
+									unitName={measure.unitName}
+									abbreviation={measure.abbreviation}
+									unitTypeName={measure.unitTypeName}
+									classTypeName={measure.classTypeName}
+									disabled={measure.disabled}
 									setEditing={setIsEditing}
 								></MeasureCard>
 							))}

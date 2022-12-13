@@ -23,6 +23,6 @@ const UnitConvertionSchema = new mongoose.Schema({
 
 const unitConvertion =
   mongoose.models.unitConvertion ||
-  mongoose.model("vehicleType", UnitConvertionSchema);
+  mongoose.model("unitConvertion", UnitConvertionSchema);
 
 export default unitConvertion;

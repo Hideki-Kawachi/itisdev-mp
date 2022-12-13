@@ -2,44 +2,40 @@ import React, { useEffect, useState } from "react";
 import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
 
-function UserCreate({ roles, setShow }) {
-	const [employeeID, setEmployeeID] = useState("");
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [password, setPassword] = useState("");
-	const [roleID, setRoleID] = useState("0000");
+function MeasureCreate ({ unitTypes, classTypes, setShow }) {
+	const [unitID, setUnitID] = useState("");
+	const [unitName, setUnitName] = useState("");
+	const [abbreviation, setAbbreviation] = useState("");
+	const [unitTypeID, setUnitTypeID] = useState("20001");
+	const [classTypeID, setClassTypeID] = useState("30001");
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [error, setError] = useState(false);
 	const [employeeIDError, setEmployeeIDError] = useState("");
-	const currentUserID = "00000001";
 
 	function submitForm() {
 		if (
-			employeeID.length != 8 ||
-			firstName.length == 0 ||
-			lastName.length == 0 ||
-			password.length == 0 ||
-			roleID.length == 0
+			unitName.length == 0 ||
+			abbreviation.length == 0 ||
+			unitTypeID.length == 0 ||
+			classTypeID.length == 0
 		) {
 			setError(true);
 		} else {
-			let userData = {
-				userID: employeeID,
-				firstName: firstName,
-				lastName: lastName,
-				password: password,
-				roleID: roleID,
-				creatorID: currentUserID,
-				creationDate: new Date(),
+			let measureData = {
+				unitID: "10001",
+				unitName: unitName,
+				abbreviation: abbreviation,
+				unitTypeID: unitTypeID,
+				classTypeID: classTypeID,
 				disabled: isDisabled,
 			};
 
-			fetch("/api/createUser", {
+			fetch("/api/measures/createMeasure", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(userData),
+				body: JSON.stringify(measureData),
 			})
 				.then((res) => res.json())
 				.then((data) => {
@@ -59,28 +55,28 @@ function UserCreate({ roles, setShow }) {
 		setShow("button");
 	}
 
-	function showEmployeeIDError() {
-		if (error) {
-			//employee ID is empty
-			if (employeeID.length == 0) {
-				return <span className="user-create-error">Input Employee ID</span>;
-			}
-			//employee ID is too short
-			else if (employeeID.length != 8) {
-				return (
-					<span className="user-create-error">
-						Employee ID must be 8 numbers long
-					</span>
-				);
-			}
-		}
-	}
+	// function showEmployeeIDError() {
+	// 	if (error) {
+	// 		//employee ID is empty
+	// 		if (employeeID.length == 0) {
+	// 			return <span className="user-create-error">Input Employee ID</span>;
+	// 		}
+	// 		//employee ID is too short
+	// 		else if (employeeID.length != 8) {
+	// 			return (
+	// 				<span className="user-create-error">
+	// 					Employee ID must be 8 numbers long
+	// 				</span>
+	// 			);
+	// 		}
+	// 	}
+	// }
 
 	return (
 		<>
 			<form className="user-create-main-container">
 				<div className="user-create-top-container">
-					<h1>CREATE NEW USER</h1>
+					<h1>CREATE NEW MEASURE</h1>
 					<button className="user-create-exit-button" onClick={cancelForm}>
 						<svg
 							viewBox="0 0 12 12"
@@ -94,76 +90,79 @@ function UserCreate({ roles, setShow }) {
 						</svg>
 					</button>
 				</div>
-				<label htmlFor="employeeID">
-					Employee ID: <span className="required-mark">*</span>
+
+				{/* Name Field */}
+				<label htmlFor="unitName">
+					Name: <span className="required-mark">*</span>
 				</label>
 				<input
-					type="Number"
-					id="employeeID"
-					onChange={(e) => setEmployeeID(e.target.value)}
+					type="text"
+					id="unitName"
+					onChange={(e) => setUnitName(e.target.value)}
 				></input>
-				{showEmployeeIDError()}
-				{employeeIDError == employeeID && employeeID.length > 0 ? (
+				{error && unitName.length == 0 ? (
+					<span className="user-create-error">Input First Name</span>
+				) : (
+					<></>
+				)}
+				{/* {showEmployeeIDError()} */}
+				{/* {employeeIDError == employeeID && employeeID.length > 0 ? (
 					<span className="user-create-error">
 						Employee ID has already been used
 					</span>
 				) : (
 					<></>
-				)}
-				<label htmlFor="firstName">
-					First Name: <span className="required-mark">*</span>
+				)} */}
+
+				{/* Abbreviation Field */}
+				<label htmlFor="abbreviation">
+					Abbreviation: <span className="required-mark">*</span>
 				</label>
 				<input
 					type="text"
-					id="firstName"
-					onChange={(e) => setFirstName(e.target.value)}
+					id="abbreviation"
+					onChange={(e) => setAbbreviation(e.target.value)}
 				></input>
-				{error && firstName.length == 0 ? (
+				{error && abbreviation.length == 0 ? (
 					<span className="user-create-error">Input First Name</span>
 				) : (
 					<></>
 				)}
-				<label htmlFor="lastName">
-					Last Name: <span className="required-mark">*</span>
-				</label>
-				<input
-					type="text"
-					id="lastName"
-					onChange={(e) => setLastName(e.target.value)}
-				></input>
-				{error && lastName.length == 0 ? (
-					<span className="user-create-error">Input Last Name</span>
-				) : (
-					<></>
-				)}
-				<label htmlFor="password">
-					Password: <span className="required-mark">*</span>
-				</label>
-				<input
-					type="password"
-					id="password"
-					onChange={(e) => setPassword(e.target.value)}
-				></input>
-				{error && password.length == 0 ? (
-					<span className="user-create-error">Input Password</span>
-				) : (
-					<></>
-				)}
-				<label htmlFor="role">
-					Role: <span className="required-mark">*</span>
+
+				{/* Unit Type Field */}
+				<label htmlFor="type">
+					Type: <span className="required-mark">*</span>
 				</label>
 				<select
 					className="sort-dropdown"
 					id="user-create-role"
-					defaultValue={"0000"}
-					onChange={(e) => setRoleID(e.target.value)}
+					defaultValue={"20001"}
+					onChange={(e) => setUnitTypeID(e.target.value)}
 				>
-					{roles.map((role) => (
-						<option key={role.roleID} value={role.roleID}>
-							{role.roleName}
+					{unitTypes.map((type) => (
+						<option key={type.UnitTypeID} value={type.UnitTypeID}>
+							{type.UnitTypeName}
 						</option>
 					))}
 				</select>
+
+				{/* Unit Class Type Field */}
+				<label htmlFor="Class">
+					Class: <span className="required-mark">*</span>
+				</label>
+				<select
+					className="sort-dropdown"
+					id="user-create-role"
+					defaultValue={"30001"}
+					onChange={(e) => setClassTypeID(e.target.value)}
+				>
+					{classTypes.map((unitClass) => (
+						<option key={unitClass.ClassTypeID} value={unitClass.ClassTypeID}>
+							{unitClass.ClassTypeName}
+						</option>
+					))}
+				</select>
+
 				<span>Status:</span>
 				<ToggleSwitch
 					disabled={isDisabled}
@@ -189,4 +188,4 @@ function UserCreate({ roles, setShow }) {
 	);
 }
 
-export default UserCreate;
+export default MeasureCreate;
