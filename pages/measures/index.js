@@ -33,7 +33,9 @@ export const getServerSideProps = withIronSessionSsr(
 					{
 						unitID: 1,
 						unitName: 1,
+						abbreviation: 1,
 						unitTypeID: 1,
+						classTypeID: 1,
 						disabled: 1,
 					}
 				);
@@ -65,9 +67,45 @@ export const getServerSideProps = withIronSessionSsr(
 					}
 				);
 
-				
+				var tempMeasureData = [];
 
-				let measureData = JSON.stringify(measureList);
+				measureList.forEach((measure) => {
+					console.log("am in measureList")
+					let isFound1 = false;
+					let unitTypeName = "";
+					while (!isFound1) {
+						console.log("am in isFoudn1")
+						unitTypeList.forEach((unit) => {
+							if (unit.UnitTypeID == measure.unitTypeID) {
+								unitTypeName = unit.UnitTypeName;
+								isFound1 = true;
+							}
+						});
+					}
+
+					let isFound2 = false;
+					let classTypeName = "";
+					while (!isFound2) {
+						console.log("am in isFoudn2")
+						classTypeList.forEach((unitClass) => {
+							if (unitClass.ClassTypeID == measure.classTypeID) {
+								classTypeName = unitClass.ClassTypeName;
+								isFound2 = true;
+							}
+						});
+					}
+
+					tempMeasureData.push({
+						unitID: unit.unitID,
+						unitName: unit.unitName,
+						abbreviation: unit.abbreviation,
+						unitTypeName: unitTypeName,
+						classTypeName: classTypeName,
+						disabled: unit.isDisabled,
+					})
+				});
+
+				let measureData = JSON.stringify(tempMeasureData);
 				let unitTypeData = JSON.stringify(unitTypeList);
 				let classTypeData = JSON.stringify(classTypeList);
 				let unitConversionData = JSON.stringify(unitConversionList);
