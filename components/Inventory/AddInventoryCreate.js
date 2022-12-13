@@ -4,6 +4,7 @@ import BasicTableAdd from "./InventoryTable";
 import BasicTablePull from "./InventoryTablePull";
 import BasicButton from "../BasicButton";
 import Cancel from "../Pop-up/cancel";
+import { v4 as uuid } from 'uuid';
 
 function AddInventoryCreate({unit, brand, supplier}) {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -26,7 +27,11 @@ function AddInventoryCreate({unit, brand, supplier}) {
   const [error, setError] = useState(false);
   const [invoiceNumberError, setInvoiceNumberError] = useState("");
   const currentUserID = "00000001";
-  const dt = new Date();
+  var curr = new Date();
+  curr.setDate(curr.getDate());
+  var date = curr.toISOString().substring(0,10);
+  const uniqueRecordID = uuid();
+  const autoRecordID = uniqueRecordID.slice(0,8)
   const [toggleState, setToggleState] = useState(1);
 
 	const toggleTab = (index) => {
@@ -97,7 +102,7 @@ function AddInventoryCreate({unit, brand, supplier}) {
       else if (addRecordID.length > 15 || addRecordID.length < 15) {
         return (
           <span className="vehicle-create-error">
-            Record ID must be 15 numbers long.
+            Record ID must be 15 characters long.
           </span>
         );
       } 
@@ -139,6 +144,12 @@ function AddInventoryCreate({unit, brand, supplier}) {
     }
   }
 
+  function generateRandomID() {
+    var min = 100000000000000;
+    var max = 999999999999999;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
   return (
     <>
       <div className="container">
@@ -154,29 +165,27 @@ function AddInventoryCreate({unit, brand, supplier}) {
                     {showResult()}
                     <div className="form-item">
 							<label className="form-labels">
-								Record ID: <label className="required"> * </label>{" "}
+								Record ID: {generateRandomID()} {" "}
 							</label>{" "}
 							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Record ID"
-							/>
-						</div>
-
-						<div className="form-item">
-							<label className="form-labels">Acquired Date: </label> <br />
-							<input
-								type="date"
-								className="form-fields"
-								placeholder="Acquired Date"
-							/>
+							
 						</div>
 					</div>				
 
 					<br />
-
+					{/*Second Field Row*/}
 					<div className="form-container">
+
+						<div className="form-item">
+							<label className="form-labels">Acquired Date: </label> <br />
+							<input
+								type= "date"
+								defaultValue={date}
+								className="form-fields"
+								placeholder="Acquired Date"
+							/>
+						</div>
+
 						<div className="form-item">
 							<label className="form-labels">
 							Invoice Number: <label className="required"> * </label>{" "}
@@ -234,7 +243,7 @@ function AddInventoryCreate({unit, brand, supplier}) {
 					</div>
 					<hr />
 
-					{/* Second Field Group */}
+					{/* Third Field Row */}
 					<br />
 					<div className="form-container">
 						<div className="form-item">
@@ -297,7 +306,7 @@ function AddInventoryCreate({unit, brand, supplier}) {
 
 					<br />
 
-					{/* Third Field Row */}
+					{/* Fourth Field Row */}
 
 					<div className="form-container">
 						<div className="form-item">
