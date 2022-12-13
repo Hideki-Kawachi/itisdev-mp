@@ -77,7 +77,7 @@ function SignIn() {
 					<div className="input-container">
 						<div className="label-cont">Employee ID:</div>
 						<input
-							type="employeeID"
+							type="number"
 							name="employeeID"
 							placeholder="Enter Employee ID"
 							onChange={(e) => setEmployeeID(e.target.value)}

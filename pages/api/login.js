@@ -11,13 +11,17 @@ export default withIronSessionApiRoute(login, ironOptions);
 async function login(req, res) {
 	const { employeeID, password, disabled } = req.body;
 
-	console.log(
-		"User: " + employeeID + " Pass: " + password + " Disabled:" + disabled
-	);
+	// console.log(
+	// 	"User: " + employeeID + " Pass: " + password + " Disabled:" + disabled
+	// );
 
 	const user = await User.findOne({ userID: employeeID});
 
-	const isDisabled = user.get("disabled");
+	let isDisabled = true;
+	
+	if (user) {
+		isDisabled = user.get("disabled");
+	}
 
 	if (!user || isDisabled) {
 		return res.json("Invalid userID");
