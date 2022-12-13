@@ -20,6 +20,7 @@ export const BasicTable = () => {
  const [fromDate, setFromDate] = useState();
  const [toDate, setToDate] = useState();
  const [dates, setDates] = useState([]);
+ const [filterDates, setFilterDates] = useState([]);
  const {
    getTableProps,
    getTableBodyProps,
@@ -71,6 +72,13 @@ export const BasicTable = () => {
     }
  };
 
+ function saveDateRange(row){
+  filterDates.push(row)  
+ }
+
+function checkDataRanges(){
+  console.log(filterDates);
+}
 const tableInstance = useRef(null);
  
   return (
@@ -92,7 +100,8 @@ const tableInstance = useRef(null);
             setToDate(dayjs(e.target.value, "MM/DD/YYYY")); handleFilter}}
         />
         <button onClick={handleFilter}>Check Date</button>
-      </span>
+        <button onClick={checkDataRanges}>Test</button>
+      </span> 
 
       <table id="btable" {...getTableProps()}>
         <thead>
@@ -120,6 +129,7 @@ const tableInstance = useRef(null);
               fromDate && toDate
             ) {
               if (dates.includes(row.original.date)) {
+                saveDateRange(row);
                 return (
                   <tr id="btable1" {...row.getRowProps()}>
                     {row.cells.map((cell) => {
