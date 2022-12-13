@@ -2,9 +2,11 @@ import { withIronSessionSsr } from "iron-session/next";
 import React from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
-import { AuditTable } from "../../components/Reports/AuditTable";
+import { BasicTable } from "../../components/Reports/BasicTable";
 import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
+import { COLUMNS } from "../../components/Reports/AuditColumns";
+import AUDIT_MOCK_DATA from "../../components/reports/AUDIT_MOCK_DATA.json";
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
@@ -42,7 +44,7 @@ function AuditReports({ currentUser }) {
       <NavBar user={currentUser}></NavBar>
       <div id="main-container">
         <ReportTabs tab="4" roleID={currentUser.roleID}></ReportTabs>
-        <AuditTable></AuditTable>
+        <BasicTable COLUMNS={COLUMNS} ADDINV={AUDIT_MOCK_DATA}></BasicTable>
       </div>
     </>
   );
