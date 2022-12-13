@@ -7,6 +7,7 @@ import {
 	usePagination,
 } from "react-table";
 import Link from "next/link";
+import { useRouter }  from 'next/router';
 import { COLUMNS } from "./ItemColumns";
 import GlobalFilter from "../GlobalFilter";
 
@@ -19,6 +20,7 @@ import { useEffect } from "react";
 export const ItemTable = ({itemData, categoryData}) => {
 	const columns = useMemo(() => COLUMNS, []);
 	const data = useMemo(() => itemData, []);
+  const router = useRouter();
 
 	const {
 		getTableProps,
@@ -41,10 +43,10 @@ export const ItemTable = ({itemData, categoryData}) => {
 		{
 			columns,
 			data,
-      // initialState: { pageIndex: 0, pageSize: 5 },
-      // filterTypes,
+      initialState: {
+        hiddenColumns: ["itemID"]
+      },
 		},
-
 		useGlobalFilter,
     useFilters,
 		useSortBy,
@@ -123,7 +125,9 @@ const handleFilter = (e) => {
           {page.map((row) => {
             prepareRow(row);
             return (
-              <tr id="btable" {...row.getRowProps()}>
+              <tr id="btable" 
+                  {...row.getRowProps()}
+                  onClick={() => router.push("items/" + row.original.itemID)}>
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>

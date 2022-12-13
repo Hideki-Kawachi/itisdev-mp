@@ -7,6 +7,11 @@ export const COLUMNS = [
     accessor: (/** @type {any} */ _row, /** @type {number} */ i) => i + 1,
   },
   {
+    Header: "",
+    id: "itemID",
+    accessor: "itemID",
+  },
+  {
     Header: "Status",
     id: "disabled",
     accessor: "disabled",

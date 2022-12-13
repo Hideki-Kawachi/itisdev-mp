@@ -323,7 +323,7 @@ function ItemCreate({items, categories, brands}) {
                     { Object.keys(detailsArray[0]).length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <BrandTable detailsArray={detailsArray}></BrandTable>
+                        <BrandTable detailsArray={detailsArray} isEdit={true}></BrandTable>
                     )}
                 </div>
             </div>
