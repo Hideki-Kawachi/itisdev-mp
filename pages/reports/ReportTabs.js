@@ -23,9 +23,9 @@ function ReportTabs(props) {
 			return (
 				<Link href="/reports/audit">
 					<button
-						className={toggleState == 5 ? "tabs active-tabs" : "tabs"}
+						className={toggleState == 4 ? "tabs active-tabs" : "tabs"}
 						onClick={() => 
-							toggleTab(5)
+							toggleTab(4)
 						}
 					>
 						Audit
@@ -45,7 +45,7 @@ function ReportTabs(props) {
 							toggleTab(1)
 						}
 					>
-						Transaction
+						Add Inventory
 					</button>
 				</Link>
 				<Link href="/reports/inventoryRep">
@@ -54,7 +54,7 @@ function ReportTabs(props) {
 						onClick={() => 
 							toggleTab(2)
 						}
-					> Inventory
+					> Pull-Out Inventory
 					</button>
 				</Link>
 				<Link href="/reports/vecRep">
@@ -63,14 +63,6 @@ function ReportTabs(props) {
 						onClick={() => toggleTab(3)}
 					>
 						Vehicles
-					</button>
-				</Link>
-				<Link href="/reports/suppliesRep">
-					<button
-						className={toggleState == 4 ? "tabs active-tabs" : "tabs"}
-						onClick={() => toggleTab(4)}
-					>
-						Supplier
 					</button>
 				</Link>
 				{showAudit()}

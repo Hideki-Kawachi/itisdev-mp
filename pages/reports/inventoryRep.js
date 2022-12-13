@@ -2,8 +2,11 @@ import { withIronSessionSsr } from "iron-session/next";
 import React from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
+import { BasicTable } from "../../components/Reports/BasicTable";
 import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
+import { COLUMNS } from "../../components/Reports/InventoryColumns";
+import ADDINV_MOCK_DATA from "../../components/ADDINV_MOCK_DATA.json";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -29,16 +32,17 @@ export const getServerSideProps = withIronSessionSsr(
 );
 
 
-function InventoryReports({ currentUser }) {
+function PullOutReports({ currentUser }) {
 	return (
 		<>
 			<Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				<ReportTabs tab="2" roleID={currentUser.roleID}></ReportTabs>
+				<BasicTable COLUMNS={COLUMNS} ADDINV={ADDINV_MOCK_DATA}></BasicTable>
 			</div>
 		</>
 	);
 }
 
-export default InventoryReports;
+export default PullOutReports;
