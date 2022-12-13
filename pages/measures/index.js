@@ -96,12 +96,12 @@ export const getServerSideProps = withIronSessionSsr(
 					}
 
 					tempMeasureData.push({
-						unitID: unit.unitID,
-						unitName: unit.unitName,
-						abbreviation: unit.abbreviation,
+						unitID: measure.unitID,
+						unitName: measure.unitName,
+						abbreviation: measure.abbreviation,
 						unitTypeName: unitTypeName,
 						classTypeName: classTypeName,
-						disabled: unit.isDisabled,
+						disabled: measure.isDisabled,
 					})
 				});
 
