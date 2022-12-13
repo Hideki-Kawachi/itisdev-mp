@@ -35,12 +35,6 @@ const ItemSchema = new mongoose.Schema({
   minQuantity: {
     type: Number,
   },
-  brandCombination: {
-    type: String,
-    minlength: 5,
-    maxlength: 5,
-    required: false,
-  },
   disabled: {
     type: Boolean,
     required: true,
