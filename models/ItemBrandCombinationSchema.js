@@ -3,14 +3,18 @@ import mongoose from "mongoose";
 const ItemBrandCombinationSchema = new mongoose.Schema({
   itemID: {
     type: String,
-    minlength: 5,
-    maxlength: 5,
+    minlength: 10,
+    maxlength: 10,
     required: true,
   },
   itemBrandID: {
     type: String,
     minlength: 5,
     maxlength: 5,
+    required: true,
+  },
+  partNumber: {
+    type: String,
     required: true,
   },
   quantity: {

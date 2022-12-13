@@ -272,7 +272,7 @@ function ItemCreate({categories, brands}) {
                                 Select Brand{" "}
                             </option>
                             {brands.map((brand) => (
-                                <option key={brand.itemBrandID} value={brand.name}>
+                                <option key={brand.itemBrandID} value={brand.itemBrandID}>
                                     {brand.name}
                                 </option>
                             ))}
