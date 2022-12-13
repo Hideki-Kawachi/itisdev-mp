@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const PullInventorySchema = new mongoose.Schema({
   lessRecordID: {
     type: String,
-    minlength: 5,
+    minlength: 15,
     maxlength: 15,
     unique: true,
     required: true,
@@ -15,7 +15,7 @@ const PullInventorySchema = new mongoose.Schema({
   },
   JOnumber: {
     type: String,
-    minlength: 5,
+    minlength: 15,
     maxlength: 15,
     required: true,
   },
