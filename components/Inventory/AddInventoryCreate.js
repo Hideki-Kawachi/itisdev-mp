@@ -28,9 +28,9 @@ function AddInventoryCreate({unit, brand, supplier}) {
   const [invoiceNumberError, setInvoiceNumberError] = useState("");
   const [partNumberError, setPartNumberError] = useState("");
   const currentUserID = "00000001";
-  var curr = new Date();
+  const curr = new Date();
   curr.setDate(curr.getDate());
-  var date = curr.toISOString().substring(0,10);
+  const date = curr.toISOString().substring(0,10);
   const uniqueRecordID = uuid();
   const autoRecordID = uniqueRecordID.slice(0,8)
   const [toggleState, setToggleState] = useState(1);
@@ -77,11 +77,6 @@ function AddInventoryCreate({unit, brand, supplier}) {
   }
   function cancelForm(){
     setCancel(true);
-  }
-
-  function checkSpecial(){
-    const specialChars = `/[!@#$%^&* ()_+\-=\[\]{};':"\\|,.<>\/?]+/;`;
-    return specialChars.split("").some((char) => invoiceNumber.includes(char)); // true if present and false if not
   }
 
   function showInvoiceNumberError() {

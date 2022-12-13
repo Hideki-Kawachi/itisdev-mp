@@ -27,8 +27,11 @@ function PullInventoryCreate({unit, brand, supplier}) {
   const [error, setError] = useState(false);
   const [JOnumberError, setJOnumberError] = useState("");
   const [itemIDErorr, setItemIDError] = useState("");
+  const [plateNumError, setPlateNumError] = useState("");
   const currentUserID = "00000001";
-  const dt = new Date();
+  const curr = new Date();
+  curr.setDate(curr.getDate());
+  const date = curr.toISOString().substring(0,10);
   const [toggleState, setToggleState] = useState(1);
 
 	const toggleTab = (index) => {
@@ -65,8 +68,6 @@ function PullInventoryCreate({unit, brand, supplier}) {
         creationDate: new Date(),
         disabled: isDisabled,
       }
-
-    //     console.log("2. Error is " + error + ", Data is " + data);
     }
   }
   function cancelForm(){
@@ -75,24 +76,17 @@ function PullInventoryCreate({unit, brand, supplier}) {
 
   function checkSpecial(){
     const specialChars = `/[!@#$%^&* ()_+\-=\[\]{};':"\\|,.<>\/?]+/;`;
-    return specialChars.split("").some((char) => JOnumber.includes(char)); // true if present and false if not
+    return specialChars.split("").some((char) => plateNum.includes(char)); // true if present and false if not
   }
 
   function showJOnumberError() {
 
-    console.log("Job Order Number has special chars: " + checkSpecial()); 
 
     if (error) {
       //JO Number is Empty
       if (JOnumber.length == 0) {
         return <span className="vehicle-create-error">Input Job Order Number</span>;
-      } else if (checkSpecial()) {
-        return (
-          <span className="vehicle-create-error">
-            Must not contain spaces, letters, or special characters.
-          </span>
-        );
-      }
+      } 
       //JO Number reached max char length
       else if (JOnumber.length > 15 || JOnumber.length < 15) {
         return (
@@ -106,15 +100,13 @@ function PullInventoryCreate({unit, brand, supplier}) {
 
   function showItemIDError() {
 
-    // console.log("Item Code has special chars: " + checkSpecial()); 
-
     if (error) {
-      //JO Number is Empty
+      //Item ID Number is Empty
       if (itemID.length == 0) {
         return <span className="vehicle-create-error">Input Item Code</span>;
       } 
-      //JO Number reached max char length
-      else if (itemID.length > 10 || JOnumber.length < 10) {
+      //Item ID Number reached max char length
+      else if (itemID.length > 10 || itemID.length < 10) {
         return (
           <span className="vehicle-create-error">
             Item Code must be 10 characters long.
@@ -137,29 +129,29 @@ function PullInventoryCreate({unit, brand, supplier}) {
     }
     function showPlateNumError() {
 
-        console.log("Plate Number has special chars: " + checkSpecial()); 
-    
-        if (error) {
-          //plateNum is Empty
-          if (plateNum.length == 0) {
-            return <span className="vehicle-create-error">Input Plate Number</span>;
-          } else if (checkSpecial()) {
-            return (
-              <span className="vehicle-create-error">
-                Must not contain spaces or special characters
-              </span>
-            );
-          }
-          //plateNum reached max char length
-          else if (plateNum.length > 7 || plateNum.length < 5) {
-            return (
-              <span className="vehicle-create-error">
-                Plate number must be 5 to 7 characters long
-              </span>
-            );
-          } 
-        } 
-      }
+		// console.log("Plate Number has special chars: " + checkSpecial()); 
+	 
+		 if (error) {
+		   //plateNum is Empty
+		   if (plateNum.length == 0) {
+			 return <span className="vehicle-create-error">Input Plate Number</span>;
+		   } else if (checkSpecial()) {
+			 return (
+			   <span className="vehicle-create-error">
+				 Must not contain spaces or special characters
+			   </span>
+			 );
+		   }
+		   //plateNum reached max char length
+		   else if (plateNum.length > 7 || plateNum.length < 5) {
+			 return (
+			   <span className="vehicle-create-error">
+				 Plate number must be 5 to 7 characters long
+			   </span>
+			 );
+		   } 
+		 } 
+	   }
   return (
     <>
       <div className="container">
@@ -172,6 +164,7 @@ function PullInventoryCreate({unit, brand, supplier}) {
 							<label className="form-labels">Pull-out Date: </label> <br />
 							<input
 								type="date"
+								defaultValue={date}
 								className="form-fields"
 								placeholder="Acquired Date"
 							/>
@@ -187,7 +180,7 @@ function PullInventoryCreate({unit, brand, supplier}) {
 							</label>{" "}
 							<br />
 							<input
-							type="text"
+							type="number"
 							className="form-fields"
 							placeholder="Enter Job Order Number"
 							onChange={(e) => setJOnumber(e.target.value)}
@@ -202,23 +195,30 @@ function PullInventoryCreate({unit, brand, supplier}) {
 							)}
                    		</div>
 
-						   <div className="form-item">
-            				<label className="form-labels">
-              					Plate Number: <label className="required"> * </label>{" "}
-            				</label>{" "}
-            				<label className="label-format">
-              				{" "}
-              					Format: Exclude spaces and dashes.{" "}
-            				</label>{" "}
-           					<br />
+						<div className="form-item">
+							<label className="form-labels">
+							Plate Number: <label className="required"> * </label>{" "}
+							</label>{" "}
+							<label className="label-format">
+							{" "}
+							Format: Exclude spaces and dashes.{" "}
+							</label>{" "}
+							<br />
 							<input
 							type="text"
 							className="form-fields"
 							placeholder="Enter Plate Number"
 							onChange={(e) => setPlateNum(e.target.value)}
-							/>
-							{showPlateNumError()}
-						</div>
+            				/>
+           					 {showPlateNumError()}
+            				{plateNumError == plateNum && plateNum.length > 0 ? (
+              					<span className="vehicle-create-error">
+                					Plate Number has already been registered
+              					</span>
+            				) : (
+              				<></>
+            				)}
+          				</div>
 
 						<div className="form-item">
 							<label className="form-labels">
