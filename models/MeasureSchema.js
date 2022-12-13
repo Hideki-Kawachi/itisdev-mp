@@ -13,7 +13,18 @@ const MeasureSchema = new mongoose.Schema({
     required: true,
     maxLength: 50,
   },
+  abbreviation: {
+    type: String,
+    required: true,
+    maxLength: 50,
+  },
   unitTypeID: {
+    type: String,
+    minlength: 5,
+    maxlength: 5,
+    required: true,
+  },
+  classTypeID: {
     type: String,
     minlength: 5,
     maxlength: 5,
@@ -28,6 +39,6 @@ const MeasureSchema = new mongoose.Schema({
 
 const Measure =
   mongoose.models.Measure ||
-  mongoose.model("engineType", MeasureSchema);
+  mongoose.model("Measure", MeasureSchema);
 
 export default Measure;

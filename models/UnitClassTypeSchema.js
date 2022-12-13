@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
-const UnitTypeSchema = new mongoose.Schema({
-  UnitTypeID: {
+const UnitClassTypeSchema = new mongoose.Schema({
+  ClassTypeID: {
     type: String,
     minlength: 5,
     maxlength: 5,
     unique: true,
     required: true,
   },
-  UnitTypeName: {
+  ClassTypeName: {
     type: String,
     required: true,
     maxLength: 50,
@@ -21,8 +21,8 @@ const UnitTypeSchema = new mongoose.Schema({
   },
 });
 
-const unitType =
-  mongoose.models.unitType ||
-  mongoose.model("unitType", UnitTypeSchema);
+const classType =
+  mongoose.models.classType ||
+  mongoose.model("classType", UnitClassTypeSchema);
 
-export default unitType;
+export default classType;

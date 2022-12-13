@@ -8,6 +8,7 @@ export const COLUMNS = [
   },
   {
     Header: "Date",
+    id: "date",
     accessor: "auditDate",
     disableGlobalFilter: true,
     filter: (rows, id, filterValue) => {
