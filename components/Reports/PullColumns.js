@@ -8,7 +8,8 @@ export const COLUMNS = [
   },
   {
     Header: "Date",
-    accessor: "creationDate",
+    id: "date",
+    accessor: "pulloutDate",
     disableGlobalFilter: true,
     filter: (rows, id, filterValue) => {
       return rows.filter(
@@ -20,14 +21,14 @@ export const COLUMNS = [
     },
   },
   {
-    Header: "Invoice #",
-    accessor: "invoiceNumber",
+    Header: "Plate #",
+    accessor: "plateNum",
     Filter: GlobalFilter,
     disableSortBy: true,
   },
   {
     Header: "Item",
-    accessor: "itemID",
+    accessor: "itemName",
     disableGlobalFilter: true,
     disableSortBy: true,
   },
@@ -43,7 +44,7 @@ export const COLUMNS = [
   },
   {
     Header: "Unit",
-    accessor: "Unit",
+    accessor: "unit",
     disableGlobalFilter: true,
     disableSortBy: true,
   },
