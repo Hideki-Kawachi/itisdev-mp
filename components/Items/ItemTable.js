@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter }  from 'next/router';
 import { COLUMNS } from "./ItemColumns";
 import GlobalFilter from "../GlobalFilter";
+import { Dropdown, DefaultFilterColumn, SelectColumnFilter } from "../Dropdown";
 
 // Temporary Assets
 import ITEM_MOCK_DATA from "./Temp/ITEM_MOCK_DATA.json";
@@ -46,33 +47,34 @@ export const ItemTable = ({itemData, categoryData}) => {
       initialState: {
         hiddenColumns: ["itemID"]
       },
+      defaultColumn: { Filter: DefaultFilterColumn },
 		},
 		useGlobalFilter,
     useFilters,
 		useSortBy,
 		usePagination
 	);
-
+  
+  const { filter } = state;
 	const { globalFilter } = state;
 	const { pageIndex } = state;
-
-
-
-const handleFilter = (e) => {
-  if (useTable.current) {
-    useTable.current.setFilter("categoryID", "Engine")
-  }
-}
-
 
 	return (
     <>
         <div className="item-header item-table-header">
             <span className="item-table-left-container">
-                <span className="form-item">
+                <Dropdown
+                  title="Item Category"
+                  options={categoryData}
+                  id="categoryID"
+                  name="name"
+                  filter={filter}
+                  setFilter={setFilter}
+                ></Dropdown>
+                {/* <span className="form-item">
                     <label className="form-labels">Item Category:</label>
                     <br />
-                    <select className="sort-dropdown" id="user-create-role" onChange={(e) => handleFilter("categoryID", e)}>
+                    <select className="sort-dropdown" id="item-category-filter" onChange={(e) => handleFilter("categoryID", e)}>
                       <option value="" key="00000" defaultValue hidden>
                           {" "}
                           All{" "}
@@ -83,7 +85,7 @@ const handleFilter = (e) => {
                           </option>
                       ))}
                     </select>
-                </span>
+                </span> */}
 
                 <span className="form-item" id="search-item-code-container">
                     <br />

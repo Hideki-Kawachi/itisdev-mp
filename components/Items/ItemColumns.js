@@ -1,4 +1,5 @@
 import { GlobalFilter } from '../GlobalFilter'
+import {SelectColumnFilter} from "../Dropdown"
 
 export const COLUMNS = [
   {
@@ -10,6 +11,7 @@ export const COLUMNS = [
     Header: "",
     id: "itemID",
     accessor: "itemID",
+    Filter: GlobalFilter,
   },
   {
     Header: "Status",
@@ -22,18 +24,19 @@ export const COLUMNS = [
         <span className="btable-disabled">⬤</span>
       );
     },
-    width: 50,
     disableSortBy: true,
   },
   {
     Header: "Category",
     accessor: "categoryID",
-
+    Filter: SelectColumnFilter,
+    filter: "includes",
+    
   },
   {
     Header: "Name",
     accessor: "itemName",
-    disableGlobalFilter: true,
+    Filter: GlobalFilter,
   },
   {
     Header: "Model",
@@ -44,11 +47,13 @@ export const COLUMNS = [
     Header: "Qty",
     accessor: "quantity",
     disableGlobalFilter: true,
+    disableSortBy: true,
   },
   {
     Header: "Min Qty",
     accessor: "minQuantity",
     disableGlobalFilter: true,
+    disableSortBy: true,
   },
   {
     Header: "Unit",
