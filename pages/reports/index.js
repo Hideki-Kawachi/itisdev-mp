@@ -1,10 +1,12 @@
 import { withIronSessionSsr } from "iron-session/next";
-import React from "react";
+import React, {useMemo} from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import { BasicTable } from "../../components/Reports/BasicTable";
 import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
+import { COLUMNS } from "../../components/Reports/InventoryColumns";
+import ADDINV_MOCK_DATA from "../../components/ADDINV_MOCK_DATA.json";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -36,6 +38,8 @@ export const getServerSideProps = withIronSessionSsr(
 // ];
 
 function TransactionReports({ currentUser }) {
+ const columns = useMemo(() => COLUMNS, []);
+ const data = useMemo(() => ADDINV_MOCK_DATA, []);
 
 	return (
 		<>
@@ -43,7 +47,7 @@ function TransactionReports({ currentUser }) {
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				<ReportTabs tab="1" roleID={currentUser.roleID}></ReportTabs>
-				<BasicTable></BasicTable>
+				<BasicTable COLUMNS = {columns} ADDINV = {data}></BasicTable>
 			</div>
 		</>
 	);

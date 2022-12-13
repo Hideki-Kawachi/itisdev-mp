@@ -1,6 +1,6 @@
 import { GlobalFilter } from "../GlobalFilter";
 
-export const COLUMNS = [
+export const {COLUMNS} = [
   {
     Header: "i",
     id: "index",

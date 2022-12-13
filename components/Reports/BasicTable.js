@@ -8,14 +8,12 @@ import {
   usePagination,
   useFilters
 } from "react-table";
-import { COLUMNS } from "./InventoryColumns";
+
 import GlobalFilter from "../GlobalFilter";
 
-import ADDINV_MOCK_DATA from "../ADDINV_MOCK_DATA.json";
-
-export const BasicTable = () => {
- const columns = useMemo(() => COLUMNS, []);
- const data = useMemo(() => ADDINV_MOCK_DATA, []);
+export const BasicTable = (COLUMNS, ADDINV) => {
+//  const columns = useMemo(() => COLUMNS, []);
+//  const data = useMemo(() => ADDINV, []);
  
  const [fromDate, setFromDate] = useState();
  const [toDate, setToDate] = useState();
