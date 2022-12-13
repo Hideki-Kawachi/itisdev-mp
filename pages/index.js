@@ -4,6 +4,9 @@ import DashboardCard from "../components/DashboardCard";
 import Header from "../components/Header";
 import NavBar from "../components/NavBar";
 import { ironOptions } from "../lib/config";
+import dbConnect from "../lib/dbConnect";
+import User from "../models/UserSchema";
+import Vehicle from "../models/VehicleSchema";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -16,7 +19,12 @@ export const getServerSideProps = withIronSessionSsr(
 					props: {},
 				};
 			} else {
-				return { props: { currentUser } };
+				await dbConnect();
+				const totalUsers = await User.countDocuments({ disabled: false });
+				const totalVehicles = await Vehicle.countDocuments({ disabled: false });
+				const 
+
+				return { props: { currentUser, totalUsers, totalVehicles } };
 			}
 		}
 
@@ -28,9 +36,7 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-const Index = ({ currentUser }) => {
-	const totalUsers = 3;
-	const totalVehicles = 35;
+const Index = ({ currentUser, totalUsers, totalVehicles }) => {
 	const inFlow = 45;
 	const outFlow = 72;
 
