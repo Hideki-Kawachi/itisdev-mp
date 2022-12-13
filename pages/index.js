@@ -22,7 +22,6 @@ export const getServerSideProps = withIronSessionSsr(
 				await dbConnect();
 				const totalUsers = await User.countDocuments({ disabled: false });
 				const totalVehicles = await Vehicle.countDocuments({ disabled: false });
-				const 
 
 				return { props: { currentUser, totalUsers, totalVehicles } };
 			}
