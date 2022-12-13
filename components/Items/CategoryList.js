@@ -15,7 +15,7 @@ import Link from "next/link";
 
 function ItemCatTable({ trigger, setTrigger, name, type, id}) {
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => ITEM_CAT_MOCK_DATA, []);
+  const data = useMemo(() => type, []);
   const [iAddOpen, setIAddOpen] = useState(false);
   const [iEditOpen, setIEditOpen] = useState(false);
   const [selected, setSelected] = useState("");
