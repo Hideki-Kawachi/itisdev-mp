@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 import {
@@ -50,21 +50,34 @@ export const BasicTable = (props) => {
 	const { globalFilter } = state;
 	const { pageIndex } = state;
 
-	const handleFilter = () => {
-		const dateArray = [];
-		var d = dayjs(fromDate);
+	// const handleFilter = () => {
+	// 	const dateArray = [];
+	// 	var d = dayjs(fromDate);
 
-		while (d.isBefore(toDate, "day") || d.isSame(toDate, "day")) {
-			dateArray.push(d.format("MM/DD/YYYY"));
-			d = d.add(1, "day");
-		}
-		filterTable(dateArray);
-	};
+	// 	while (d.isBefore(toDate, "day") || d.isSame(toDate, "day")) {
+	// 		dateArray.push(d.format("MM/DD/YYYY"));
+	// 		d = d.add(1, "day");
+	// 	}
+	// 	filterTable(dateArray);
+	// };
 
 	const filterTable = (dates) => {
-		console.log("Dates are:", dates);
+		//console.log("Dates are:", dates);
 		setFilter("date", dates);
 	};
+
+	useEffect(() => {
+    if (fromDate && toDate) {
+      const dateArray = [];
+      var d = dayjs(fromDate);
+
+      while (d.isBefore(toDate, "day") || d.isSame(toDate, "day")) {
+        dateArray.push(d.format("MM/DD/YYYY"));
+        d = d.add(1, "day");
+      }
+      filterTable(dateArray);
+    }
+  }, [fromDate,toDate]);
 
 	return (
 		<div>
@@ -82,7 +95,7 @@ export const BasicTable = (props) => {
 					className="form-fields form-fields-calendar-range"
 					onChange={(e) => setToDate(dayjs(e.target.value, "MM/DD/YYYY"))}
 				/>
-				<button onClick={handleFilter}>Check Date</button>
+				{/* <button onClick={handleFilter}>Check Date</button> */}
 			</span>
 
 			<table id="btable" {...getTableProps()}>
