@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import dayjs from "dayjs";
 
 import {
@@ -19,6 +19,7 @@ export const BasicTable = () => {
  
  const [fromDate, setFromDate] = useState();
  const [toDate, setToDate] = useState();
+ const [dates, setDates] = useState([]);
  const {
    getTableProps,
    getTableBodyProps,
@@ -43,8 +44,8 @@ export const BasicTable = () => {
      data,
    },
 
-   useGlobalFilter,
    useFilters,
+   useGlobalFilter,
    useSortBy,
    usePagination
  );
@@ -54,23 +55,23 @@ export const BasicTable = () => {
 
  const handleFilter = () => {
     const dateArray = [];
-    var d = dayjs(fromDate);
+    console.log("Dates right now: " + fromDate + toDate)
+    
+    if(fromDate && toDate){
+      var d = dayjs(fromDate);
 
       while (d.isBefore(toDate, "day") || d.isSame(toDate, "day")) {
-        console.log("Date: " + d);
+      //  console.log("Date: " + d);
         dateArray.push(d.format("MM/DD/YYYY"));
         d = d.add(1, "day");
       }
-      console.log(dateArray);
-      filterTable(dateArray);
-      console.log("From Date: " + fromDate + " To Date: " + toDate);
- };
-
-const filterTable = (dates) => {
-     if (useTable.current) {
-       useTable.current.setFilter("date", dates);
+   //   console.log(dateArray);
+      setDates(dateArray);
+      // console.log("From Date: " + fromDate + " To Date: " + toDate);
     }
  };
+
+const tableInstance = useRef(null);
  
   return (
     <div>
@@ -80,17 +81,15 @@ const filterTable = (dates) => {
         <input
           type="date"
           className="form-fields form-fields-calendar-range"
-          onChange={(e) =>
-            setFromDate(dayjs(e.target.value, "MM/DD/YYYY"))
-          }
-        />{" "}
-        to{" "}
+          onChange={(e) => {
+            setFromDate(dayjs(e.target.value, "MM/DD/YYYY")); handleFilter}}
+        />
+        to
         <input
           type="date"
           className="form-fields form-fields-calendar-range"
-          onChange={(e) =>
-            setToDate(dayjs(e.target.value, "MM/DD/YYYY"))
-          }
+          onChange={(e) => {
+            setToDate(dayjs(e.target.value, "MM/DD/YYYY")); handleFilter}}
         />
         <button onClick={handleFilter}>Check Date</button>
       </span>
@@ -117,15 +116,33 @@ const filterTable = (dates) => {
         <tbody {...getTableBodyProps()}>
           {page.map((row) => {
             prepareRow(row);
-            return (
-              <tr id="btable" {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
-              </tr>
-            );
+            if (
+              fromDate && toDate
+            ) {
+              if (dates.includes(row.original.date)) {
+                return (
+                  <tr id="btable1" {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                  </tr>
+                );
+              } else {
+                return <></>;
+              }
+            } else {
+              return (
+                <tr id="btable2" {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            }
           })}
         </tbody>
       </table>

@@ -9,20 +9,14 @@ export const COLUMNS = [
   {
     Header: "Date",
     accessor: "date",
-    filter: (rows, id, filterValue) => {
-      return rows.filter(
-        (row) =>
-          filterValue.length <= 0 ||
-          !filterValue ||
-          filterValue.includes(row.values[id])
-      );
-    },
+    disableGlobalFilter: true,
+   // filter: ,
   },
   {
     Header: "Item",
     accessor: "item",
     disableSortBy: true,
-    filter: GlobalFilter
+    filter: GlobalFilter,
   },
   {
     Header: "Model",
