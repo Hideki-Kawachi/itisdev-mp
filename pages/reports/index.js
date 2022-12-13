@@ -38,8 +38,6 @@ export const getServerSideProps = withIronSessionSsr(
 // ];
 
 function TransactionReports({ currentUser }) {
- const columns = useMemo(() => COLUMNS, []);
- const data = useMemo(() => ADDINV_MOCK_DATA, []);
 
 	return (
 		<>
@@ -47,7 +45,7 @@ function TransactionReports({ currentUser }) {
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				<ReportTabs tab="1" roleID={currentUser.roleID}></ReportTabs>
-				<BasicTable COLUMNS = {columns} ADDINV = {data}></BasicTable>
+				<BasicTable COLUMNS={COLUMNS} ADDINV={ADDINV_MOCK_DATA}></BasicTable>
 			</div>
 		</>
 	);

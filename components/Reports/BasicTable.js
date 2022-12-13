@@ -11,9 +11,10 @@ import {
 
 import GlobalFilter from "../GlobalFilter";
 
-export const BasicTable = (COLUMNS, ADDINV) => {
-//  const columns = useMemo(() => COLUMNS, []);
-//  const data = useMemo(() => ADDINV, []);
+export const BasicTable = (props) => {
+
+  const columns = useMemo(() => props.COLUMNS, []);
+  const data = useMemo(() => props.ADDINV, []);
  
  const [fromDate, setFromDate] = useState();
  const [toDate, setToDate] = useState();
