@@ -10,9 +10,6 @@ import Link from "next/link";
 import { COLUMNS } from "./BrandColumns";
 import { useState } from "react";
 
-// Temporary Assets
-import ITEM_BRAND_MOCK_DATA from "./Temp/ITEM_BRAND_MOCK_DATA.json";
-
 
 export const BrandTable = ({detailsArray}) => {
 	const columns = useMemo(() => COLUMNS, []);
