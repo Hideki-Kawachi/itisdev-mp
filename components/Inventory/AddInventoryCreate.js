@@ -26,6 +26,7 @@ function AddInventoryCreate({unit, brand, supplier}) {
   const [notifResult, setNotifResult] = useState("");
   const [error, setError] = useState(false);
   const [invoiceNumberError, setInvoiceNumberError] = useState("");
+  const [partNumberError, setPartNumberError] = useState("");
   const currentUserID = "00000001";
   var curr = new Date();
   curr.setDate(curr.getDate());
@@ -80,34 +81,40 @@ function AddInventoryCreate({unit, brand, supplier}) {
 
   function checkSpecial(){
     const specialChars = `/[!@#$%^&* ()_+\-=\[\]{};':"\\|,.<>\/?]+/;`;
-    return specialChars.split("").some((char) => addRecordID.includes(char)); // true if present and false if not
+    return specialChars.split("").some((char) => invoiceNumber.includes(char)); // true if present and false if not
   }
 
   function showInvoiceNumberError() {
 
-    console.log("Record ID has special chars: " + checkSpecial()); 
-
-    if (error) {
+	if (error) {
       //Invoice Number is Empty
-      if (addRecordID.length == 0) {
+      if (invoiceNumber.length == 0) {
         return <span className="vehicle-create-error">Input Invoice Number</span>;
-      } else if (checkSpecial()) {
-        return (
-          <span className="vehicle-create-error">
-            Must not contain spaces, letters, or special characters.
-          </span>
-        );
-      }
+      } 
       //Invoice Number reached max char length
-      else if (addRecordID.length > 15 || addRecordID.length < 15) {
+      else if (invoiceNumber.length > 15 || invoiceNumber.length < 15) {
         return (
           <span className="vehicle-create-error">
-            Record ID must be 15 characters long.
+            Invoice Number must be 15 numbers long.
           </span>
         );
       } 
     } 
-  }
+}
+
+  function showPartNumberError() {
+
+	if (error) {
+      //Part Number reached max char length
+    if (partNumber.length > 15 || partNumber.length < 15) {
+        return (
+          <span className="vehicle-create-error">
+            Part Number must be 15 numbers long.
+          </span>
+        );
+      } 
+    } 
+}
 
   	function showResult() {
       if (notifResult.length > 0) {
@@ -162,17 +169,15 @@ function AddInventoryCreate({unit, brand, supplier}) {
 					{/* First Field Row */}
 
 					<div className="form-container">
-                    {showResult()}
-                    <div className="form-item">
-							<label className="form-labels">
-								Record ID: {generateRandomID()} {" "}
-							</label>{" "}
-							<br />
-							
+						<div className="form-item">
+								<label className="form-labels">
+									Record ID: {generateRandomID()} {" "}
+								</label>{" "}
+								<br />
 						</div>
 					</div>				
-
 					<br />
+					
 					{/*Second Field Row*/}
 					<div className="form-container">
 
@@ -196,10 +201,10 @@ function AddInventoryCreate({unit, brand, supplier}) {
 							</label>{" "}
 							<br />
 							<input
-							type="text"
+							type="number"
 							className="form-fields"
 							placeholder="Enter Invoice Number"
-							onChange={(e) => setAddRecordID(e.target.value)}
+							onChange={(e) => setInvoiceNumber(e.target.value)}
 							/>
 							{showInvoiceNumberError()}
 							{invoiceNumberError == invoiceNumber && invoiceNumber.length > 0 ? (
@@ -325,12 +330,28 @@ function AddInventoryCreate({unit, brand, supplier}) {
 						</div>
 
 						<div className="form-item">
-							<label className="form-labels">Part Number: </label> <br />
+							<label className="form-labels">
+							Part Number: {" "}
+							</label>{" "}
+							<label className="label-format">
+							{" "}
+							Format: Numbers only.{" "}
+							</label>{" "}
+							<br />
 							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Part Number"
+							type="number"
+							className="form-fields"
+							placeholder="Enter Part Number"
+							onChange={(e) => setpartNumber(e.target.value)}
 							/>
+							{showPartNumberError()}
+							{partNumberError == partNumber && partNumber.length > 0 ? (
+							<span className="vehicle-create-error">
+								Part Number has already been registered.
+							</span>
+							) : (
+							<></>
+							)}
 						</div>
 
 						<div className="form-item">
