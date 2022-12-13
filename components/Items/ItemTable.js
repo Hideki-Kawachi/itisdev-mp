@@ -8,15 +8,17 @@ import {
 } from "react-table";
 import Link from "next/link";
 import { COLUMNS } from "./ItemColumns";
+import GlobalFilter from "../GlobalFilter";
 
 // Temporary Assets
 import ITEM_MOCK_DATA from "./Temp/ITEM_MOCK_DATA.json";
 import TempFilter from "./Temp/TempSearch";
 import TempCategoryFilter from "./Temp/TempCategoryFilter";
+import { useEffect } from "react";
 
-export const ItemTable = () => {
+export const ItemTable = ({itemData, categoryData}) => {
 	const columns = useMemo(() => COLUMNS, []);
-	const data = useMemo(() => ITEM_MOCK_DATA, []);
+	const data = useMemo(() => itemData, []);
 
 	const {
 		getTableProps,
@@ -33,19 +35,33 @@ export const ItemTable = () => {
 		prepareRow,
 		state,
 		setGlobalFilter,
+    setFilter,
+    filters,
 	} = useTable(
 		{
 			columns,
 			data,
+      // initialState: { pageIndex: 0, pageSize: 5 },
+      // filterTypes,
 		},
 
 		useGlobalFilter,
+    useFilters,
 		useSortBy,
 		usePagination
 	);
 
 	const { globalFilter } = state;
 	const { pageIndex } = state;
+
+
+
+const handleFilter = (e) => {
+  if (useTable.current) {
+    useTable.current.setFilter("categoryID", "Engine")
+  }
+}
+
 
 	return (
     <>
@@ -54,12 +70,22 @@ export const ItemTable = () => {
                 <span className="form-item">
                     <label className="form-labels">Item Category:</label>
                     <br />
-                    <TempCategoryFilter identifier="item-category-filter" />
+                    <select className="sort-dropdown" id="user-create-role" onChange={(e) => handleFilter("categoryID", e)}>
+                      <option value="" key="00000" defaultValue hidden>
+                          {" "}
+                          All{" "}
+                      </option>
+                      {categoryData.map((category) => (
+                          <option key={category.categoryID} value={category.categoryID}>
+                              {category.name}
+                          </option>
+                      ))}
+                    </select>
                 </span>
 
                 <span className="form-item" id="search-item-code-container">
                     <br />
-                    <TempFilter filter={globalFilter} setFilter={setGlobalFilter} placeholder="Search Item Code" />
+                    <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
                 </span>
                 
             </span>
@@ -110,30 +136,54 @@ export const ItemTable = () => {
       </table>
 
 	  <br/>
+    <br />
       <div className="page-buttons">
+        {/* <input
+          type="number"
+          defaultValue={pageIndex + 1}
+          onChange={(e) => {
+            const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0;
+            gotoPage(pageNumber);
+          }}
+        /> */}
         <span>
           Page{" "}
           <strong>
-            {pageIndex + 1} of {pageOptions.length} 
+            {pageIndex + 1} of {pageOptions.length}
           </strong>
         </span>
-		<input type='number' defaultValue = {pageIndex + 1} onChange={e => {
-			const pageNumber= e.target.value ? Number(e.target.value) - 1 : 0
-			gotoPage(pageNumber)}
-		}/>
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {"<<"}
-        </button>
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {"<"}
-  
-        </button>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
- 		{">"}
-        </button>
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {">>"}
-        </button>
+
+        <span className="vehicle-nav-buttons-div">
+          <button
+            className="navigate-page"
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+          >
+            {"<<"}
+          </button>
+
+          <button
+            className="navigate-page"
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+          >
+            {"<"}
+          </button>
+          <button
+            className="navigate-page"
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+          >
+            {">"}
+          </button>
+          <button
+            className="navigate-page"
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+          >
+            {">>"}
+          </button>
+        </span>
       </div>
     </>
   );
