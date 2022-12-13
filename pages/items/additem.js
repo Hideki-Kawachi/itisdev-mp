@@ -96,6 +96,7 @@ function Items({
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				<ItemCreate 
+					items = {items}
 					categories = {categories}
 					brands = {brands}
 				/>

@@ -13,9 +13,9 @@ import { COLUMNS } from "./BrandColumns";
 import ITEM_BRAND_MOCK_DATA from "./Temp/ITEM_BRAND_MOCK_DATA.json";
 
 
-export const BrandTable = () => {
+export const BrandTable = ({detailsArray}) => {
 	const columns = useMemo(() => COLUMNS, []);
-	const data = useMemo(() => ITEM_BRAND_MOCK_DATA, []);
+	const data = useMemo(() => detailsArray, []);
 
 	const {
 		getTableProps,

@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const ItemSchema = new mongoose.Schema({
   itemID: {
     type: String,
-    minlength: 10,
     maxlength: 10,
     unique: true,
     required: true,
@@ -16,7 +15,6 @@ const ItemSchema = new mongoose.Schema({
   },
   itemName: {
     type: String,
-    unique: true,
     required: true,
     maxLength: 50,
   },

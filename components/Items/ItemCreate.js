@@ -7,7 +7,7 @@ import ItemCatTable from './CategoryList';
 import BrandTable from './BrandTable';
 
 // TO-DO: add dropdown options as parameters
-function ItemCreate({categories, brands}) {
+function ItemCreate({items, categories, brands}) {
     // Item Identification
     const [itemID, setItemID] = useState("");
     const [categoryID, setCategoryID] = useState("");
@@ -62,10 +62,22 @@ function ItemCreate({categories, brands}) {
         console.log(detailsArray)
     }
 
+    // useEffect(() => {
+    //     // TEMPORARY ONLY
+    //     if (items.length == 0) {
+    //     setItemID("6000000000")
+    //     } else {
+    //     setItemID(String(Math.max(...items.map((item) => item.itemID)) + 1));
+    //     }
+    //     console.log(itemID)
+    // }, [itemID]);
+
     // Submit Form
     function submitForm() {
         // console.log("1. Error is " + error + ", Data is " + data);
+
         if (
+          itemID.length == 0 ||
           categoryID.length == 0 ||
           name.length == 0 ||
           unitID.length == 0 ||
@@ -76,7 +88,7 @@ function ItemCreate({categories, brands}) {
           setError(true);
         } else {
           let itemData = {
-            itemID: "6000000002",
+            itemID: itemID,
             categoryID: categoryID,
             itemName: name,
             itemModel: model,
@@ -307,12 +319,12 @@ function ItemCreate({categories, brands}) {
                 </div>
 
                 <div className="details-right-container">
-                    <BrandTable></BrandTable>
-                    {/* { detailsArray.length == 0 ? (
+                    
+                    { Object.keys(detailsArray[0]).length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <<h1>Insert table here</h1>>
-                    )} */}
+                        <BrandTable detailsArray={detailsArray}></BrandTable>
+                    )}
                 </div>
             </div>
 
