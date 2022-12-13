@@ -1290,7 +1290,7 @@ input:disabled+label {
   display: flex;
   gap: 25px;
 
-  div{
+  .dashboard-gray-containers{
     background: map-get($colors-neutral, 300);
     padding: 25px 25px 25px 25px;
     width: 100%;
@@ -1326,15 +1326,48 @@ input:disabled+label {
   gap: 25px;
   margin: 25px 25px 0px 0px;
 
-  div{
+  .dashboard-gray-containers{
     background: map-get($colors-neutral, 300);
     padding: 25px 25px 25px 25px;
-    
   }
 
   .dashboard-stock-container{
     height: calc(100vh - 375px);
+    background: map-get($colors-neutral, 300);
+    padding: 25px 25px 25px 25px;
+
+    .stock-container-header{
+      display: flex;
+      justify-content: space-between;
+      margin: 25px 5px 10px 5px;
+    }
   }
 }
+
+.dashboard-card-list-container{
+  overflow-y: scroll;
+  max-height: calc(100% - 100px);
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-card-main-container{
+  border-radius: 10px;
+  background: map-get($colors-neutral, 100);
+  padding: 15px;
+  display: flex;
+
+  .dashboard-card-left-container{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .dashboard-card-count{
+    font-size: 40px;
+  }
+} 
+
 
 

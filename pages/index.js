@@ -1,5 +1,6 @@
 import { withIronSessionSsr } from "iron-session/next";
 import React from "react";
+import DashboardCard from "../components/DashboardCard";
 import Header from "../components/Header";
 import NavBar from "../components/NavBar";
 import { ironOptions } from "../lib/config";
@@ -40,15 +41,15 @@ const Index = ({ currentUser }) => {
 			<div id="main-container" className="dashboard-main-container">
 				<div className="dashboard-left-container">
 					<div className="dashboard-top-container">
-						<div>
+						<div className="dashboard-gray-containers">
 							<h1>Total Users</h1>
 							<span>{totalUsers}</span>
 						</div>
-						<div>
+						<div className="dashboard-gray-containers">
 							<h1>Total Vehicles</h1>
 							<span>{totalVehicles}</span>
 						</div>
-						<div>
+						<div className="dashboard-gray-containers">
 							<h1>In-Flow: Past 30 Days</h1>
 							<span>{inFlow}</span>
 						</div>
@@ -58,12 +59,23 @@ const Index = ({ currentUser }) => {
 					</div>
 				</div>
 				<div className="dashboard-right-container">
-					<div>
+					<div className="dashboard-gray-containers">
 						<h1>Out-Flow: Past 30 Days</h1>
 						<span>{outFlow}</span>
 					</div>
 					<div className="dashboard-stock-container">
 						<h1>Low Stock</h1>
+						<div className="stock-container-header">
+							<span>Item</span>
+							<span>Count</span>
+						</div>
+						<div className="dashboard-card-list-container">
+							<DashboardCard
+								itemName={"oil filter"}
+								itemModel={"#JC-721"}
+								quantity={2}
+							></DashboardCard>
+						</div>
 					</div>
 				</div>
 			</div>
