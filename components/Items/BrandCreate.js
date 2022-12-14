@@ -58,7 +58,6 @@ function AddItemBrand({itemID, trigger, setTrigger, name, type, id}) {
         }
 
         useEffect(() => {
-          // TEMPORARY ONLY
             if (type.length == 0) {
               if (name == "Select Brand") {
                   setDefaultID("10000");
@@ -66,7 +65,7 @@ function AddItemBrand({itemID, trigger, setTrigger, name, type, id}) {
             } else {
               setDefaultID(String(Math.max(...type.map((type) => JSON.parse(type[id]))) + 1));
             }
-            }, [defaultID]);
+        }, [defaultID]);
 
   return (
     <>

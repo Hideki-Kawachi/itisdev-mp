@@ -20,9 +20,12 @@ function ItemCreate({items, categories, brands}) {
 
     // Item Details
     const [details, setDetails] = useState({
+        combinationID: String(Math.floor(Math.random() * 50000)),
         brand: "",
         partNumber: "",
         quantity: 0,
+        unit: "",
+        disabled: false,
     })
     const [detailsArray, setDetailsArray] = useState([{}]);
 
@@ -38,15 +41,30 @@ function ItemCreate({items, categories, brands}) {
     const [infoPop, setInfoPop] = useState(false);
     const [cancel, setCancel] = useState(false);
 
+    function revertBrandToID () {
+        detailsArray.every((value) => {
+            brands.every((brand) => {
+                if (value.brand == brand.name) {
+                    value.brand = brand.itemBrandID
+                    return false;
+                }
+                return true;
+            }) 
+            return true
+        })
+        console.log(detailsArray)
+    }
+
     // Handle details input
     function handleDetails (e) {
         const { name, value } = e.target
+        
         setDetails(prevState => ({
             ...prevState,
+            combinationID: String(Math.floor(Math.random() * 50000)),
             [name]: value,
         }));
     }
-
 
     function addDetails () {
         if (Object.keys(detailsArray[0]).length == 0) {
@@ -61,29 +79,19 @@ function ItemCreate({items, categories, brands}) {
             quantity: 0,
         }));
     }
-
-    // useEffect(() => {
-    //     // TEMPORARY ONLY
-    //     if (items.length == 0) {
-    //     setItemID("6000000000")
-    //     } else {
-    //     setItemID(String(Math.max(...items.map((item) => item.itemID)) + 1));
-    //     }
-    //     console.log(itemID)
-    // }, [itemID]);
-
+    
     // Submit Form
     function submitForm() {
         // console.log("1. Error is " + error + ", Data is " + data);
-
+        revertBrandToID();
         if (
-          itemID.length == 0 ||
-          categoryID.length == 0 ||
-          name.length == 0 ||
-          unitID.length == 0 ||
-          quantity == 0 ||
-          minQuantity == 0 ||
-          detailsArray.length == 0    
+          itemID.length == 0 
+        //   categoryID.length == 0 ||
+        //   name.length == 0 ||
+        //   unitID.length == 0 ||
+        //   quantity == 0 ||
+        //   minQuantity == 0 ||
+        //   detailsArray.length == 0    
         ) {
           setError(true);
         } else {
@@ -323,7 +331,7 @@ function ItemCreate({items, categories, brands}) {
                     { Object.keys(detailsArray[0]).length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <BrandTable detailsArray={detailsArray} isEdit={true}></BrandTable>
+                        <BrandTable detailsArray={detailsArray} pageState="create"></BrandTable>
                     )}
                 </div>
             </div>

@@ -15,10 +15,14 @@ export const BrandTable = ({
   setDetailsArray,
   convertFunc, 
   isEditable, 
-  deleteFunc}) => {
+  deleteFunc,
+  editFunc,
+  pageState,
+  }) => {
 	const columns = useMemo(() => COLUMNS, []);
-	const data = useMemo(() => convertFunc(), [detailsArray]);
-
+  
+	const data = useMemo(() => detailsArray, [detailsArray]);
+  
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -81,7 +85,7 @@ export const BrandTable = ({
           {page.map((row) => {
             prepareRow(row);
             return (
-              <tr id="btable"{...row.getRowProps()} key={row.index}>
+              <tr id="btable"{...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
                     <>
@@ -90,7 +94,7 @@ export const BrandTable = ({
                     
                   );
                 })}
-                {isEditable == true ? (<td><button>✏️</button></td>) : (<></>)}
+                {isEditable == true ? (<td><button type="button" onClick={() => editFunc(row.original)}>✏️</button></td>) : (<></>)}
                 <td><button type="button" onClick={() => deleteFunc(row.original)}>X</button></td>
                 
               </tr>

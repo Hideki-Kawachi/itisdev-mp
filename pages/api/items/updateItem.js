@@ -20,24 +20,22 @@ export default async (req, res) => {
             disabled: itemInfo.isDisabled,
         }
     )
-
+    let detailsResult = [];
     for (var i = 0; i < detailsInfo.length; i++) {
-        let filter = { i
-            itemID: itemInfo.itemID,
+        let updateFields = { 
             itemBrandID: detailsInfo[i].brand,
             partNumber: detailsInfo[i].partNum,
             quantity: parseInt(detailsInfo[i].quantity),
         }
+        detailsResult.push(await ItemBrandCombination.findOneAndUpdate(
+            {combinationID: detailsInfo[i].itemID},
+            { $set: updateFields }
+        ))
     }
 
-    let detailsResult = await ItemBrandCombination.(
-        {itemID: itemInfo.itemID},
-        {
-            itemBrandID: detailsInfo[i].brand,
-            partNumber: detailsInfo[i].partNum,
-            quantity: parseInt(detailsInfo[i].quantity),
-        }
-    )
+    console.log(detailsResult)
+
+
 
     if (itemResult.modifiedCount == 0 && itemResult.matchedCount > 0 
         || detailsResult.modifiedCount == 0 && detailsResult.matchedCount > 0) {

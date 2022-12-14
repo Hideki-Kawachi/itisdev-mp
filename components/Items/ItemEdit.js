@@ -37,9 +37,12 @@ function ItemEdit({itemID, items, categories, brands}) {
     //     quantity: 0,
     // })
     const [details, setDetails] = useState({
+        combinationID: "",
         brand: "",
-        partNum: "",
+        partNumber: "",
         quantity: 0,
+        unit: "",
+        disabled: false,
     })
     const [detailsArray, setDetailsArray] = useState([{}]);
 
@@ -55,8 +58,6 @@ function ItemEdit({itemID, items, categories, brands}) {
     const [infoPop, setInfoPop] = useState(false);
     const [cancel, setCancel] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
-
-
 
     useEffect(() => {
         fetch("/api/items/" + itemID, {
@@ -82,8 +83,44 @@ function ItemEdit({itemID, items, categories, brands}) {
 
 
     function submitForm(e) {
-        console.log("Submit Form")
-    }
+        if (
+            itemID.length == 0 ||
+            categoryID.length == 0 ||
+            name.length == 0 ||
+            unitID.length == 0 ||
+            quantity == 0 ||
+            minQuantity == 0 ||
+            detailsArray.length == 0    
+          ) {
+            setError(true);
+          } else {
+            let itemData = {
+              itemID: itemID,
+              categoryID: categoryID,
+              itemName: name,
+              itemModel: model,
+              unitID: unitID,
+              quantity: quantity,
+              minQuantity: minQuantity,
+              disabled: isDisabled,
+            }
+      
+            fetch("/api/items/updateItem", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({itemData, details:detailsArray}),
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                setNotifResult(data);
+                if (data != "No Fields Edited") {
+                    setTimeout(() => window.location.reload(), 800);
+                }
+            });
+    }}
+    
 
     // Handle details input
     function convertDetailsArray () {
@@ -94,8 +131,9 @@ function ItemEdit({itemID, items, categories, brands}) {
                 combiID: "",
                 brand: null,
                 partNumber: null,
-                quantity: 0,
+                quantity: null,
                 disabled: false,
+                unit: "",
             }
             brands.every((brand) => {
                 if (value.itemBrandID == brand.itemBrandID) {
@@ -104,6 +142,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                     template.partNumber = value.partNumber
                     template.quantity = value.quantity
                     template.disabled = value.disabled
+                    template.unit = value.unit
                     templateArray.push(template)
                     return false;
                 }
@@ -113,33 +152,59 @@ function ItemEdit({itemID, items, categories, brands}) {
         })
 
         return templateArray;
-        // setDetailsTable(templateArray)
-        // if (JSON.stringify(detailsTable[0]) == "{}") {
-        //     detailsTable.shift()
-        // }
+    }
+
+    // Handle details input
+    function handleDetails (e) {
+        const { name, value } = e.target
+        setDetails(prevState => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }
+
+
+    function addDetails () {
+        if (Object.keys(detailsArray[0]).length == 0) {
+            detailsArray.shift()
+        }
+        setDetailsArray(detailsArray => [...detailsArray, details])
+        setQuantity(quantity+parseInt(details.quantity))
+        setDetails(prevState => ({
+            ...prevState,
+            brand: "",
+            partNumber: "",
+            quantity: 0,
+        }));
     }
 
     function enableEdit(e){
         e.preventDefault();
         setIsEditable(true);
     }
+    
+    function onRowEditClick(row) {
+        setDetails(prevState => ({
+            ...prevState,
+            combinationID: row.combiID,
+            brand: row.brand,
+            partNumber: row.partNumber,
+            quantity: row.quantity,
+            unit: row.unit,
+            disabled: row.disabled,
+        }));
+        console.log(details)
+    }
 
     function deleteRow(row) {
         if (detailsArray.length > 1) {
             detailsArray.every((value) => {
                 setDetailsArray(detailsArray.filter(value => value.combinationID == row.combiID))
-                // if (value.combinationID == row.combiID) {
-                //     console.log(detailsArray.filter(value => value == row.combiID))
-                // }
-                // return true;
             })
         }
         else {
             setDetailsArray([{}]);
         }
-
-        
-        console.log(detailsArray)
     }
     
     return (
@@ -163,7 +228,6 @@ function ItemEdit({itemID, items, categories, brands}) {
                 ></Cancel>
             </Modal>
             <form onSubmit={submitForm} className="item-column-container" id="item-add-main-container">
-                <button type="button" onClick={(detailsArray) => convertDetailsArray(detailsArray)}>test</button>
                 <h1>IDENTIFICATION</h1>
     
                 <div id="add-item-form-identification">
@@ -287,6 +351,67 @@ function ItemEdit({itemID, items, categories, brands}) {
                 <h1>ITEM DETAILS</h1>
 
                 <div id="add-item-form-details">
+                { isEditable == true ? (
+                    <><div className="details-left-container" >
+                    <div className="item-input">
+                        <div className="item-label-with-buttons">
+                            <label htmlFor="brandID">Brand: <label className="required"> * </label></label>
+                            <button id="select-brand" className="item-icon-button item-add-option-button " type="button" onClick={() => {
+                                setModStatus(true);
+                                setModName("Add Brand");
+                                setModType(brands);
+                                setModID("itemBrandID");
+                                }}>✎</button>
+                        </div>
+                        <select
+                            className="sort-dropdown"
+                            id="user-create-role"
+                            defaultValue={"0000"}
+                            name="brand"
+                            value={details.brand}
+                            onChange={(e) => {handleDetails(e)}}
+                        >
+                            <option value="" key="00003" defaultValue hidden>
+                                {" "}
+                                Select Brand{" "}
+                            </option>
+                            {brands.map((brand) => (
+                                <option key={brand.itemBrandID} value={brand.name}>
+                                    {brand.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="item-input">
+                        <label htmlFor="partNum">Part Number:</label>
+                        <input 
+                            type="text"
+                            name="partNum"
+                            value={details.partNumber}
+                            onChange={(e) => {handleDetails(e)}}
+                        />
+                    </div>
+
+                    <div className="item-input">
+                        <label htmlFor="quantity">Initial Quantity:</label>
+                        <input 
+                            type="number"
+                            name="quantity"
+                            value={details.quantity}
+                            onChange={(e) => {handleDetails(e)}}
+                        />
+                    </div>
+
+                    <button type="button" 
+                            className="green-button-container add-button"
+                             >
+                        Add 
+                    </button>
+                </div></>
+                ) : (
+                    <></>
+                )}
                     <div className="details-right-container">
                         { JSON.stringify(detailsArray[0]) == "{}" ? (
                             <h1 id="gray-header-text">NO DETAILS TO SHOW</h1>
@@ -297,86 +422,13 @@ function ItemEdit({itemID, items, categories, brands}) {
                                 convertFunc={convertDetailsArray} 
                                 isEditable={isEditable} 
                                 deleteFunc={deleteRow}
+                                editFunc={onRowEditClick}
                             />
                         )}
                     </div>
                         
                 </div>
 
-                { isEditable == true ? (
-                    <></>
-                ) : (
-                    <></>
-                )}
-{/*                
-                <div id="add-item-form-details">
-                    <div className="details-left-container" >
-                        <div className="item-input">
-                            <div className="item-label-with-buttons">
-                                <label htmlFor="brandID">Brand: <label className="required"> * </label></label>
-                                <button id="select-brand" className="item-icon-button item-add-option-button " type="button" onClick={() => {
-                                    setModStatus(true);
-                                    setModName("Add Brand");
-                                    setModType(brands);
-                                    setModID("itemBrandID");
-                                    }}>✎</button>
-                            </div>
-                            <select
-                                className="sort-dropdown"
-                                id="user-create-role"
-                                defaultValue={"0000"}
-                                name="brand"
-                                value={details.brand}
-                                onChange={(e) => handleDetails(e)}
-                            >
-                                <option value="" key="00003" defaultValue hidden>
-                                    {" "}
-                                    Select Brand{" "}
-                                </option>
-                                {brands.map((brand) => (
-                                    <option key={brand.itemBrandID} value={brand.name}>
-                                        {brand.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-    
-                        <div className="item-input">
-                            <label htmlFor="partNum">Part Number:</label>
-                            <input 
-                                type="text"
-                                name="partNum"
-                                value={details.partNum}
-                                onChange={(e) => handleDetails(e)}
-                            />
-                        </div>
-    
-                        <div className="item-input">
-                            <label htmlFor="quantity">Initial Quantity:</label>
-                            <input 
-                                type="number"
-                                name="quantity"
-                                value={details.quantity}
-                                onChange={(e) => handleDetails(e)}
-                            />
-                        </div>
-    
-                        <button type="button" 
-                                className="green-button-container add-button"
-                                onClick={addDetails} >
-                            Add 
-                        </button>
-                    </div>
-    
-                    <div className="details-right-container">
-                        
-                        { Object.keys(detailsTable[0]).length == 0 ? (
-                            <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
-                        ) : (
-                            <BrandTable detailsArray={detailsTable} isEdit={true}></BrandTable>
-                        )}
-                    </div>
-                </div> */}
     
                 <div className="item-footer">
                     <Link href="/items">
