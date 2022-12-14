@@ -8,7 +8,6 @@ import ReportTabs from "./ReportTabs";
 import { COLUMNS } from "../../components/Reports/AddColumns";
 import ADDINV_MOCK_DATA from "../../components/Reports/ADD_INV.json";
 import dbConnect from "../../lib/dbConnect";
-import Role from "../../models/RoleSchema";
 import AddInventory from "../../models/AddInvSchema";
 
 import unitType from "../../models/UnitTypeSchema";
@@ -26,7 +25,7 @@ export const getServerSideProps = withIronSessionSsr(
 				};
 			} else {
 
-				// await dbConnect();
+				await dbConnect();
 
 				// const addRecList = await AddInventory.find(
 				// 	{},
