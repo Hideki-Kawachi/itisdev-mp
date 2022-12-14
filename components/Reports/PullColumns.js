@@ -9,7 +9,7 @@ export const COLUMNS = [
   {
     Header: "Date",
     id: "date",
-    accessor: "pulloutDate",
+    accessor: "pullDate",
     disableGlobalFilter: true,
     filter: (rows, id, filterValue) => {
       return rows.filter(

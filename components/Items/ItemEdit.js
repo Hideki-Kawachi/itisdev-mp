@@ -41,8 +41,19 @@ function ItemEdit({itemID, items, categories, brands}) {
         disabled: false,
     })
     const [detailsArray, setDetailsArray] = useState([{}]);
-    const [newCombiID, setCombiID] = useState(String(Math.floor(Math.random() * 50000)));
+    const [auditTrail, setAuditTrail] = useState({
+        auditID: String(Math.floor(Math.random() * 90000)),
+        itemID: "",
+        auditDate: "",
+        systemCount: 0,
+        physicalCount: 0,
+        creatorID: "",
+        creationDate: "",
+    });
 
+    const [auditArray, setAuditArray] = useState([{}])
+    const [newCombiID, setCombiID] = useState(String(Math.floor(Math.random() * 50000)));
+    
     // Modals
     const [modStatus, setModStatus] = useState(false)
     const [modType, setModType] = useState("")
@@ -55,6 +66,7 @@ function ItemEdit({itemID, items, categories, brands}) {
     const [infoPop, setInfoPop] = useState(false);
     const [cancel, setCancel] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
+    const currentUserID = "00000001";
 
     useEffect(() => {
         fetch("/api/items/" + itemID, {
@@ -116,6 +128,26 @@ function ItemEdit({itemID, items, categories, brands}) {
                     setTimeout(() => window.location.reload(), 800);
                 }
             });
+
+            fetch("/api/items/auditTrail", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ auditTrail }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data == "created") {
+                  console.log("SUCCESS");
+                  setNotifResult("Successfully created!");
+                  setError(false);
+                  window.location.reload();
+                } else {
+                  setError(true);
+                }
+              });
+            
     }}
     
     function clearDetails() {
@@ -201,11 +233,15 @@ function ItemEdit({itemID, items, categories, brands}) {
     function addDetails () {
         if (Object.keys(detailsArray[0]).length == 0) {
             detailsArray.shift()
+            auditTrail.shift()
         }
         details["combinationID"] = String(Math.floor(Math.random() * 50000)),
         details["itemBrandID"] = revertOneBrandToID(details["brand"]);
         setDetailsArray(detailsArray => [...detailsArray, details])
+        setAuditTrail(auditTrail => [...auditTrail, ])
         setQuantity(quantity+parseInt(details.quantity))
+
+        auditTrail[""]
         clearDetails()
     }
 

@@ -7,11 +7,11 @@ import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
 import { COLUMNS } from "../../components/Reports/AddColumns";
 import ADDINV_MOCK_DATA from "../../components/Reports/ADD_INV.json";
-import dbConnect from "../../lib/dbConnect";
-import AddInventory from "../../models/AddInvSchema";
+// import dbConnect from "../../lib/dbConnect";
+// import AddInventory from "../../models/AddInvSchema";
 
-import unitType from "../../models/UnitTypeSchema";
-import Item from "../../models/ItemSchema";
+// import unitType from "../../models/UnitTypeSchema";
+// import Item from "../../models/ItemSchema";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -25,7 +25,7 @@ export const getServerSideProps = withIronSessionSsr(
 				};
 			} else {
 
-				await dbConnect();
+				//await dbConnect();
 
 				// const addRecList = await AddInventory.find(
 				// 	{},
