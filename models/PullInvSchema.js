@@ -29,6 +29,7 @@ const PullInventorySchema = new mongoose.Schema({
 	mechanicName: {
 		type: String,
 		maxlength: 100,
+		require: true,
 	},
 	remarks: {
 		type: String,
