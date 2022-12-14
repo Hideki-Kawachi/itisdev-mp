@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
 
-function MeasureCreate ({ unitTypes, classTypes, setShow }) {
-	const [unitID, setUnitID] = useState("");
+function MeasureCreate ({ unitTypes, classTypes, newMeasureID, setShow }) {
 	const [unitName, setUnitName] = useState("");
 	const [abbreviation, setAbbreviation] = useState("");
 	const [unitTypeID, setUnitTypeID] = useState("20001");
@@ -22,7 +21,7 @@ function MeasureCreate ({ unitTypes, classTypes, setShow }) {
 			setError(true);
 		} else {
 			let measureData = {
-				unitID: "10001",
+				unitID: newMeasureID,
 				unitName: unitName,
 				abbreviation: abbreviation,
 				unitTypeID: unitTypeID,
@@ -130,7 +129,7 @@ function MeasureCreate ({ unitTypes, classTypes, setShow }) {
 				)}
 
 				{/* Unit Type Field */}
-				<label htmlFor="type">
+				<label htmlFor="unitType">
 					Type: <span className="required-mark">*</span>
 				</label>
 				<select
@@ -147,7 +146,7 @@ function MeasureCreate ({ unitTypes, classTypes, setShow }) {
 				</select>
 
 				{/* Unit Class Type Field */}
-				<label htmlFor="Class">
+				<label htmlFor="unitClass">
 					Class: <span className="required-mark">*</span>
 				</label>
 				<select

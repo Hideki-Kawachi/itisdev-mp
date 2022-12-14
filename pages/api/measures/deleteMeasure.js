@@ -1,14 +1,14 @@
 import dbConnect from "../../lib/dbConnect";
-import User from "../../models/UserSchema";
+import Measure from "../../../models/MeasureSchema";
 
 export default async (req, res) => {
 	await dbConnect();
 
-	let result = await User.deleteOne({ userID: req.body.userID });
+	let result = await Measure.deleteOne({ unitID: req.body.unitID });
 
 	if (result.deletedCount > 0) {
-		res.json("User Deleted Successfully!");
+		res.json("Measure Deleted Successfully!");
 	} else {
-		res.json("User Deletion Failed");
+		res.json("Measure Deletion Failed");
 	}
 };
