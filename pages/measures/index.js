@@ -100,7 +100,7 @@ export const getServerSideProps = withIronSessionSsr(
 						abbreviation: measure.abbreviation,
 						unitTypeName: unitTypeName,
 						classTypeName: classTypeName,
-						disabled: measure.isDisabled,
+						disabled: measure.disabled,
 					})
 				});
 
@@ -142,12 +142,15 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 		getSearch(search);
 	}, [filter]);
 
+	
 	function getSearch(value) {
 		let tempList = [];
 		measures.forEach((measure) => {
+			console.log("Fitler: " + filter)
+			console.log("UnitTypeID: " + JSON.stringify(measure))
 			if (
 				(measure.unitName.toLowerCase().includes(value)) &&
-				(measure.roleName == filter || filter == "All")
+				(measure.unitTypeName == filter || filter == "All")
 			) {
 				tempList.push(measure);
 			}
@@ -225,6 +228,7 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 		}
 	}
 
+	// console.log(measureShow)
 	return (
 		<>
 			<Header page={"MEASURES"} subPage={"HOME"} user={currentUser}></Header>
@@ -263,6 +267,7 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 							))}
 						</select>
 						<div className="user-list-container">
+
 							{measureShow.map((measure) => (
 								<MeasureCard
 									key={measure.unitID}

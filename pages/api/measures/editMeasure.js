@@ -13,7 +13,7 @@ export default async (req, res) => {
 			abbreviation: measureInfo.abbreviation,
 			unitTypeID: measureInfo.unitTypeID,
 			classTypeID: measureInfo.classTypeID,
-			disabled: measureInfo.isDisabled,
+			disabled: measureInfo.disabled,
 		}
 	);
 

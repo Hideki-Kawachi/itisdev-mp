@@ -13,8 +13,6 @@ function MeasureCard({
 }) {
 	const [isDisabled, setIsDisabled] = useState(disabled);
 
-	useEffect(() => ({}), [isDisabled]);
-
 	function showDisabled() {
 		if (isDisabled) {
 			return (
