@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
 	useTable,
 	useSortBy,
@@ -7,14 +7,18 @@ import {
 	usePagination,
 } from "react-table";
 import Link from "next/link";
-import { COLUMNS } from "./BrandColumns";
-import { useState } from "react";
+import { COLUMNS } from "./BrandColumns";;
 
 
-export const BrandTable = ({detailsArray}) => {
+export const BrandTable = ({
+  detailsArray,
+  setDetailsArray,
+  convertFunc, 
+  isEditable, 
+  deleteFunc}) => {
 	const columns = useMemo(() => COLUMNS, []);
-	const data = useMemo(() => detailsArray, [detailsArray]);
-  
+	const data = useMemo(() => convertFunc(), [detailsArray]);
+
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -34,15 +38,20 @@ export const BrandTable = ({detailsArray}) => {
 		{
 			columns,
 			data,
+      initialState: {
+        hiddenColumns: ["combinationID"]
+      },
 		},
 
-		useGlobalFilter,
-		useSortBy,
-		usePagination
+  useGlobalFilter,
+  useSortBy,
+  usePagination
 	);
 
 	const { globalFilter } = state;
 	const { pageIndex } = state;
+
+  
 
 	return (
     <>
@@ -63,6 +72,8 @@ export const BrandTable = ({detailsArray}) => {
                   </span>
                 </th>
               ))}
+              {isEditable == true ? (<th></th>) : (<></>)}
+              <th></th>
             </tr>
           ))}
         </thead>
@@ -70,15 +81,22 @@ export const BrandTable = ({detailsArray}) => {
           {page.map((row) => {
             prepareRow(row);
             return (
-              <tr id="btable" {...row.getRowProps()}>
+              <tr id="btable"{...row.getRowProps()} key={row.index}>
                 {row.cells.map((cell) => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    <>
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    </>
+                    
                   );
                 })}
+                {isEditable == true ? (<td><button>✏️</button></td>) : (<></>)}
+                <td><button type="button" onClick={() => deleteFunc(row.original)}>X</button></td>
+                
               </tr>
             );
           })}
+          
         </tbody>
       </table>
 

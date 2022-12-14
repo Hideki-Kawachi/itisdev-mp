@@ -10,6 +10,15 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import BrandTable from "./BrandTable";
 
+export async function getServerSideProps() {
+    // Fetch data from external API
+    const res = await fetch(`https://.../data`)
+    const data = await res.json()
+  
+    // Pass data to the page via props
+    return { props: { data } }
+  }
+
 function ItemEdit({itemID, items, categories, brands}) {
     // Item Identification
     const [categoryID, setCategoryID] = useState("");
@@ -22,13 +31,17 @@ function ItemEdit({itemID, items, categories, brands}) {
 
     // Item Details
     const [prevBrand, setPrevBrand] = useState([""]);
+    // const [details, setDetails] = useState({
+    //     brand: "",
+    //     partNum: "",
+    //     quantity: 0,
+    // })
     const [details, setDetails] = useState({
         brand: "",
         partNum: "",
         quantity: 0,
     })
     const [detailsArray, setDetailsArray] = useState([{}]);
-    const [detailsTable, setDetailsTable] = useState([{}]);
 
     // Modals
     const [modStatus, setModStatus] = useState(false)
@@ -42,6 +55,8 @@ function ItemEdit({itemID, items, categories, brands}) {
     const [infoPop, setInfoPop] = useState(false);
     const [cancel, setCancel] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
+
+
 
     useEffect(() => {
         fetch("/api/items/" + itemID, {
@@ -61,7 +76,7 @@ function ItemEdit({itemID, items, categories, brands}) {
             setQuantity(data.itemInfo.quantity);
             setMinQuantity(data.itemInfo.minQuantity);
             setIsDisabled(data.itemInfo.disabled);
-            
+            setDetailsArray(data.brandInfo);
         })
     }, [itemID])
 
@@ -71,12 +86,37 @@ function ItemEdit({itemID, items, categories, brands}) {
     }
 
     // Handle details input
-    function handleDetails (e) {
-        const { name, value } = e.target
-        setDetails(prevState => ({
-            ...prevState,
-            [name]: value,
-        }));
+    function convertDetailsArray () {
+        let templateArray = []
+        
+        detailsArray.every((value) => {
+            let template = {
+                combiID: "",
+                brand: null,
+                partNumber: null,
+                quantity: 0,
+                disabled: false,
+            }
+            brands.every((brand) => {
+                if (value.itemBrandID == brand.itemBrandID) {
+                    template.combiID = value.combinationID
+                    template.brand = brand.name
+                    template.partNumber = value.partNumber
+                    template.quantity = value.quantity
+                    template.disabled = value.disabled
+                    templateArray.push(template)
+                    return false;
+                }
+                return true;
+            })
+            return true; 
+        })
+
+        return templateArray;
+        // setDetailsTable(templateArray)
+        // if (JSON.stringify(detailsTable[0]) == "{}") {
+        //     detailsTable.shift()
+        // }
     }
 
     function enableEdit(e){
@@ -84,6 +124,24 @@ function ItemEdit({itemID, items, categories, brands}) {
         setIsEditable(true);
     }
 
+    function deleteRow(row) {
+        if (detailsArray.length > 1) {
+            detailsArray.every((value) => {
+                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combiID))
+                // if (value.combinationID == row.combiID) {
+                //     console.log(detailsArray.filter(value => value == row.combiID))
+                // }
+                // return true;
+            })
+        }
+        else {
+            setDetailsArray([{}]);
+        }
+
+        
+        console.log(detailsArray)
+    }
+    
     return (
         <>
             <Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
@@ -105,6 +163,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                 ></Cancel>
             </Modal>
             <form onSubmit={submitForm} className="item-column-container" id="item-add-main-container">
+                <button type="button" onClick={(detailsArray) => convertDetailsArray(detailsArray)}>test</button>
                 <h1>IDENTIFICATION</h1>
     
                 <div id="add-item-form-identification">
@@ -226,6 +285,29 @@ function ItemEdit({itemID, items, categories, brands}) {
                 </div>
                 <hr />
                 <h1>ITEM DETAILS</h1>
+
+                <div id="add-item-form-details">
+                    <div className="details-right-container">
+                        { JSON.stringify(detailsArray[0]) == "{}" ? (
+                            <h1 id="gray-header-text">NO DETAILS TO SHOW</h1>
+                        ) : (
+                            <BrandTable 
+                                detailsArray={detailsArray}
+                                setDetailsArray={setDetailsArray}
+                                convertFunc={convertDetailsArray} 
+                                isEditable={isEditable} 
+                                deleteFunc={deleteRow}
+                            />
+                        )}
+                    </div>
+                        
+                </div>
+
+                { isEditable == true ? (
+                    <></>
+                ) : (
+                    <></>
+                )}
 {/*                
                 <div id="add-item-form-details">
                     <div className="details-left-container" >

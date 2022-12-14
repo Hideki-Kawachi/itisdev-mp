@@ -21,11 +21,11 @@ const ItemBrandCombinationSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-//   disabled: {
-//     type: Boolean,
-//     required: true,
-//     default: false,
-//   },
+  disabled: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 const ItemBrandCombination = mongoose.models.ItemBrandCombination || mongoose.model("ItemBrandCombination", ItemBrandCombinationSchema);

@@ -21,7 +21,7 @@ function ItemCreate({items, categories, brands}) {
     // Item Details
     const [details, setDetails] = useState({
         brand: "",
-        partNum: "",
+        partNumber: "",
         quantity: 0,
     })
     const [detailsArray, setDetailsArray] = useState([{}]);
@@ -57,7 +57,7 @@ function ItemCreate({items, categories, brands}) {
         setDetails(prevState => ({
             ...prevState,
             brand: "",
-            partNum: "",
+            partNumber: "",
             quantity: 0,
         }));
     }
@@ -292,11 +292,11 @@ function ItemCreate({items, categories, brands}) {
                     </div>
 
                     <div className="item-input">
-                        <label htmlFor="partNum">Part Number:</label>
+                        <label htmlFor="partNumber">Part Number:</label>
                         <input 
                             type="text"
-                            name="partNum"
-                            value={details.partNum}
+                            name="partNumber"
+                            value={details.partNumber}
                             onChange={(e) => handleDetails(e)}
                         />
                     </div>
