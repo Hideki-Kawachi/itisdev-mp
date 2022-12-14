@@ -79,19 +79,30 @@ function ItemCreate({ items, categories, brands }) {
             quantity: 0,
         }));
     }
+
+	function deleteRow(row) {
+        if (detailsArray.length > 1) {
+            detailsArray.every((value) => {
+                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combiID))
+            })
+        }
+        else {
+            setDetailsArray([{}]);
+        }
+    }
     
     // Submit Form
     function submitForm() {
         // console.log("1. Error is " + error + ", Data is " + data);
         revertBrandToID();
         if (
-          itemID.length == 0 
-        //   categoryID.length == 0 ||
-        //   name.length == 0 ||
-        //   unitID.length == 0 ||
-        //   quantity == 0 ||
-        //   minQuantity == 0 ||
-        //   detailsArray.length == 0    
+          itemID.length == 0 ||
+          categoryID.length == 0 ||
+          name.length == 0 ||
+          unitID.length == 0 ||
+          quantity == 0 ||
+          minQuantity == 0 ||
+          detailsArray.length == 0    
         ) {
           setError(true);
         } else {
@@ -373,7 +384,7 @@ function ItemCreate({ items, categories, brands }) {
                     { Object.keys(detailsArray[0]).length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <BrandTable detailsArray={detailsArray} pageState="create"></BrandTable>
+                        <BrandTable detailsArray={detailsArray} deleteFunc={deleteRow}></BrandTable>
                     )}
                 </div>
             </div>
