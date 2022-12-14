@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ToggleSwitch from "../ToggleSwitch";
 import BasicTableAdd from "./InventoryTable";
 import BasicTablePull from "./InventoryTablePull";
+import PullTable from "./PullCartTable";
 import BasicButton from "../BasicButton";
 import Cancel from "../Pop-up/cancel";
 
@@ -11,7 +12,6 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 	const [otype, setOType] = useState();
 	const [name, setName] = useState("");
 	const [cancel, setCancel] = useState(false);
-
 	const [lessRecordID, setLessRecordID] = useState("");
 	const [pullDate, setPullDate] = useState("");
 	const [JOnumber, setJOnumber] = useState("");
@@ -33,11 +33,31 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 	curr.setDate(curr.getDate());
 	const date = curr.toISOString().substring(0, 10);
 	const [toggleState, setToggleState] = useState(1);
+	const [quantity, setQuantity] = useState(0);
+
+	// Pull-out Cart Details
+	const [details, setDetails] = useState({
+		itemCode: "",
+		itemName: "",
+		brand: "",
+		partNum: "",
+		quantity: 0,
+		unit: "",
+  });
+
+	const [detailsArray, setDetailsArray] = useState([{}]);
 
 	const toggleTab = (index) => {
 		setToggleState(index);
 	};
 
+    function handleDetails(e) {
+      const { name, value } = e.target;
+      setDetails((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
 	function submitForm() {
 		// console.log("1. Error is " + error + ", Data is " + data);
 		if (
@@ -91,6 +111,23 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 	}
 	function cancelForm() {
 		setCancel(true);
+	}
+
+	function addToCart(){
+		if (Object.keys(detailsArray[0]).length == 0) {
+		detailsArray.shift();
+		}
+			setDetailsArray((detailsArray) => [...detailsArray, details]);
+			setQuantity(quantity + parseInt(details.quantity));
+			setDetails((prevState) => ({
+			...prevState,
+			itemCode: "",
+			itemName: "",
+			brand: "",
+			partNum: "",
+			quantity: 0,
+			unit: "",
+      }));
 	}
 
 	function checkSpecial() {
@@ -172,72 +209,69 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 		}
 	}
 	return (
-		<>
-			<div className="container">
-				<div className="content-tabs">
-					<BasicTablePull> </BasicTablePull>
+    <>
+      <div className="container">
+        <div className="content-tabs">
+          <BasicTablePull> </BasicTablePull>
 
-					{/* First Field Group */}
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">Pull-out Date: </label> <br />
-							<input
-								type="date"
-								defaultValue={date}
-								className="form-fields"
-								placeholder="Acquired Date"
-							/>
-						</div>
+          {/* First Field Group */}
+          <div className="form-container">
+            <div className="form-item">
+              <label className="form-labels">Pull-out Date: </label> <br />
+              <input
+                type="date"
+                defaultValue={date}
+                className="form-fields"
+                placeholder="Acquired Date"
+              />
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Job Order Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<label className="label-format">
-								{" "}
-								Format: Numbers only.{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="number"
-								className="form-fields"
-								placeholder="Enter Job Order Number"
-								onChange={(e) => setJOnumber(e.target.value)}
-							/>
-							{showJOnumberError()}
-							{JOnumberError == JOnumber && JOnumber.length > 0 ? (
-								<span className="vehicle-create-error">
-									Job Order Number has already been registered.
-								</span>
-							) : (
-								<></>
-							)}
-						</div>
+            <div className="form-item">
+              <label className="form-labels">
+                Job Order Number: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <label className="label-format"> Format: Numbers only. </label>{" "}
+              <br />
+              <input
+                type="number"
+                className="form-fields"
+                placeholder="Enter Job Order Number"
+                onChange={(e) => setJOnumber(e.target.value)}
+              />
+              {showJOnumberError()}
+              {JOnumberError == JOnumber && JOnumber.length > 0 ? (
+                <span className="vehicle-create-error">
+                  Job Order Number has already been registered.
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Plate Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<label className="label-format">
-								{" "}
-								Format: Exclude spaces and dashes.{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Plate Number"
-								onChange={(e) => setPlateNum(e.target.value)}
-							/>
-							{showPlateNumError()}
-							{plateNumError == plateNum && plateNum.length > 0 ? (
-								<span className="vehicle-create-error">
-									Plate Number has already been registered
-								</span>
-							) : (
-								<></>
-							)}
-						</div>
+            <div className="form-item">
+              <label className="form-labels">
+                Plate Number: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <label className="label-format">
+                {" "}
+                Format: Exclude spaces and dashes.{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                placeholder="Enter Plate Number"
+                onChange={(e) => setPlateNum(e.target.value)}
+              />
+              {showPlateNumError()}
+              {plateNumError == plateNum && plateNum.length > 0 ? (
+                <span className="vehicle-create-error">
+                  Plate Number has already been registered
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
 
 						<div className="form-item">
 							<label className="form-labels">
@@ -249,112 +283,157 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 					</div>
 					<hr />
 
-					<br />
+          <br />
+          {/* PULL OUT DETAILS */}
 
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Item Code: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<label className="label-format">
-								{" "}
-								Format: Numbers and characters.{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Item Code"
-								onChange={(e) => setItemID(e.target.value)}
-							/>
-							{showItemIDError()}
-						</div>
+          <div className="form-container">
+            <div className="form-item">
+              <label className="form-labels">
+                Item Code: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <label className="label-format">
+                {" "}
+                Format: Numbers and characters.{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                placeholder="Enter Item Code"
+                name="itemCode"
+                value={details.itemCode}
+                onChange={(e) => handleDetails(e)}
+              />
+              {showItemIDError()}
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Item Name: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
-					<br />
+            <div className="form-item">
+              <label className="form-labels">
+                Item Name: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                name="itemName"
+                value={details.itemName}
+                onChange={(e) => handleDetails(e)}
+              />
+            </div>
+          </div>
+          <br />
 
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Brand: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
+          <div className="form-container">
+            <div className="form-item">
+              <label className="form-labels">
+                Brand: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                name="brand"
+                value={details.brand}
+                onChange={(e) => handleDetails(e)}
+              />
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Part Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
-					<br />
+            <div className="form-item">
+              <label className="form-labels">
+                Part Number: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                name="partNum"
+                value={details.partNum}
+                onChange={(e) => handleDetails(e)}
+              />
+            </div>
+          </div>
+          <br />
 
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Quantity: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
+          <div className="form-container">
+            <div className="form-item">
+              <label className="form-labels">
+                Quantity: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                name="quantity"
+                value={details.quantity}
+                onChange={(e) => handleDetails(e)}
+              />
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Unit: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input type="text" className="form-fields" />
-						</div>
-					</div>
+            <div className="form-item">
+              <label className="form-labels">
+                Unit: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                name="unit"
+                value={details.unit}
+                onChange={(e) => handleDetails(e)}
+              />
+            </div>
+          </div>
+          <br />
+          <button className="gray-button-container1" onClick={addToCart}>
+            {" "}
+            Add to Pull Cart
+          </button>
+          <div className="details-right-container">
+            {Object.keys(detailsArray[0]).length == 0 ? (
+              <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
+            ) : (
+              <PullTable
+                detailsArray={detailsArray}
+                isEdit={true}
+              ></PullTable>
+            )}
+          </div>
+          <br />
+          <br />
+          <hr />
+          <br />
 
-					<br />
-					<button className="gray-button-container1"> Add to Pull Cart</button>
-					<br />
-					<br />
-					<hr />
-					<br />
-					<div className="form-item">
-						<label className="form-labels">Remarks:</label> <br />
-						<input type="textarea" className="form-fields-remarks" />
-					</div>
+          <div className="form-item">
+            <label className="form-labels">Remarks:</label> <br />
+            <input type="textarea" className="form-fields-remarks" />
+          </div>
+        </div>
+      </div>
+      <br />
 
-				</div>
-			</div>
-			<br />
-
-			{/* Buttons */}
-			<div className="form-container">
-				<span className="required-text">
-					Fields marked with <label className="required"> * </label> are
-					required.
-				</span>
-				<span className="form-item-buttons">
-					<BasicButton
-						label={"Cancel"}
-						color={"gray"}
-						type={"reset"}
-						clickFunction={cancelForm}
-					></BasicButton>
-					<BasicButton
-						label={"Save"}
-						color={"green"}
-						type={"button"}
-						clickFunction={submitForm}
-					></BasicButton>
-				</span>
-			</div>
-		</>
-	);
+      {/* Buttons */}
+      <div className="form-container">
+        <span className="required-text">
+          Fields marked with <label className="required"> * </label> are
+          required.
+        </span>
+        <span className="form-item-buttons">
+          <BasicButton
+            label={"Cancel"}
+            color={"gray"}
+            type={"reset"}
+            clickFunction={cancelForm}
+          ></BasicButton>
+          <BasicButton
+            label={"Save"}
+            color={"green"}
+            type={"button"}
+            clickFunction={submitForm}
+          ></BasicButton>
+        </span>
+      </div>
+    </>
+  );
 }
 
 export default PullInventoryCreate;
