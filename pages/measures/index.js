@@ -128,7 +128,7 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 	const unitTypes = JSON.parse(unitTypeData);
 	const classTypes = JSON.parse(classTypeData);
 	const unitConversions = JSON.parse(unitConversionData);
-	const newMeasureID = Math.max(...measures.map((measures) => (measures.unitID))) + 1;
+	// const newMeasureID = Math.max(...measures.map((measures) => (measures.unitID))) + 1;
 
 	const [search, setSearch] = useState("");
 	const [filter, setFilter] = useState("All");
@@ -138,11 +138,25 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 	const [measureShow, setMeasureShow] = useState(measures);
 	const [notifResult, setNotifResult] = useState("");
 
+	const [newMeasureID, setnewMeasureID] = useState("");
+
+	useEffect(() => {
+		if (measureData.length===2) {
+			console.log("1. am empty: " + newMeasureID)
+			setnewMeasureID("10001");
+			console.log("1. am now: " + newMeasureID)
+		} else {
+			console.log("2. am empty: " + newMeasureID)
+			setnewMeasureID(Math.max(...measures.map((measures) => (measures.unitID))) + 1)
+			console.log("2. am now: " + newMeasureID)
+		}
+	}, [newMeasureID]);
+
+
 	useEffect(() => {
 		getSearch(search);
 	}, [filter]);
 
-	
 	function getSearch(value) {
 		let tempList = [];
 		measures.forEach((measure) => {
