@@ -1309,6 +1309,13 @@ button {
   text-align: justify;
 }
 
+.inventory-create-error{
+  color:map-get($colors-red, 200);
+  font-size: 16px;
+  margin-left: 35px;
+  text-align: justify;
+}
+
 input:disabled+label {
   opacity: 0px;
 }

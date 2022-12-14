@@ -108,13 +108,13 @@ function AddInventoryCreate({ units, brands, items, suppliers }) {
 			//Invoice Number is Empty
 			if (invoiceNumber.length == 0) {
 				return (
-					<span className="vehicle-create-error">Input Invoice Number</span>
+					<span className="inventory-create-error">Input Invoice Number</span>
 				);
 			}
 			//Invoice Number reached max char length
 			else if (invoiceNumber.length > 15 || invoiceNumber.length < 15) {
 				return (
-					<span className="vehicle-create-error">
+					<span className="inventory-create-error">
 						Invoice Number must be 15 numbers long.
 					</span>
 				);
@@ -124,13 +124,16 @@ function AddInventoryCreate({ units, brands, items, suppliers }) {
 
 	function showPartNumberError() {
 		if (error) {
-			//Part Number reached max char length
-			if (partNumber.length > 15 || partNumber.length < 15) {
-				return (
-					<span className="vehicle-create-error">
-						Part Number must be 15 numbers long.
-					</span>
-				);
+			if (partNumber.length > 0 )
+			{
+				//Part Number reached max char length
+				if (partNumber.length > 15 || partNumber.length < 15) {
+					return (
+						<span className="inventory-create-error">
+							Part Number must be 15 numbers long.
+						</span>
+					);
+				}
 			}
 		}
 	}
@@ -150,7 +153,7 @@ function AddInventoryCreate({ units, brands, items, suppliers }) {
 		if (error) {
 			if (unitPrice < 0) {
 				return (
-					<span className="vehicle-create-error">
+					<span className="inventory-create-error">
 						Input must not be negative.
 					</span>
 				);
@@ -162,7 +165,7 @@ function AddInventoryCreate({ units, brands, items, suppliers }) {
 		if (error) {
 			if (quantity < 0) {
 				return (
-					<span className="vehicle-create-error">
+					<span className="inventory-create-error">
 						Input must not be negative.
 					</span>
 				);
@@ -297,7 +300,7 @@ function AddInventoryCreate({ units, brands, items, suppliers }) {
 								/>
 								{ShowQuantityError()}
 								{error && quantity.length == 0 ? (
-									<span className="vehicle-create-error">Input Quantity</span>
+									<span className="inventory-create-error">Input Quantity</span>
 								) : (
 									<></>
 								)}
@@ -354,7 +357,7 @@ function AddInventoryCreate({ units, brands, items, suppliers }) {
 								/>
 								{ShowPriceError()}
 								{error && unitPrice.length == 0 ? (
-									<span className="vehicle-create-error">Input Unit Price</span>
+									<span className="inventory-create-error">Input Unit Price</span>
 								) : (
 									<></>
 								)}
