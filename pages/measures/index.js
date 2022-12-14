@@ -6,12 +6,14 @@ import NavBar from "../../components/NavBar";
 import MeasureCard from "../../components/Measures/MeasureCard";
 import MeasureCreate from "../../components/Measures/MeasureCreate";
 import MeasureEdit from "../../components/Measures/MeasureEdit";
+import MeasureView from "../../components/Measures/MeasureView";
 import dbConnect from "../../lib/dbConnect";
 //schemas
 import Measure from "../../models/MeasureSchema";
 import UnitType from "../../models/UnitTypeSchema";
 import ClassType from "../../models/UnitClassTypeSchema";
 import UnitConvertion from "../../models/UnitConvertionSchema";
+
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/config";
 
@@ -39,7 +41,7 @@ export const getServerSideProps = withIronSessionSsr(
 						disabled: 1,
 					}
 				);
-
+				//get unitTypes
 				const unitTypeList = await UnitType.find(
 					{},
 					{
@@ -48,7 +50,7 @@ export const getServerSideProps = withIronSessionSsr(
 						disabled: 1,
 					}
 				);
-
+				//get classTypes
 				const classTypeList = await ClassType.find(
 					{},
 					{
@@ -57,7 +59,7 @@ export const getServerSideProps = withIronSessionSsr(
 						disabled: 1,
 					}
 				);
-
+				//get unitConversionList
 				const unitConversionList = await UnitConvertion.find(
 					{},
 					{
@@ -70,11 +72,9 @@ export const getServerSideProps = withIronSessionSsr(
 				var tempMeasureData = [];
 
 				measureList.forEach((measure) => {
-					console.log("am in measureList")
 					let isFound1 = false;
 					let unitTypeName = "";
 					while (!isFound1) {
-						console.log("am in isFoudn1")
 						unitTypeList.forEach((unit) => {
 							if (unit.UnitTypeID == measure.unitTypeID) {
 								unitTypeName = unit.UnitTypeName;
@@ -86,7 +86,6 @@ export const getServerSideProps = withIronSessionSsr(
 					let isFound2 = false;
 					let classTypeName = "";
 					while (!isFound2) {
-						console.log("am in isFoudn2")
 						classTypeList.forEach((unitClass) => {
 							if (unitClass.ClassTypeID == measure.classTypeID) {
 								classTypeName = unitClass.ClassTypeName;
@@ -124,16 +123,18 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-function Users({ measureData, unitTypeData, classTypeData, unitConversionData, currentUser }) {
+function Measures({ measureData, unitTypeData, classTypeData, unitConversionData, currentUser }) {
 	const measures = JSON.parse(measureData);
 	const unitTypes = JSON.parse(unitTypeData);
 	const classTypes = JSON.parse(classTypeData);
 	const unitConversions = JSON.parse(unitConversionData);
+	const newMeasureID = Math.max(...measures.map((measures) => (measures.unitID))) + 1;
 
 	const [search, setSearch] = useState("");
 	const [filter, setFilter] = useState("All");
 	const [rightShow, setRightShow] = useState("button");
 	const [isEditing, setIsEditing] = useState("");
+	const [isViewing, setIsViewing] = useState("");
 	const [measureShow, setMeasureShow] = useState(measures);
 	useEffect(() => {
 		getSearch(search);
@@ -155,13 +156,19 @@ function Users({ measureData, unitTypeData, classTypeData, unitConversionData, c
 	useEffect(() => {
 		if (isEditing.length > 0) {
 			setRightShow("edit");
+			setIsViewing("");
+		} else if (isViewing.length > 0) {
+			setRightShow("view");
+			setIsEditing("");
+		} else {
+			setRightShow("button");
 		}
-	}, [isEditing]);
+	}, [isEditing, isViewing]);
 
 	const rightContainerShow = {
 		// edit: (
 		// 	<MeasureEdit
-		// 		unitTypes={roles}
+		// 	unitTypes={unitTypes}
 		// 		userID={isEditing}
 		// 		setShow={setRightShow}
 		// 	></MeasureEdit>
@@ -170,8 +177,19 @@ function Users({ measureData, unitTypeData, classTypeData, unitConversionData, c
 			<MeasureCreate 
 				unitTypes={unitTypes}
 				classTypes={classTypes}
+				newMeasureID={newMeasureID}
 				setShow={setRightShow}
 			></MeasureCreate>
+		),
+		view: (
+			<MeasureView
+				unitTypes={unitTypes}
+				classTypes={classTypes}
+				unitID={isViewing}
+				setShow={setRightShow}
+				setViewing={setIsViewing}
+				setEditing={setIsEditing}
+			></MeasureView>
 		),
 		button: (
 			<BasicButton
@@ -230,6 +248,7 @@ function Users({ measureData, unitTypeData, classTypeData, unitConversionData, c
 									unitTypeName={measure.unitTypeName}
 									classTypeName={measure.classTypeName}
 									disabled={measure.disabled}
+									setViewing={setIsViewing}
 									setEditing={setIsEditing}
 								></MeasureCard>
 							))}
@@ -244,4 +263,4 @@ function Users({ measureData, unitTypeData, classTypeData, unitConversionData, c
 	);
 }
 
-export default Users;
+export default Measures;

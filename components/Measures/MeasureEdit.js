@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
+import Modal from "react-modal";
 
-function UserEdit({ roles, userID, setShow }) {
+function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [password, setPassword] = useState("");
 	const [roleID, setRoleID] = useState("");
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [error, setError] = useState(false);
-	const currentUserID = "00000000";
+	const [modalOpen, setModalOpen] = useState(false);
 
 	useEffect(() => {
 		console.log("EDITING:", userID);
@@ -31,8 +32,27 @@ function UserEdit({ roles, userID, setShow }) {
 			});
 	}, [userID]);
 
+	function deleteUser() {
+		fetch("/api/deleteUser", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ userID: userID }),
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				setModalOpen(false);
+				setNotifResult(data);
+				if (data != "User Deletion Failed") {
+					setTimeout(() => window.location.reload(), 800);
+				}
+			});
+	}
+
 	function cancelForm() {
 		setShow("button");
+		setEditing("");
 	}
 
 	function submitForm() {
@@ -50,18 +70,68 @@ function UserEdit({ roles, userID, setShow }) {
 				lastName: lastName,
 				password: password,
 				roleID: roleID,
-				creatorID: currentUserID,
-				creationDate: new Date(),
 				disabled: isDisabled,
 			};
+
+			fetch("/api/editUser", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(userData),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					setNotifResult(data);
+					if (data != "No Fields Edited") {
+						setTimeout(() => window.location.reload(), 800);
+					}
+				});
 		}
 	}
 
+	useEffect(() => {
+		console.log("ROLE ID IS:", roleID);
+	}, [roleID]);
+
 	return (
 		<>
+			<Modal isOpen={modalOpen} className="item-modal-bg">
+				<div className="user-modal-container">
+					<div className="user-modal-exit-button-container">
+						<button
+							className="user-modal-exit-button"
+							onClick={() => setModalOpen(false)}
+						>
+							X
+						</button>
+					</div>
+
+					<div className="user-modal-text-container">
+						<span>Are you sure you want to delete user</span>
+						<span>
+							{firstName} {lastName} ?
+						</span>
+					</div>
+					<div className="user-modal-button-container">
+						<BasicButton
+							label={"No"}
+							color={"gray"}
+							type={"button"}
+							clickFunction={() => setModalOpen(false)}
+						></BasicButton>
+						<BasicButton
+							label={"Yes"}
+							color={"red"}
+							type={"button"}
+							clickFunction={deleteUser}
+						></BasicButton>
+					</div>
+				</div>
+			</Modal>
 			<form className="user-create-main-container">
 				<div className="user-create-top-container">
-					<h1>CREATE NEW USER</h1>
+					<h1>EDIT USER</h1>
 					<button className="user-create-exit-button" onClick={cancelForm}>
 						<svg
 							viewBox="0 0 12 12"
@@ -125,21 +195,29 @@ function UserEdit({ roles, userID, setShow }) {
 				<select
 					className="sort-dropdown"
 					id="user-create-role"
-					defaultValue={roleID}
 					onChange={(e) => setRoleID(e.target.value)}
 				>
-					{roles.map((role) => (
-						<option key={role.roleID} value={role.roleID}>
-							{role.roleName}
-						</option>
-					))}
+					{roles.map((role) => {
+						if (role.roleID == roleID) {
+							return (
+								<option key={role.roleID} value={role.roleID} selected>
+									{role.roleName}
+								</option>
+							);
+						} else {
+							return (
+								<option key={role.roleID} value={role.roleID}>
+									{role.roleName}
+								</option>
+							);
+						}
+					})}
 				</select>
 				<span>Status:</span>
 				<ToggleSwitch
 					disabled={isDisabled}
 					setDisabled={setIsDisabled}
 				></ToggleSwitch>
-
 				<div className="user-create-button-container">
 					<BasicButton
 						label={"Save"}
@@ -147,12 +225,20 @@ function UserEdit({ roles, userID, setShow }) {
 						type={"button"}
 						clickFunction={submitForm}
 					></BasicButton>
-					<BasicButton
-						label={"Cancel"}
-						color={"gray"}
-						type={"reset"}
-						clickFunction={cancelForm}
-					></BasicButton>
+					<div className="horizontal-container">
+						<BasicButton
+							label={"Delete"}
+							color={"red"}
+							type={"button"}
+							clickFunction={() => setModalOpen(true)}
+						></BasicButton>
+						<BasicButton
+							label={"Cancel"}
+							color={"gray"}
+							type={"reset"}
+							clickFunction={cancelForm}
+						></BasicButton>
+					</div>
 				</div>
 			</form>
 		</>
