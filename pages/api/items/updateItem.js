@@ -7,44 +7,47 @@ export default async (req, res) => {
 
     const itemInfo = (req.body.itemData);
     const detailsInfo = req.body.details;
+    console.log(itemInfo)
+    console.log(detailsInfo)
 
     let itemResult = await Item.updateOne(
-        {itemID: itemInfo.itemID},
+        {   
+            itemID: itemInfo.itemID
+        },
         {
             categoryID: itemInfo.categoryID,
-            itemName: itemInfo.name,
-            itemModel: itemInfo.model,
+            itemName: itemInfo.itemName,
+            itemModel: itemInfo.itemModel,
             unitID: itemInfo.unitID,
             quantity: itemInfo.quantity,
             minQuantity: itemInfo.minQuantity,
-            disabled: itemInfo.isDisabled,
-        }
+            disabled: itemInfo.disabled,
+        },
     )
-    let detailsResult = [];
+    console.log(itemResult)
+    let detailsResult;
     for (var i = 0; i < detailsInfo.length; i++) {
         let updateFields = { 
             itemBrandID: detailsInfo[i].brand,
-            partNumber: detailsInfo[i].partNum,
+            partNumber: detailsInfo[i].partNumber,
             quantity: parseInt(detailsInfo[i].quantity),
         }
-        detailsResult.push(await ItemBrandCombination.findOneAndUpdate(
-            {combinationID: detailsInfo[i].itemID},
-            { $set: updateFields }
-        ))
+        detailsResult = await ItemBrandCombination.updateOne(
+            {combinationID: detailsInfo[i].combinationID},
+            { $set: updateFields },
+            { upsert: true }
+        )
     }
 
-    console.log(detailsResult)
-
-
-
-    if (itemResult.modifiedCount == 0 && itemResult.matchedCount > 0 
-        || detailsResult.modifiedCount == 0 && detailsResult.matchedCount > 0) {
-        res.json("No fields edited");
-    } 
-    else if (itemResult.modifiedCount == 0 || detailsResult.modifiedCount == 0) {
-        res.json("Edit is invalid");
-    }
-    else {
-        res.json("Item edited successfully");
-    }
+    res.json("item update")
+    // if (itemResult.modifiedCount == 0 && itemResult.matchedCount > 0 
+    //     || detailsResult.modifiedCount == 0 && detailsResult.matchedCount > 0) {
+    //     res.json("No fields edited");
+    // } 
+    // else if (itemResult.modifiedCount == 0 || detailsResult.modifiedCount == 0) {
+    //     res.json("Edit is invalid");
+    // }
+    // else {
+    //     res.json("Item edited successfully");
+    // }
 };

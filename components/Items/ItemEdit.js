@@ -29,13 +29,9 @@ function ItemEdit({itemID, items, categories, brands}) {
     const [minQuantity, setMinQuantity] = useState(0);
     const [isDisabled, setIsDisabled] = useState(false);
 
+    const [detailsButton, setDetailsButton] = useState("Add");
+
     // Item Details
-    const [prevBrand, setPrevBrand] = useState([""]);
-    // const [details, setDetails] = useState({
-    //     brand: "",
-    //     partNum: "",
-    //     quantity: 0,
-    // })
     const [details, setDetails] = useState({
         combinationID: "",
         brand: "",
@@ -121,6 +117,17 @@ function ItemEdit({itemID, items, categories, brands}) {
             });
     }}
     
+    function clearDetails() {
+        setDetails(prevState => ({
+            ...prevState,
+            combinationID: "",
+            brand: "",
+            partNumber: "",
+            quantity: 0,
+            unit: "",
+            disabled: false,
+        }))
+    }
 
     // Handle details input
     function convertDetailsArray () {
@@ -150,7 +157,7 @@ function ItemEdit({itemID, items, categories, brands}) {
             })
             return true; 
         })
-
+        
         return templateArray;
     }
 
@@ -170,12 +177,7 @@ function ItemEdit({itemID, items, categories, brands}) {
         }
         setDetailsArray(detailsArray => [...detailsArray, details])
         setQuantity(quantity+parseInt(details.quantity))
-        setDetails(prevState => ({
-            ...prevState,
-            brand: "",
-            partNumber: "",
-            quantity: 0,
-        }));
+        clearDetails()
     }
 
     function enableEdit(e){
@@ -193,7 +195,26 @@ function ItemEdit({itemID, items, categories, brands}) {
             unit: row.unit,
             disabled: row.disabled,
         }));
-        console.log(details)
+        setDetailsButton("Edit")
+    }
+
+    function editRow() {
+        let newQuantity = 0;
+        let newArr = detailsArray.map(item => {
+            if (item.combinationID == details.combinationID){
+                item.itemBrandID = revertOneBrandToID(details.brand);
+                item.partNumber = details.partNumber;
+                item.quantity = details.quantity;
+                item.unit = details.unit;
+                item.disabled = details.disabled;
+                newQuantity += item.quantity;
+            }
+            return item;
+        })
+        setDetailsButton("Add")
+        setQuantity(newQuantity)
+        setDetailsArray(newArr)
+        clearDetails()
     }
 
     function deleteRow(row) {
@@ -207,6 +228,18 @@ function ItemEdit({itemID, items, categories, brands}) {
         }
     }
     
+    function revertOneBrandToID (value) {
+        brands.every((brand) => {
+            if (value == brand.name) {
+                value = brand.itemBrandID
+                return false;
+            }
+            return true;
+        }) 
+
+        return value;
+    }
+
     return (
         <>
             <Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
@@ -387,7 +420,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                         <label htmlFor="partNum">Part Number:</label>
                         <input 
                             type="text"
-                            name="partNum"
+                            name="partNumber"
                             value={details.partNumber}
                             onChange={(e) => {handleDetails(e)}}
                         />
@@ -402,12 +435,29 @@ function ItemEdit({itemID, items, categories, brands}) {
                             onChange={(e) => {handleDetails(e)}}
                         />
                     </div>
-
-                    <button type="button" 
+                    
+                    { detailsButton == "Edit" ? 
+                    ( 
+                    <>
+                        <button 
+                            type="button" 
                             className="green-button-container add-button"
-                             >
-                        Add 
-                    </button>
+                            onClick={() => editRow()}
+                        >Edit 
+                        </button>
+                    </>
+                    ) : 
+                    (
+                        <button 
+                            type="button" 
+                            className="green-button-container add-button"
+                            onClick={() => addDetails()}
+                        >Add 
+                        </button>
+                    )
+ 
+                    }
+                   
                 </div></>
                 ) : (
                     <></>
@@ -417,12 +467,13 @@ function ItemEdit({itemID, items, categories, brands}) {
                             <h1 id="gray-header-text">NO DETAILS TO SHOW</h1>
                         ) : (
                             <BrandTable 
-                                detailsArray={detailsArray}
-                                setDetailsArray={setDetailsArray}
-                                convertFunc={convertDetailsArray} 
+                                detailsArray={convertDetailsArray()}
+                                setDetailsArray={setDetailsArray} 
                                 isEditable={isEditable} 
                                 deleteFunc={deleteRow}
                                 editFunc={onRowEditClick}
+                                detailsButton={detailsButton}
+                                setDetailsButton={setDetailsButton}
                             />
                         )}
                     </div>

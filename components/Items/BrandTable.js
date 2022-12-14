@@ -13,11 +13,11 @@ import { COLUMNS } from "./BrandColumns";;
 export const BrandTable = ({
   detailsArray,
   setDetailsArray,
-  convertFunc, 
   isEditable, 
   deleteFunc,
   editFunc,
-  pageState,
+  detailsButton,
+  setDetailsButton,
   }) => {
 	const columns = useMemo(() => COLUMNS, []);
   
@@ -54,8 +54,6 @@ export const BrandTable = ({
 
 	const { globalFilter } = state;
 	const { pageIndex } = state;
-
-  
 
 	return (
     <>
@@ -95,7 +93,7 @@ export const BrandTable = ({
                   );
                 })}
                 {isEditable == true ? (<td><button type="button" onClick={() => editFunc(row.original)}>✏️</button></td>) : (<></>)}
-                <td><button type="button" onClick={() => deleteFunc(row.original)}>X</button></td>
+                <td><button type="button" onClick={() => editFunc(row.original)}>X</button></td>
                 
               </tr>
             );
