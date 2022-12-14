@@ -1,4 +1,5 @@
 import dbConnect from "../../../lib/dbConnect";
+import Item from "../../../models/ItemSchema";
 import PullInventory from "../../../models/PullInvSchema";
 import RecordDetails from "../../../models/RecordDetailsSchema";
 
@@ -25,15 +26,24 @@ export default async (req, res) => {
 		disabled: pullData.disabled,
 	});
 
-	records.forEach(async (record) => {
-		await RecordDetails.create({
-			lessRecordID: pullData.lessRecordID,
-			itemID: record.itemCode,
-			brandID: record.brand,
-			quantity: record.quantity,
-			unitID: record.unitID,
+	if (pull instanceof PullInventory) {
+		records.forEach(async (record) => {
+			await RecordDetails.create({
+				lessRecordID: pullData.lessRecordID,
+				itemID: record.itemCode,
+				brandID: record.brand,
+				quantity: record.quantity,
+				unitID: record.unitID,
+			});
+
+			await Item.updateOne(
+				{ itemID: record.itemCode },
+				{ $inc: { quantity: -record.quantity } }
+			);
 		});
-	});
+	} else {
+		res.json("invalid");
+	}
 
 	if (pull == null) {
 		res.json("invalid");

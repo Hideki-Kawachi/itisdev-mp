@@ -653,6 +653,10 @@ function PullInventoryCreate({
 						type={"button"}
 						clickFunction={submitForm}
 					></BasicButton>
+					<br />
+					<br />
+					<br />
+					<br />
 				</span>
 			</div>
 		</>
