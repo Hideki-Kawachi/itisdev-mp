@@ -136,6 +136,8 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 	const [isEditing, setIsEditing] = useState("");
 	const [isViewing, setIsViewing] = useState("");
 	const [measureShow, setMeasureShow] = useState(measures);
+	const [notifResult, setNotifResult] = useState("");
+
 	useEffect(() => {
 		getSearch(search);
 	}, [filter]);
@@ -165,14 +167,24 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 		}
 	}, [isEditing, isViewing]);
 
+	useEffect(() => {
+		if (notifResult.length > 0) {
+			console.log("result is:", notifResult);
+			setTimeout(() => setNotifResult(""), 3000);
+		}
+	}, [notifResult]);
+
 	const rightContainerShow = {
-		// edit: (
-		// 	<MeasureEdit
-		// 	unitTypes={unitTypes}
-		// 		userID={isEditing}
-		// 		setShow={setRightShow}
-		// 	></MeasureEdit>
-		// ),
+		edit: (
+			<MeasureEdit
+				unitTypes={unitTypes}
+				classTypes={classTypes}
+				unitID={isEditing}
+				setShow={setRightShow}
+				setEditing={setIsEditing}
+				setNotifResult={setNotifResult}
+			></MeasureEdit>
+		),
 		create: (
 			<MeasureCreate 
 				unitTypes={unitTypes}
@@ -200,6 +212,18 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 			></BasicButton>
 		),
 	};
+
+	function showResult() {
+		if (notifResult.length > 0) {
+			return (
+				<div className="top-notification-container">
+					<span>{notifResult}</span>
+				</div>
+			);
+		} else {
+			return <></>;
+		}
+	}
 
 	return (
 		<>

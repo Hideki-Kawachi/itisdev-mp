@@ -3,18 +3,18 @@ import BasicButton from "../BasicButton";
 import ToggleSwitch from "../ToggleSwitch";
 import Modal from "react-modal";
 
-function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [password, setPassword] = useState("");
-	const [roleID, setRoleID] = useState("");
+function UserEdit({ unitTypes, classTypes, unitID, setShow, setEditing, setNotifResult }) {
+	const [unitName, setUnitName] = useState("");
+	const [abbreviation, setAbbreviation] = useState("");
+	const [unitTypeID, setUnitTypeID] = useState("");
+	const [classTypeID, setClassTypeID] = useState("");
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [error, setError] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
 
 	useEffect(() => {
-		console.log("EDITING:", userID);
-		fetch("/api/findUser/" + userID, {
+		console.log("EDITING:", unitID);
+		fetch("/api/findMeasure/" + unitID, {
 			method: "GET",
 			headers: {
 				Accept: "application/json",
@@ -24,27 +24,27 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 			.then((res) => res.json())
 			.then((data) => {
 				console.log("RECEIVED DATA:", data);
-				setFirstName(data.firstName);
-				setLastName(data.lastName);
-				setPassword(data.password);
-				setRoleID(data.roleID);
+				setUnitName(data.unitName);
+				setAbbreviation(data.abbreviation);
+				setUnitTypeID(data.unitTypeID);
+				setClassTypeID(data.classTypeID);
 				setIsDisabled(data.disabled);
 			});
-	}, [userID]);
+	}, [unitID]);
 
-	function deleteUser() {
-		fetch("/api/deleteUser", {
+	function deleteMeasure() {
+		fetch("/api/measures/deleteMeasure", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ userID: userID }),
+			body: JSON.stringify({ unitID: unitID }),
 		})
 			.then((res) => res.json())
 			.then((data) => {
 				setModalOpen(false);
 				setNotifResult(data);
-				if (data != "User Deletion Failed") {
+				if (data != "Measure Deletion Failed") {
 					setTimeout(() => window.location.reload(), 800);
 				}
 			});
@@ -57,28 +57,28 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 
 	function submitForm() {
 		if (
-			firstName.length == 0 ||
-			lastName.length == 0 ||
-			password.length == 0 ||
-			roleID.length == 0
+			unitName.length == 0 ||
+			abbreviation.length == 0 ||
+			unitTypeID.length == 0 ||
+			classTypeID.length == 0
 		) {
 			setError(true);
 		} else {
-			let userData = {
-				userID: userID,
-				firstName: firstName,
-				lastName: lastName,
-				password: password,
-				roleID: roleID,
+			let measureData = {
+				unitID: unitID,
+				unitName: unitName,
+				abbreviation: abbreviation,
+				unitTypeID: unitTypeID,
+				classTypeID: classTypeID,
 				disabled: isDisabled,
 			};
 
-			fetch("/api/editUser", {
+			fetch("/api/measures/editMeasure", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(userData),
+				body: JSON.stringify(measureData),
 			})
 				.then((res) => res.json())
 				.then((data) => {
@@ -89,10 +89,6 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 				});
 		}
 	}
-
-	useEffect(() => {
-		console.log("ROLE ID IS:", roleID);
-	}, [roleID]);
 
 	return (
 		<>
@@ -108,9 +104,9 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 					</div>
 
 					<div className="user-modal-text-container">
-						<span>Are you sure you want to delete user</span>
+						<span>Are you sure you want to delete measure</span>
 						<span>
-							{firstName} {lastName} ?
+							{unitName}?
 						</span>
 					</div>
 					<div className="user-modal-button-container">
@@ -124,14 +120,14 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 							label={"Yes"}
 							color={"red"}
 							type={"button"}
-							clickFunction={deleteUser}
+							clickFunction={deleteMeasure}
 						></BasicButton>
 					</div>
 				</div>
 			</Modal>
 			<form className="user-create-main-container">
 				<div className="user-create-top-container">
-					<h1>EDIT USER</h1>
+					<h1>EDIT MEASURE</h1>
 					<button className="user-create-exit-button" onClick={cancelForm}>
 						<svg
 							viewBox="0 0 12 12"
@@ -145,69 +141,86 @@ function UserEdit({ roles, userID, setShow, setEditing, setNotifResult }) {
 						</svg>
 					</button>
 				</div>
-				<label htmlFor="employeeID">Employee ID:</label>
-				<input type="Number" id="employeeID" value={userID} disabled></input>
-				<label htmlFor="firstName">
-					First Name: <span className="required-mark">*</span>
+				
+				{/* Name Field */}
+				<label htmlFor="unitName">
+					Name: <span className="required-mark">*</span>
 				</label>
 				<input
 					type="text"
-					id="firstName"
-					value={firstName}
-					onChange={(e) => setFirstName(e.target.value)}
+					id="unitName"
+					value={unitName}
+					disabled
+					onChange={(e) => setUnitName(e.target.value)}
 				></input>
-				{error && firstName.length == 0 ? (
+				{error && unitName.length == 0 ? (
 					<span className="user-create-error">Input First Name</span>
 				) : (
 					<></>
 				)}
-				<label htmlFor="lastName">
-					Last Name: <span className="required-mark">*</span>
+
+				{/* Abbreviation Field */}
+				<label htmlFor="abbreviation">
+					Abbreviation: <span className="required-mark">*</span>
 				</label>
 				<input
 					type="text"
-					id="lastName"
-					value={lastName}
-					onChange={(e) => setLastName(e.target.value)}
+					id="abbreviation"
+					value={abbreviation}
+					onChange={(e) => setAbbreviation(e.target.value)}
 				></input>
-				{error && lastName.length == 0 ? (
-					<span className="user-create-error">Input Last Name</span>
+				{error && abbreviation.length == 0 ? (
+					<span className="user-create-error">Input First Name</span>
 				) : (
 					<></>
 				)}
-				<label htmlFor="password">
-					Password: <span className="required-mark">*</span>
-				</label>
-				<input
-					type="password"
-					id="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-				></input>
-				{error && password.length == 0 ? (
-					<span className="user-create-error">Input Password</span>
-				) : (
-					<></>
-				)}
-				<label htmlFor="role">
-					Role: <span className="required-mark">*</span>
+
+				{/* Unit Type Field */}
+				<label htmlFor="unitType">
+					Type: <span className="required-mark">*</span>
 				</label>
 				<select
 					className="sort-dropdown"
 					id="user-create-role"
-					onChange={(e) => setRoleID(e.target.value)}
+					onChange={(e) => setUnitTypeID(e.target.value)}
 				>
-					{roles.map((role) => {
-						if (role.roleID == roleID) {
+					{unitTypes.map((type) => {
+						if (type.UnitTypeID == unitTypeID) {
 							return (
-								<option key={role.roleID} value={role.roleID} selected>
-									{role.roleName}
+								<option key={type.UnitTypeID} value={type.UnitTypeID} selected>
+									{type.UnitTypeName}
 								</option>
 							);
 						} else {
 							return (
-								<option key={role.roleID} value={role.roleID}>
-									{role.roleName}
+								<option key={type.UnitTypeID} value={type.UnitTypeID}>
+									{type.UnitTypeName}
+								</option>
+							);
+						}
+					})}
+				</select>
+
+				{/* Unit Class Type Field */}
+				<label htmlFor="unitClass">
+					Class: <span className="required-mark">*</span>
+				</label>
+				<select
+					className="sort-dropdown"
+					id="user-create-role"
+					onChange={(e) => setClassTypeID(e.target.value)}
+				>
+					{classTypes.map((unitClass) => {
+						if (unitClass.ClassTypeID == classTypeID) {
+							return (
+								<option key={unitClass.ClassTypeID} value={unitClass.ClassTypeID} selected>
+									{unitClass.ClassTypeName}
+								</option>
+							);
+						} else {
+							return (
+								<option key={unitClass.ClassTypeID} value={unitClass.ClassTypeID}>
+									{unitClass.ClassTypeName}
 								</option>
 							);
 						}

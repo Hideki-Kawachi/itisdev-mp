@@ -161,9 +161,9 @@ function UserView({ unitTypes, classTypes, unitID, setShow, setEditing, setViewi
 					disabled
 				>
 					{classTypes.map((unitClass) => {
-						if (unitClass.classTypeID == classTypeID) {
+						if (unitClass.ClassTypeID == classTypeID) {
 							return (
-								<option key={unitClass.ClassTypeID} value={unitClass.ClassTypeID}>
+								<option key={unitClass.ClassTypeID} value={unitClass.ClassTypeID} selected>
 									{unitClass.ClassTypeName}
 								</option>
 							);

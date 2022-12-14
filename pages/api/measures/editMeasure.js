@@ -1,4 +1,4 @@
-import dbConnect from "../../lib/dbConnect";
+import dbConnect from "../../../lib/dbConnect";
 import Measure from "../../../models/MeasureSchema";
 
 export default async (req, res) => {
@@ -22,6 +22,6 @@ export default async (req, res) => {
 	} else if (result.modifiedCount == 0) {
 		res.json("Edit is Invalid");
 	} else {
-		res.json("User Successfully Edited!");
+		res.json("Measure Successfully Edited!");
 	}
 };
