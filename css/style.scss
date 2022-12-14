@@ -312,7 +312,24 @@ svg{
   border-radius: 15px;
   background-color: map-get($colors-neutral, 400);
   min-height: 60px;
-  min-width: 900px;
+  min-width: 500px;
+  display: inline;
+  justify-content: center;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.50);
+  cursor:default;
+  font-size: 25px;
+  font-weight: 700;
+  color: map-get($colors-neutral,100);
+  padding: 20px;
+  margin-left: 215px;
+}
+
+.green-button-container1{
+  border: none;
+  border-radius: 15px;
+  background-color: map-get($colors-green, 200);
+  min-height: 60px;
+  min-width: 500px;
   display: inline;
   justify-content: center;
   box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.50);
@@ -321,6 +338,7 @@ svg{
   font-weight: 700;
   color: map-get($colors-neutral,100);
   padding: 20px;
+  margin-left: 215px;
   
   span{
     align-self: center;
