@@ -7,14 +7,14 @@ import Dropdown from "../../components/Dropdown";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/config";
 import dbConnect from "../../lib/dbConnect";
+import unitType from "../../models/UnitTypeSchema";
 import ItemBrand from "../../models/ItemBrandSchema";
 import Supplier from "../../models/SupplierSchema";
 import AddInventoryCreate from "../../components/Inventory/AddInventoryCreate";
 import PullInventoryCreate from "../../components/Inventory/PullInventoryCreate";
-import Vehicles from "../../models/VehicleSchema";
+import AddInvSchema from "../../models/AddInvSchema";
 import Item from "../../models/ItemSchema";
-import ItemBrandCombination from "../../models/ItemBrandCombinationSchema";
-import Measure from "../../models/MeasureSchema";
+
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -22,50 +22,63 @@ export const getServerSideProps = withIronSessionSsr(
 			let currentUser = req.session.user;
 			await dbConnect();
 
-			const unitList = await Measure.find({ disabled: false });
+			const InvAddList = await AddInvSchema.find(
+				{},
+				{
+					addRecordID: 1,
+					invoiceNumber: 1,
+					partNumber: 1,
+					supplierID: 1,
+					brandID: 1,
+					itemID: 1,
+					quantity: 1,
+					unitID: 1,
+					unitPrice: 1,
+					acquireDate: 1,
+					remarks: 1,
+					creatorID: 1,
+					editorID: 1,
+					editDate: 1,
+					itemModel: 1,
+					disabled: 1
+				}
+			);
+
+			const unitList = await unitType.find(
+				{},
+				{ UnitTypeID: 1, UnitTypeName: 1, disabled: 1 }
+			);
 
 			const brandList = await ItemBrand.find(
-				{ disabled: false },
-				{ itemBrandID: 1, name: 1 }
-			);
-
-			const supplierList = await Supplier.find(
-				{ disabled: false },
-				{ supplierID: 1, supplierName: 1 }
-			);
-
-			const vehicleList = await Vehicles.find(
-				{ disabled: false },
-				{ plateNum: 1 }
+				{},
+				{ itemBrandID: 1, name: 1, disabled: 1 }
 			);
 
 			const itemList = await Item.find(
-				{ quantity: { $gt: 0 }, disabled: false },
-				{ itemID: 1, itemName: 1, unitID: 1, quantity: 1, minQuantity: 1 }
+				{},
+				{ itemID: 1, itemName: 1, disabled: 1}
 			);
 
-			const itemBrandList = await ItemBrandCombination.find(
-				{ quantity: { $gt: 0 }, disabled: false },
-				{ itemID: 1, itemBrandID: 1, partNumber: 1 }
+			const supplierList = await Supplier.find(
+				{},
+				{ supplierID: 1, supplierName: 1, disabled: 1}
 			);
 
+			let InvAddData = JSON.stringify(InvAddList)
 			let unitData = JSON.stringify(unitList);
 			let brandData = JSON.stringify(brandList);
-			let supplierData = JSON.stringify(supplierList);
-			let vehicleData = JSON.stringify(vehicleList);
 			let itemData = JSON.stringify(itemList);
-			let itemBrandData = JSON.stringify(itemBrandList);
+			let supplierData = JSON.stringify(supplierList);
 
 			return {
 				props: {
+					InvAddData,
 					currentUser,
 					unitData,
 					brandData,
-					supplierData,
-					vehicleData,
 					itemData,
-					itemBrandData,
-				},
+					supplierData,
+				}
 			};
 		} else {
 			return {
@@ -77,21 +90,12 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-function Inventory({
-	currentUser,
-	unitData,
-	brandData,
-	supplierData,
-	vehicleData,
-	itemData,
-	itemBrandData,
-}) {
+function Inventory({ InvAddData, unitData, brandData, itemData, supplierData, currentUser }) {
+	const inventories = JSON.parse(InvAddData);
 	const units = JSON.parse(unitData);
 	const brands = JSON.parse(brandData);
-	const suppliers = JSON.parse(supplierData);
-	const vehicles = JSON.parse(vehicleData);
 	const items = JSON.parse(itemData);
-	const itemBrands = JSON.parse(itemBrandData);
+	const suppliers = JSON.parse(supplierData);
 
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [toggleState, setToggleState] = useState(1);
@@ -124,34 +128,22 @@ function Inventory({
 						</div>
 
 						<div
-							className={
-								toggleState === 1 ? "content  active-content" : "content"
-							}
+							className={toggleState === 1 ? "content  active-content" : "content"}
 						>
 							<AddInventoryCreate
-								units={units}
-								brands={brands}
-								suppliers={suppliers}
-								items={items}
+							inventories={inventories}
+							units={units}
+							brands={brands}
+							items={items}
+							suppliers={suppliers}
 							></AddInventoryCreate>
 						</div>
 
 						<div
-							className={
-								toggleState === 2 ? "content  active-content" : "content"
-							}
+							className={toggleState === 2 ? "content  active-content" : "content"}
 						>
-							<PullInventoryCreate
-								currentUser={currentUser}
-								unitData={units}
-								brandData={brands}
-								supplierData={suppliers}
-								vehicleData={vehicles}
-								itemData={items}
-								itemBrandData={itemBrands}
-							>
-								{" "}
-							</PullInventoryCreate>
+							<PullInventoryCreate> </PullInventoryCreate>
+
 						</div>
 					</div>
 				</div>
