@@ -35,6 +35,17 @@ const ItemSchema = new mongoose.Schema({
   minQuantity: {
     type: Number,
   },
+  creatorID: {
+    type: String,
+    minlength: 8,
+    maxlength: 8,
+    required: true,
+  },
+  creationDate: {
+    type: Date,
+    required: true,
+    default: new Date(),
+  },
   disabled: {
     type: Boolean,
     required: true,

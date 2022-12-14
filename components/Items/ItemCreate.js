@@ -17,7 +17,7 @@ function ItemCreate({ items, categories, brands }) {
 	const [quantity, setQuantity] = useState(0);
 	const [minQuantity, setMinQuantity] = useState(0);
 	const [isDisabled, setIsDisabled] = useState(false);
-
+	const currentUserID = "00000001";
     // Item Details
     const [details, setDetails] = useState({
         combinationID: String(Math.floor(Math.random() * 50000)),
@@ -139,6 +139,7 @@ function ItemCreate({ items, categories, brands }) {
             unitID: unitID,
             quantity: quantity,
             minQuantity: minQuantity,
+			creatorID: currentUserID,
             disabled: isDisabled,
           }
     
