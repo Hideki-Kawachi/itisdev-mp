@@ -13,6 +13,7 @@ import Supplier from "../../models/SupplierSchema";
 import AddInventoryCreate from "../../components/Inventory/AddInventoryCreate";
 import PullInventoryCreate from "../../components/Inventory/PullInventoryCreate";
 
+
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
 		if (req.session.user) {
@@ -31,8 +32,9 @@ export const getServerSideProps = withIronSessionSsr(
 
 			const supplierList = await Supplier.find(
 				{},
-				{ supplierID: 1, supplierName: 1, disabled: 1 }
+				{ supplierID: 1, supplierName: 1, disabled: 1}
 			);
+
 
 			let unitData = JSON.stringify(unitList);
 			let brandData = JSON.stringify(brandList);
@@ -44,7 +46,7 @@ export const getServerSideProps = withIronSessionSsr(
 					unitData,
 					brandData,
 					supplierData,
-				},
+				}
 			};
 		} else {
 			return {
@@ -92,23 +94,20 @@ function Inventory({ unitData, brandData, supplierData, currentUser }) {
 						</div>
 
 						<div
-							className={
-								toggleState === 1 ? "content  active-content" : "content"
-							}
+							className={toggleState === 1 ? "content  active-content" : "content"}
 						>
 							<AddInventoryCreate
-								units={units}
-								brands={brands}
-								suppliers={suppliers}
+							units={units}
+							brands={brands}
+							suppliers={suppliers}
 							></AddInventoryCreate>
 						</div>
 
 						<div
-							className={
-								toggleState === 2 ? "content  active-content" : "content"
-							}
+							className={toggleState === 2 ? "content  active-content" : "content"}
 						>
 							<PullInventoryCreate> </PullInventoryCreate>
+
 						</div>
 					</div>
 				</div>

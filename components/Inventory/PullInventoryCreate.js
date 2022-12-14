@@ -20,6 +20,7 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 	const [mechanicName, setMechanicName] = useState("");
 	const [remarks, setRemarks] = useState("");
 	const [creatorID, setCreatorID] = useState("");
+	const [recordDate, setRecordDate] = useState("");
 	const [editorID, setEditorID] = useState("");
 	const [editDate, setEditDate] = useState("");
 	const [notifResult, setNotifResult] = useState("");
@@ -39,27 +40,35 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 
 	function submitForm() {
 		// console.log("1. Error is " + error + ", Data is " + data);
-		console.log("clicked", mechanicName.length);
 		if (
+			lessRecordID.length == 0 ||
 			pullDate.length == 0 ||
 			JOnumber.length == 0 ||
 			plateNum.length == 0 ||
-			mechanicName.length == 0
+			mechanicName.length == 0 ||
+			creatorID.length == 0 ||
+			recordDate.length == 0 ||
+			editorID.length == 0 ||
+			editDate.length == 0 ||
+			checkSpecial() == true ||
+			checkYear() == true
 		) {
 			setError(true);
+
 		} else {
 			let pullInvData = {
 				lessRecordID: lessRecordID,
-				pullDate: new Date(pullDate),
+				pullDate: pullDate,
 				JOnumber: JOnumber,
 				plateNum: plateNum,
 				mechanicName: mechanicName,
 				creatorID: currentUserID,
-				editorID: null,
+				recordDate: recordDate,
+				editorID: currentUserID,
 				creationDate: new Date(),
-				disabled: false,
+				disabled: isDisabled,
 			};
-			console.log("pull data", pullInvData);
+
 			fetch("/api/inventory/pullInventory", {
 				method: "POST",
 				headers: {
@@ -67,6 +76,7 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 				},
 				body: JSON.stringify(pullInvData),
 			})
+
 				.then((res) => res.json())
 				.then((data) => {
 					if (data == "created") {
@@ -89,12 +99,12 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 	}
 
 	function showJOnumberError() {
+
+
 		if (error) {
 			//JO Number is Empty
 			if (JOnumber.length == 0) {
-				return (
-					<span className="vehicle-create-error">Input Job Order Number</span>
-				);
+				return <span className="vehicle-create-error">Input Job Order Number</span>;
 			}
 			//JO Number reached max char length
 			else if (JOnumber.length > 15 || JOnumber.length < 15) {
@@ -108,6 +118,7 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 	}
 
 	function showItemIDError() {
+
 		if (error) {
 			//Item ID Number is Empty
 			if (itemID.length == 0) {
@@ -136,7 +147,8 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 		}
 	}
 	function showPlateNumError() {
-		// console.log("Plate Number has special chars: " + checkSpecial());
+
+		// console.log("Plate Number has special chars: " + checkSpecial()); 
 
 		if (error) {
 			//plateNum is Empty
@@ -174,7 +186,6 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 								defaultValue={date}
 								className="form-fields"
 								placeholder="Acquired Date"
-								onChange={(e) => setPullDate(e.target.value)}
 							/>
 						</div>
 
@@ -182,7 +193,10 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 							<label className="form-labels">
 								Job Order Number: <label className="required"> * </label>{" "}
 							</label>{" "}
-							<label className="label-format"> Format: Numbers only. </label>{" "}
+							<label className="label-format">
+								{" "}
+								Format: Numbers only.{" "}
+							</label>{" "}
 							<br />
 							<input
 								type="number"
@@ -226,12 +240,11 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 						</div>
 
 						<div className="form-item">
-							<label className="form-labels">Mechanic Name: </label> <br />
-							<input
-								type="text"
-								className="form-fields"
-								onChange={(e) => setMechanicName(e.target.value)}
-							/>
+							<label className="form-labels">
+								Mechanic Name: {" "}
+							</label>{" "}
+							<br />
+							<input type="text" className="form-fields" />
 						</div>
 					</div>
 					<hr />
@@ -314,6 +327,7 @@ function PullInventoryCreate({ unit, brand, supplier }) {
 						<label className="form-labels">Remarks:</label> <br />
 						<input type="textarea" className="form-fields-remarks" />
 					</div>
+
 				</div>
 			</div>
 			<br />
