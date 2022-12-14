@@ -1,10 +1,6 @@
 import mongoose from "mongoose";
 
 const ItemBrandCombinationSchema = new mongoose.Schema({
-  combinationID: {
-    type:String,
-    unique: true,
-  },
   itemID: {
     type: String,
     minlength: 10,
