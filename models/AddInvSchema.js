@@ -90,6 +90,6 @@ const AddInventorySchema = new mongoose.Schema({
   },
 });
 
-const AddInventory = mongoose.models.AddInventory || mongoose.model("AddInventory", AddInventorySchema);
+const AddInventory = mongoose.models.AddInventories || mongoose.model("AddInventories", AddInventorySchema);
 
 export default AddInventory;

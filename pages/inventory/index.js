@@ -18,12 +18,35 @@ import Measure from "../../models/MeasureSchema";
 import PullInventory from "../../models/PullInvSchema";
 import RecordDetails from "../../models/RecordDetailsSchema";
 import dayjs from "dayjs";
+import AddInvSchema from "../../models/AddInvSchema";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
 		if (req.session.user) {
 			let currentUser = req.session.user;
 			await dbConnect();
+
+			const InvAddList = await AddInvSchema.find(
+				{},
+				{
+					addRecordID: 1,
+					invoiceNumber: 1,
+					partNumber: 1,
+					supplierID: 1,
+					brandID: 1,
+					itemID: 1,
+					quantity: 1,
+					unitID: 1,
+					unitPrice: 1,
+					acquireDate: 1,
+					remarks: 1,
+					creatorID: 1,
+					editorID: 1,
+					editDate: 1,
+					itemModel: 1,
+					disabled: 1,
+				}
+			);
 
 			const unitList = await Measure.find({ disabled: false });
 
@@ -55,6 +78,7 @@ export const getServerSideProps = withIronSessionSsr(
 			const pullList = await PullInventory.find({ disabled: false });
 			const recordList = await RecordDetails.find({});
 
+			let InvAddData = JSON.stringify(InvAddList);
 			let unitData = JSON.stringify(unitList);
 			let brandData = JSON.stringify(brandList);
 			let supplierData = JSON.stringify(supplierList);
@@ -143,6 +167,7 @@ export const getServerSideProps = withIronSessionSsr(
 					itemBrandData,
 					pullData,
 					pullTableData,
+					InvAddData,
 				},
 			};
 		} else {
@@ -165,7 +190,9 @@ function Inventory({
 	itemBrandData,
 	pullData,
 	pullTableData,
+	InvAddData,
 }) {
+	const inventories = JSON.parse(InvAddData);
 	const units = JSON.parse(unitData);
 	const brands = JSON.parse(brandData);
 	const suppliers = JSON.parse(supplierData);
@@ -211,6 +238,7 @@ function Inventory({
 							}
 						>
 							<AddInventoryCreate
+								inventories={inventories}
 								units={units}
 								brands={brands}
 								suppliers={suppliers}

@@ -11,18 +11,19 @@ import { COLUMNS } from "./BrandColumns";;
 
 
 export const BrandTable = ({
-  detailsArray,
-  setDetailsArray,
+  tableValues,
+  convertFunc,
   isEditable, 
   deleteFunc,
   editFunc,
-  detailsButton,
-  setDetailsButton,
+  pageType,
   }) => {
 	const columns = useMemo(() => COLUMNS, []);
-  
-	const data = useMemo(() => detailsArray, [detailsArray]);
-  
+	const data = useMemo(() => convertFunc(pageType, tableValues), [tableValues]);
+    
+  useEffect(() => {
+    console.log(tableValues)
+  }, [])
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -38,12 +39,20 @@ export const BrandTable = ({
 		prepareRow,
 		state,
 		setGlobalFilter,
+    filters, 
+    useFilters
 	} = useTable(
 		{
 			columns,
 			data,
       initialState: {
-        hiddenColumns: ["combinationID"]
+        hiddenColumns: ["combinationID", "status"],
+        // filters: [
+        //   {
+        //     id: "status",
+        //     value: "false"
+        //   }
+        // ]
       },
 		},
 
@@ -54,7 +63,7 @@ export const BrandTable = ({
 
 	const { globalFilter } = state;
 	const { pageIndex } = state;
-
+  
 	return (
     <>
       <br />
@@ -75,7 +84,7 @@ export const BrandTable = ({
                 </th>
               ))}
               {isEditable == true ? (<th></th>) : (<></>)}
-              <th></th>
+              {(isEditable == true || pageType == false) ? (<th></th>) : (<></>)}
             </tr>
           ))}
         </thead>
@@ -93,7 +102,8 @@ export const BrandTable = ({
                   );
                 })}
                 {isEditable == true ? (<td><button type="button" onClick={() => editFunc(row.original)}>✏️</button></td>) : (<></>)}
-                <td><button type="button" onClick={() => editFunc(row.original)}>X</button></td>
+                {(isEditable == true || pageType == false) ? (<td><button type="button" onClick={() => deleteFunc(row.original)}>X</button></td>) : (<></>)}
+                
                 
               </tr>
             );

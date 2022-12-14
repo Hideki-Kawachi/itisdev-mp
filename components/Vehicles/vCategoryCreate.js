@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ToggleSwitch from "../ToggleSwitch";
 
-function AddVehicleCategory({ trigger, setTrigger, name, type, catname, id }) {
+function AddVehicleCategory({ trigger, setTrigger, name, type, id }) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [defaultID, setDefaultID] = useState("");
   const [categoryName, setCategoryName] = useState("");

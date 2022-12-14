@@ -7,6 +7,11 @@ import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
 import { COLUMNS } from "../../components/Reports/AddColumns";
 import ADDINV_MOCK_DATA from "../../components/Reports/ADD_INV.json";
+import dbConnect from "../../lib/dbConnect";
+import AddInventory from "../../models/AddInvSchema";
+
+import unitType from "../../models/UnitTypeSchema";
+import Item from "../../models/ItemSchema";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -19,7 +24,86 @@ export const getServerSideProps = withIronSessionSsr(
 					props: {},
 				};
 			} else {
-				return { props: { currentUser } };
+
+				await dbConnect();
+
+				// const addRecList = await AddInventory.find(
+				// 	{},
+				// 	//date, invoice,  item, item model, quantity, unit
+				// 	{	
+				// 		addRecordID: 1, 
+				// 		acquireDate: 1, 
+				// 		invoiceNumber: 1, 
+				// 		itemID: 1, 
+				// 		quantity:1, 
+				// 		unitID: 1 
+				// 	}
+				// );
+
+				// const itemList = await Item.find(
+				// 	{},
+				// 	{
+				// 		itemID: 1,
+				// 		itemName: 1,
+				// 		itemModel: 1,
+				// 	}
+				// );
+
+				// const unitTypeList = await unitType.find(
+				// 		{},
+				// 		{
+				// 			UnitTypeID: 1,
+				// 			UnitTypeName: 1,
+				// 			disabled: 1,
+				// 		}
+				// );
+
+				// var tempAddData = [];
+
+				// addRecList.forEach((addRec) => {
+				// 	let isFound = false;
+				// 	let isFound2 = false;
+				// 	let itemName = "";
+				// 	let itemModel = "";
+				// 	let unitTypeName = "";
+					
+				// 	while (!isFound && !isFound2) {
+
+				// 		itemList.forEach((item) => {
+				// 			if (addRec.itemID == item.itemID) {
+				// 				itemName = item.itemName;
+				// 				isFound = true;
+				// 			}
+				// 		});
+
+				// 		unitTypeList.forEach((unitType) => {
+				// 			if (addRec.unitID == unitType.UnitTypeID ) {
+				// 				unitTypeName = unitType.UnitTypeName;
+				// 				isFound2 = true;
+				// 			} 
+				// 		});
+
+				// 	}
+
+				// 	tempAddData.push({
+				// 		//date, invoice,  item n, item model, quantity, unit name
+				// 		acquireDate: addRecList.acquireDate,
+				// 		invoiceNumber: addRecList.invoiceNumber,
+				// 		itemName: itemName,
+				// 		itemModel: addRecList.itemModel,
+				// 		quantity: addRecList.quantity,
+				// 		unit: unitTypeName
+				// 	});
+
+
+				// });
+
+				// let addRecData = JSOn.stringify(tempAddData);
+
+				// return { props: { currentUser, addRecData } }; 
+				return { props: { currentUser } }; //need to edit once done
+
+
 			}
 		} else {
 			return {

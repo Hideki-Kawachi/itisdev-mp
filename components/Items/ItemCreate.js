@@ -17,7 +17,7 @@ function ItemCreate({ items, categories, brands }) {
 	const [quantity, setQuantity] = useState(0);
 	const [minQuantity, setMinQuantity] = useState(0);
 	const [isDisabled, setIsDisabled] = useState(false);
-
+	const currentUserID = "00000001";
     // Item Details
     const [details, setDetails] = useState({
         combinationID: String(Math.floor(Math.random() * 50000)),
@@ -52,7 +52,6 @@ function ItemCreate({ items, categories, brands }) {
             }) 
             return true
         })
-        console.log(detailsArray)
     }
 
     // Handle details input
@@ -80,10 +79,36 @@ function ItemCreate({ items, categories, brands }) {
         }));
     }
 
+	function convertDetailsArray (type, arr) {
+		if (type) {
+			let template = {
+				combinationID: "",
+				brand: "",
+				partNumber: "",
+				quantity: 0,
+				disabled: false,
+			}
+			let templateArray = [] 
+			arr.every((value) => {
+				template.combinationID = value.combinationID;
+				template.brand = convertBrandID(value.itemBrandID)
+				template.partNumber = value.partNumber;
+				template.quantity = value.quantity;
+				template.disbaled = value.disabled;
+				templateArray.push(template)
+				return true; 
+			})
+
+			return templateArray;
+		}
+
+		return arr;
+	}
+
 	function deleteRow(row) {
         if (detailsArray.length > 1) {
             detailsArray.every((value) => {
-                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combiID))
+                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combinationID))
             })
         }
         else {
@@ -114,6 +139,7 @@ function ItemCreate({ items, categories, brands }) {
             unitID: unitID,
             quantity: quantity,
             minQuantity: minQuantity,
+			creatorID: currentUserID,
             disabled: isDisabled,
           }
     
@@ -384,7 +410,13 @@ function ItemCreate({ items, categories, brands }) {
                     { Object.keys(detailsArray[0]).length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <BrandTable detailsArray={detailsArray} deleteFunc={deleteRow}></BrandTable>
+                        <BrandTable 
+							tableValues={detailsArray} 
+							convertFunc={convertDetailsArray} 
+							deleteFunc={deleteRow} 
+							isEditable={false} 
+							pageType={false}>	
+						</BrandTable>
                     )}
                 </div>
             </div>
