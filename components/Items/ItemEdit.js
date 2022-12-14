@@ -203,7 +203,7 @@ function ItemEdit({itemID, items, categories, brands}) {
             detailsArray.shift()
         }
         details["combinationID"] = String(Math.floor(Math.random() * 50000)),
-        details["itemBrandID"] = details["brand"]
+        details["itemBrandID"] = revertOneBrandToID(details["brand"]);
         setDetailsArray(detailsArray => [...detailsArray, details])
         setQuantity(quantity+parseInt(details.quantity))
         clearDetails()
