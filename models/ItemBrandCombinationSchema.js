@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const ItemBrandCombinationSchema = new mongoose.Schema({
   combinationID: {
     type:String,
+    maxlength: 10,
     unique: true,
   },
   itemID: {
     type: String,
-    minlength: 10,
     maxlength: 10,
     required: true,
   },
