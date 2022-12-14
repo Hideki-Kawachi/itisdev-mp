@@ -35,6 +35,8 @@ function PullInventoryCreate({
 	const [plateNumError, setPlateNumError] = useState("");
 
 	const [brands, setBrands] = useState([{}]);
+	const [partNumbers, setPartNumbers] = useState([{}]);
+	const [maxQuantity, setMaxQuantity] = useState(0);
 
 	const curr = new Date();
 	curr.setDate(curr.getDate());
@@ -61,21 +63,34 @@ function PullInventoryCreate({
 
 	function handleDetails(e) {
 		const { name, value } = e.target;
+		console.log("NAME IS:", name, "  VALUE IS:", value);
 		setDetails((prevState) => ({
 			...prevState,
 			[name]: value,
 		}));
-
 		if (name == "itemCode") {
 			//if input is item code
 			let isFound = false;
 			let index = itemData.length - 1;
 			while (!isFound && index >= 0) {
 				if (itemData[index].itemID == value) {
-					let tempItemName = itemData[index].itemName;
+					let tempItem = itemData[index];
+					let unitName = "";
+
+					let isFound2 = false;
+					let index2 = unitData.length - 1;
+					while (!isFound2 && index2 >= 0) {
+						if (unitData[index2].unitID == itemData[index].unitID) {
+							unitName = unitData[index2].unitName;
+							isFound2 = true;
+						}
+						index2--;
+					}
+					setMaxQuantity(itemData[index].quantity);
 					setDetails((prevState) => ({
 						...prevState,
-						itemName: tempItemName,
+						itemName: tempItem.itemName,
+						unit: unitName,
 					}));
 					isFound = true;
 					brandList(itemData[index].itemID);
@@ -86,6 +101,7 @@ function PullInventoryCreate({
 				setDetails((prevState) => ({
 					...prevState,
 					itemName: "",
+					unit: "",
 				}));
 			}
 		} else if (name == "itemName") {
@@ -95,10 +111,25 @@ function PullInventoryCreate({
 			while (!isFound && index >= 0) {
 				console.log("ITEM IS:", itemData[index].itemName, "  value is:", value);
 				if (itemData[index].itemName == value) {
-					let tempItemCode = itemData[index].itemID;
+					let tempItem = itemData[index];
+
+					let unitName = "";
+					console.log("item data is:", itemData[index]);
+
+					let isFound2 = false;
+					let index2 = unitData.length - 1;
+					while (!isFound2 && index2 >= 0) {
+						if (unitData[index2].unitID == itemData[index].unitID) {
+							unitName = unitData[index2].unitName;
+							isFound2 = true;
+						}
+						index2--;
+					}
+					setMaxQuantity(itemData[index].quantity);
 					setDetails((prevState) => ({
 						...prevState,
-						itemCode: tempItemCode,
+						itemCode: tempItem.itemID,
+						unit: unitName,
 					}));
 					isFound = true;
 					brandList(itemData[index].itemID);
@@ -109,6 +140,7 @@ function PullInventoryCreate({
 				setDetails((prevState) => ({
 					...prevState,
 					itemCode: "",
+					unit: "",
 				}));
 			}
 		}
@@ -116,42 +148,53 @@ function PullInventoryCreate({
 
 	function brandList(itemID) {
 		let tempBrandList = [];
-		console.log(itemBrandData);
+
 		itemBrandData.forEach((itemBrand) => {
 			if (itemBrand.itemID == itemID) {
 				let isFound = false;
 				let index = brandData.length - 1;
 				let name = "";
+				let part = "";
 				while (!isFound && index >= 0) {
 					if (itemBrand.itemBrandID == brandData[index].itemBrandID) {
 						name = brandData[index].name;
+						part = itemBrand.partNumber;
 						isFound = true;
 					}
 					index--;
 				}
-				let tempItemBrand = { brandID: itemBrand.itemBrandID, brandName: name };
+				let tempItemBrand = {
+					brandID: itemBrand.itemBrandID,
+					brandName: name,
+					partNum: part,
+				};
 				tempBrandList.push(tempItemBrand);
 			}
 		});
+		console.log("setting brandsz:", tempBrandList);
+		setDetails((prevState) => ({
+			...prevState,
+			brand: tempBrandList[0].brandName,
+			partNum: tempBrandList[0].partNum,
+		}));
 		setBrands(tempBrandList);
 	}
 
-	useEffect(() => {
-		console.log("currentUser", currentUser);
-		console.log("unitData", unitData);
-		console.log("brandData", brandData);
-		console.log("supplierData", supplierData);
-		console.log("vehicleData", vehicleData);
-		console.log("itemData", itemData);
-		console.log("itemBrandData", itemBrandData);
-	}, []);
+	// useEffect(() => {
+	// 	console.log("currentUser", currentUser);
+	// 	console.log("unitData", unitData);
+	// 	console.log("brandData", brandData);
+	// 	console.log("supplierData", supplierData);
+	// 	console.log("vehicleData", vehicleData);
+	// 	console.log("itemData", itemData);
+	// 	console.log("itemBrandData", itemBrandData);
+	// }, []);
 
 	useEffect(() => {
 		console.log("DETAILS ARE:", details);
 	}, [details]);
 
 	function submitForm() {
-		// console.log("1. Error is " + error + ", Data is " + data);
 		if (
 			pullDate.length == 0 ||
 			JOnumber.length == 0 ||
@@ -275,6 +318,18 @@ function PullInventoryCreate({
 		}
 	}
 
+	function showQuantityError() {
+		if (details.quantity == 0) {
+			return (
+				<span className="vehicle-create-error">Quantity Cannot Be Zero</span>
+			);
+		} else if (details.quantity > maxQuantity) {
+			return (
+				<span className="vehicle-create-error">Quantity Exceeds Stock</span>
+			);
+		}
+	}
+
 	function showResult() {
 		if (notifResult.length > 0) {
 			return (
@@ -298,7 +353,8 @@ function PullInventoryCreate({
 			details.brand.length == 0 ||
 			details.partNum.length == 0 ||
 			details.quantity == 0 ||
-			details.unit.length == 0
+			details.unit.length == 0 ||
+			details.quantity > maxQuantity
 		) {
 			return (
 				<button className="gray-button-container1" disabled>
@@ -469,7 +525,7 @@ function PullInventoryCreate({
 							>
 								{brands.map((brand, index) => (
 									<option key={index} value={brand.brandName}>
-										{brand.name}
+										{brand.brandName}
 									</option>
 								))}
 							</select>
@@ -480,14 +536,19 @@ function PullInventoryCreate({
 								Part Number: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<br />
-							<input
-								type="text"
+							<select
 								className="form-fields"
 								name="partNum"
 								value={details.partNum}
 								onChange={(e) => handleDetails(e)}
 								disabled={disableFields()}
-							/>
+							>
+								{brands.map((brand, index) => (
+									<option key={index} value={brand.partNum}>
+										{brand.partNum}
+									</option>
+								))}
+							</select>
 						</div>
 					</div>
 					<br />
@@ -499,13 +560,14 @@ function PullInventoryCreate({
 							</label>{" "}
 							<br />
 							<input
-								type="text"
+								type="number"
 								className="form-fields"
 								name="quantity"
 								value={details.quantity}
 								onChange={(e) => handleDetails(e)}
 								disabled={disableFields()}
 							/>
+							{showQuantityError()}
 						</div>
 
 						<div className="form-item">
@@ -513,14 +575,17 @@ function PullInventoryCreate({
 								Unit: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<br />
-							<input
-								type="text"
+							<select
 								className="form-fields"
 								name="unit"
 								value={details.unit}
 								onChange={(e) => handleDetails(e)}
 								disabled={disableFields()}
-							/>
+							>
+								<option key={details.unit} value={details.unit}>
+									{details.unit}
+								</option>
+							</select>
 						</div>
 					</div>
 					<br />

@@ -7,7 +7,6 @@ import Dropdown from "../../components/Dropdown";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/config";
 import dbConnect from "../../lib/dbConnect";
-import unitType from "../../models/UnitTypeSchema";
 import ItemBrand from "../../models/ItemBrandSchema";
 import Supplier from "../../models/SupplierSchema";
 import AddInventoryCreate from "../../components/Inventory/AddInventoryCreate";
@@ -15,6 +14,7 @@ import PullInventoryCreate from "../../components/Inventory/PullInventoryCreate"
 import Vehicles from "../../models/VehicleSchema";
 import Item from "../../models/ItemSchema";
 import ItemBrandCombination from "../../models/ItemBrandCombinationSchema";
+import Measure from "../../models/MeasureSchema";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -22,10 +22,7 @@ export const getServerSideProps = withIronSessionSsr(
 			let currentUser = req.session.user;
 			await dbConnect();
 
-			const unitList = await unitType.find(
-				{ disabled: false },
-				{ UnitTypeID: 1, UnitTypeName: 1 }
-			);
+			const unitList = await Measure.find({ disabled: false });
 
 			const brandList = await ItemBrand.find(
 				{ disabled: false },
