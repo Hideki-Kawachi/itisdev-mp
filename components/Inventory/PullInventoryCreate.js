@@ -34,9 +34,12 @@ function PullInventoryCreate({
 	const [itemIDErorr, setItemIDError] = useState("");
 	const [plateNumError, setPlateNumError] = useState("");
 
+	const [brands, setBrands] = useState([{}]);
+
 	const curr = new Date();
 	curr.setDate(curr.getDate());
 	const date = curr.toISOString().substring(0, 10);
+
 	const [toggleState, setToggleState] = useState(1);
 	const [quantity, setQuantity] = useState(0);
 
@@ -75,6 +78,7 @@ function PullInventoryCreate({
 						itemName: tempItemName,
 					}));
 					isFound = true;
+					brandList(itemData[index].itemID);
 				}
 				index--;
 			}
@@ -97,32 +101,7 @@ function PullInventoryCreate({
 						itemCode: tempItemCode,
 					}));
 					isFound = true;
-				}
-				index--;
-			}
-			if (!isFound) {
-				setDetails((prevState) => ({
-					...prevState,
-					itemCode: "",
-				}));
-			}
-		} else if (
-			name == "brand" &&
-			details.itemCode.length > 0 &&
-			details.itemName.length > 0
-		) {
-			//if input is brand and item is picked
-			let isFound = false;
-			let index = brandData.length - 1;
-			while (!isFound && index >= 0) {
-				console.log("ITEM IS:", itemData[index].itemName, "  value is:", value);
-				if (itemData[index].itemName == value) {
-					let tempItemCode = itemData[index].itemID;
-					setDetails((prevState) => ({
-						...prevState,
-						itemCode: tempItemCode,
-					}));
-					isFound = true;
+					brandList(itemData[index].itemID);
 				}
 				index--;
 			}
@@ -133,6 +112,28 @@ function PullInventoryCreate({
 				}));
 			}
 		}
+	}
+
+	function brandList(itemID) {
+		let tempBrandList = [];
+		console.log(itemBrandData);
+		itemBrandData.forEach((itemBrand) => {
+			if (itemBrand.itemID == itemID) {
+				let isFound = false;
+				let index = brandData.length - 1;
+				let name = "";
+				while (!isFound && index >= 0) {
+					if (itemBrand.itemBrandID == brandData[index].itemBrandID) {
+						name = brandData[index].name;
+						isFound = true;
+					}
+					index--;
+				}
+				let tempItemBrand = { brandID: itemBrand.itemBrandID, brandName: name };
+				tempBrandList.push(tempItemBrand);
+			}
+		});
+		setBrands(tempBrandList);
 	}
 
 	useEffect(() => {
@@ -459,14 +460,19 @@ function PullInventoryCreate({
 								Brand: <label className="required"> * </label>{" "}
 							</label>{" "}
 							<br />
-							<input
-								type="text"
+							<select
 								className="form-fields"
 								name="brand"
 								value={details.brand}
 								onChange={(e) => handleDetails(e)}
 								disabled={disableFields()}
-							/>
+							>
+								{brands.map((brand) => (
+									<option key={brand.brandID} value={brand.brandName}>
+										{brand.name}
+									</option>
+								))}
+							</select>
 						</div>
 
 						<div className="form-item">

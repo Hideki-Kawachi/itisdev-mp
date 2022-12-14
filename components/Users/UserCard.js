@@ -11,7 +11,6 @@ function UserCard({
 	setViewing,
 }) {
 	const [isDisabled, setIsDisabled] = useState(disabled);
-	const isMounted = useRef(false);
 
 	function showDisabled() {
 		if (isDisabled) {

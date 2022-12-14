@@ -8,7 +8,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/config";
 import dbConnect from "../../lib/dbConnect";
 import unitType from "../../models/UnitTypeSchema";
-import Brand from "../../models/BrandSchema";
+import ItemBrand from "../../models/ItemBrandSchema";
 import Supplier from "../../models/SupplierSchema";
 import AddInventoryCreate from "../../components/Inventory/AddInventoryCreate";
 import PullInventoryCreate from "../../components/Inventory/PullInventoryCreate";
@@ -27,9 +27,9 @@ export const getServerSideProps = withIronSessionSsr(
 				{ UnitTypeID: 1, UnitTypeName: 1 }
 			);
 
-			const brandList = await Brand.find(
+			const brandList = await ItemBrand.find(
 				{ disabled: false },
-				{ brandID: 1, name: 1 }
+				{ itemBrandID: 1, name: 1 }
 			);
 
 			const supplierList = await Supplier.find(
@@ -135,6 +135,7 @@ function Inventory({
 								units={units}
 								brands={brands}
 								suppliers={suppliers}
+								items={items}
 							></AddInventoryCreate>
 						</div>
 
