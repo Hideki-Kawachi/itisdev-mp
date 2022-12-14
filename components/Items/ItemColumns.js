@@ -28,9 +28,16 @@ export const COLUMNS = [
   },
   {
     Header: "Category",
+    id: "categoryID",
     accessor: "categoryID",
-    Filter: SelectColumnFilter,
-    filter: "includes",
+    filter: (rows, id, filterValue) => {
+      return rows.filter(
+        (row) =>
+          filterValue.length <= 0 ||
+          !filterValue ||
+          filterValue.includes(row.values[id])
+      );
+    },
     
   },
   {

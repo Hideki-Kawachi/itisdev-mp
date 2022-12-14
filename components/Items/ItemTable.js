@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useRouter }  from 'next/router';
 import { COLUMNS } from "./ItemColumns";
 import GlobalFilter from "../GlobalFilter";
-import { Dropdown, DefaultFilterColumn, SelectColumnFilter } from "../Dropdown";
+import { Dropdown } from "../Dropdown";
 
 // Temporary Assets
 import ITEM_MOCK_DATA from "./Temp/ITEM_MOCK_DATA.json";
@@ -47,7 +47,6 @@ export const ItemTable = ({itemData, categoryData}) => {
       initialState: {
         hiddenColumns: ["itemID"]
       },
-      defaultColumn: { Filter: DefaultFilterColumn },
 		},
 		useGlobalFilter,
     useFilters,
