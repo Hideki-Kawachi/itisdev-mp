@@ -5,7 +5,6 @@ import BasicTablePull from "./InventoryTablePull";
 import PullTable from "./PullCartTable";
 import BasicButton from "../BasicButton";
 import Cancel from "../Pop-up/cancel";
-import { func } from "prop-types";
 
 function PullInventoryCreate({
 	currentUser,
@@ -15,19 +14,23 @@ function PullInventoryCreate({
 	vehicleData,
 	itemData,
 	itemBrandData,
+	pullData,
+	pullTableData,
 }) {
+	const curr = new Date();
+	curr.setDate(curr.getDate());
+	const date = curr.toISOString().substring(0, 10);
+
 	const [vTypeOpen, setvTypeOpen] = useState(false);
 	const [otype, setOType] = useState();
 	const [name, setName] = useState("");
 	const [cancel, setCancel] = useState(false);
-	const [lessRecordID, setLessRecordID] = useState("");
-	const [pullDate, setPullDate] = useState("");
+	const [pullDate, setPullDate] = useState(date);
 	const [JOnumber, setJOnumber] = useState("");
 	const [itemID, setItemID] = useState("");
 	const [plateNum, setPlateNum] = useState("");
 	const [mechanicName, setMechanicName] = useState("");
 	const [remarks, setRemarks] = useState("");
-	const [recordDate, setRecordDate] = useState("");
 	const [notifResult, setNotifResult] = useState("");
 	const [error, setError] = useState(false);
 	const [JOnumberError, setJOnumberError] = useState("");
@@ -37,10 +40,6 @@ function PullInventoryCreate({
 	const [brands, setBrands] = useState([{}]);
 	const [partNumbers, setPartNumbers] = useState([{}]);
 	const [maxQuantity, setMaxQuantity] = useState(0);
-
-	const curr = new Date();
-	curr.setDate(curr.getDate());
-	const date = curr.toISOString().substring(0, 10);
 
 	const [toggleState, setToggleState] = useState(1);
 	const [quantity, setQuantity] = useState(0);
@@ -76,12 +75,14 @@ function PullInventoryCreate({
 				if (itemData[index].itemID == value) {
 					let tempItem = itemData[index];
 					let unitName = "";
+					let unitID = "";
 
 					let isFound2 = false;
 					let index2 = unitData.length - 1;
 					while (!isFound2 && index2 >= 0) {
 						if (unitData[index2].unitID == itemData[index].unitID) {
 							unitName = unitData[index2].unitName;
+							unitID = itemData[index].unitID;
 							isFound2 = true;
 						}
 						index2--;
@@ -91,6 +92,7 @@ function PullInventoryCreate({
 						...prevState,
 						itemName: tempItem.itemName,
 						unit: unitName,
+						unitID: unitID,
 					}));
 					isFound = true;
 					brandList(itemData[index].itemID);
@@ -102,6 +104,7 @@ function PullInventoryCreate({
 					...prevState,
 					itemName: "",
 					unit: "",
+					unitID: "",
 				}));
 			}
 		} else if (name == "itemName") {
@@ -114,6 +117,7 @@ function PullInventoryCreate({
 					let tempItem = itemData[index];
 
 					let unitName = "";
+					let unitID = "";
 					console.log("item data is:", itemData[index]);
 
 					let isFound2 = false;
@@ -121,6 +125,7 @@ function PullInventoryCreate({
 					while (!isFound2 && index2 >= 0) {
 						if (unitData[index2].unitID == itemData[index].unitID) {
 							unitName = unitData[index2].unitName;
+							unitID = itemData[index].unitID;
 							isFound2 = true;
 						}
 						index2--;
@@ -130,6 +135,7 @@ function PullInventoryCreate({
 						...prevState,
 						itemCode: tempItem.itemID,
 						unit: unitName,
+						unitID: unitID,
 					}));
 					isFound = true;
 					brandList(itemData[index].itemID);
@@ -141,6 +147,7 @@ function PullInventoryCreate({
 					...prevState,
 					itemCode: "",
 					unit: "",
+					unitID: "",
 				}));
 			}
 		}
@@ -171,24 +178,23 @@ function PullInventoryCreate({
 				tempBrandList.push(tempItemBrand);
 			}
 		});
-		console.log("setting brandsz:", tempBrandList);
 		setDetails((prevState) => ({
 			...prevState,
-			brand: tempBrandList[0].brandName,
-			partNum: tempBrandList[0].partNum,
+			brand: tempBrandList[0]?.brandID,
+			partNum: tempBrandList[0]?.partNum,
 		}));
 		setBrands(tempBrandList);
 	}
 
-	// useEffect(() => {
-	// 	console.log("currentUser", currentUser);
-	// 	console.log("unitData", unitData);
-	// 	console.log("brandData", brandData);
-	// 	console.log("supplierData", supplierData);
-	// 	console.log("vehicleData", vehicleData);
-	// 	console.log("itemData", itemData);
-	// 	console.log("itemBrandData", itemBrandData);
-	// }, []);
+	useEffect(() => {
+		console.log("currentUser", currentUser);
+		console.log("unitData", unitData);
+		console.log("brandData", brandData);
+		console.log("supplierData", supplierData);
+		console.log("vehicleData", vehicleData);
+		console.log("itemData", itemData);
+		console.log("itemBrandData", itemBrandData);
+	}, []);
 
 	useEffect(() => {
 		console.log("DETAILS ARE:", details);
@@ -197,23 +203,33 @@ function PullInventoryCreate({
 	function submitForm() {
 		if (
 			pullDate.length == 0 ||
-			JOnumber.length == 0 ||
+			JOnumber.length != 15 ||
 			plateNum.length == 0 ||
+			plateNum.length > 8 ||
 			mechanicName.length == 0 ||
-			detailsArray.length == 0
+			JSON.stringify(detailsArray[0]) == "{}"
 		) {
 			setError(true);
 		} else {
+			let tempID = "";
+			if (pullData.length == 0) {
+				tempID = "100000000000000";
+			} else {
+				let id = Math.max(...pullData.map((pull) => pull.lessRecordID)) + 1;
+				tempID = id.toString();
+			}
+
 			let pullInvData = {
-				lessRecordID: lessRecordID,
+				lessRecordID: tempID,
 				pullDate: new Date(pullDate),
 				JOnumber: JOnumber,
 				plateNum: plateNum,
 				mechanicName: mechanicName,
+				remarks: remarks,
 				creatorID: currentUser.userID,
-				recordDate: recordDate,
-				editorID: null,
 				creationDate: new Date(),
+				editorID: null,
+				editDate: null,
 				disabled: false,
 			};
 
@@ -222,7 +238,7 @@ function PullInventoryCreate({
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(pullInvData),
+				body: JSON.stringify({ pullInvData, detailsArray }),
 			})
 				.then((res) => res.json())
 				.then((data) => {
@@ -400,7 +416,7 @@ function PullInventoryCreate({
 		<>
 			<div className="container">
 				<div className="content-tabs">
-					<BasicTablePull> </BasicTablePull>
+					<BasicTablePull pullTableData={pullTableData}> </BasicTablePull>
 
 					{/* First Field Group */}
 					<div className="form-container">
@@ -464,7 +480,11 @@ function PullInventoryCreate({
 
 						<div className="form-item">
 							<label className="form-labels">Mechanic Name: </label> <br />
-							<input type="text" className="form-fields" />
+							<input
+								type="text"
+								className="form-fields"
+								onChange={(e) => setMechanicName(e.target.value)}
+							/>
 						</div>
 					</div>
 					<hr />
@@ -524,7 +544,7 @@ function PullInventoryCreate({
 								disabled={disableFields()}
 							>
 								{brands.map((brand, index) => (
-									<option key={index} value={brand.brandName}>
+									<option key={index} value={brand.brandID}>
 										{brand.brandName}
 									</option>
 								))}
@@ -604,7 +624,11 @@ function PullInventoryCreate({
 
 					<div className="form-item">
 						<label className="form-labels">Remarks:</label> <br />
-						<input type="textarea" className="form-fields-remarks" />
+						<input
+							type="textarea"
+							className="form-fields-remarks"
+							onChange={(e) => setRemarks(e.target.value)}
+						/>
 					</div>
 				</div>
 			</div>

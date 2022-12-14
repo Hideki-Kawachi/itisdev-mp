@@ -19,12 +19,6 @@ const PullInventorySchema = new mongoose.Schema({
 		maxlength: 15,
 		required: true,
 	},
-	itemID: {
-		type: String,
-		minlength: 5,
-		maxlength: 10,
-		required: true,
-	},
 	plateNum: {
 		type: String,
 		minlength: 5,
@@ -34,13 +28,10 @@ const PullInventorySchema = new mongoose.Schema({
 	},
 	mechanicName: {
 		type: String,
-		minlength: 30,
 		maxlength: 100,
-		required: true,
 	},
 	remarks: {
 		type: String,
-		minlength: 5,
 		maxlength: 100,
 	},
 	creatorID: {
@@ -58,7 +49,6 @@ const PullInventorySchema = new mongoose.Schema({
 		type: String,
 		minlength: 8,
 		maxlength: 8,
-		required: true,
 	},
 	editDate: {
 		type: Date,

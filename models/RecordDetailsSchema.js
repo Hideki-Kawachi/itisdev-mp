@@ -5,7 +5,6 @@ const RecordDetailsSchema = new mongoose.Schema({
 		type: String,
 		minlength: 15,
 		maxlength: 15,
-		unique: true,
 		required: true,
 	},
 	itemID: {
@@ -16,8 +15,8 @@ const RecordDetailsSchema = new mongoose.Schema({
 	},
 	brandID: {
 		type: String,
-		minlength: 4,
-		maxlength: 4,
+		minlength: 5,
+		maxlength: 5,
 		required: true,
 	},
 	quantity: {
@@ -26,8 +25,8 @@ const RecordDetailsSchema = new mongoose.Schema({
 	},
 	unitID: {
 		type: String,
-		minlength: 4,
-		maxlength: 4,
+		minlength: 5,
+		maxlength: 5,
 		required: true,
 	},
 });

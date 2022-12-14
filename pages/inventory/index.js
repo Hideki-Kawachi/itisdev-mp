@@ -15,6 +15,9 @@ import Vehicles from "../../models/VehicleSchema";
 import Item from "../../models/ItemSchema";
 import ItemBrandCombination from "../../models/ItemBrandCombinationSchema";
 import Measure from "../../models/MeasureSchema";
+import PullInventory from "../../models/PullInvSchema";
+import RecordDetails from "../../models/RecordDetailsSchema";
+import dayjs from "dayjs";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -49,12 +52,85 @@ export const getServerSideProps = withIronSessionSsr(
 				{ itemID: 1, itemBrandID: 1, partNumber: 1 }
 			);
 
+			const pullList = await PullInventory.find({ disabled: false });
+			const recordList = await RecordDetails.find({});
+
 			let unitData = JSON.stringify(unitList);
 			let brandData = JSON.stringify(brandList);
 			let supplierData = JSON.stringify(supplierList);
 			let vehicleData = JSON.stringify(vehicleList);
 			let itemData = JSON.stringify(itemList);
 			let itemBrandData = JSON.stringify(itemBrandList);
+			let pullData = "";
+			let pullTable = [];
+			let pullTableData;
+			if (pullList) {
+				pullData = JSON.stringify(pullList);
+				pullList.forEach((pull) => {
+					let index = recordList.length - 1;
+					let item = "";
+					let brand = "";
+					let quantity = 0;
+					let unit = "";
+
+					let itemName = "";
+					let brandName = "";
+					let unitName = "";
+
+					while (index >= 0) {
+						if (pull.lessRecordID == recordList[index].lessRecordID) {
+							item = recordList[index].itemID;
+							brand = recordList[index].brandID;
+							quantity = recordList[index].quantity;
+							unit = recordList[index].unitID;
+							if (item.length > 0) {
+								let isFound2 = false;
+								let index2 = itemList.length - 1;
+								while (!isFound2 && index2 >= 0) {
+									if (item == itemList[index2].itemID) {
+										isFound2 = true;
+										itemName = itemList[index2].itemName;
+									}
+									index2--;
+								}
+								isFound2 = false;
+								index2 = brandList.length - 1;
+								while (!isFound2 && index2 >= 0) {
+									if (brand == brandList[index2].itemBrandID) {
+										isFound2 = true;
+										brandName = brandList[index2].name;
+									}
+									index2--;
+								}
+								isFound2 = false;
+								index2 = unitList.length - 1;
+								while (!isFound2 && index2 >= 0) {
+									if (unit == unitList[index2].unitID) {
+										isFound2 = true;
+										unitName = unitList[index2].unitName;
+									}
+									index2--;
+								}
+							}
+
+							pullTable.push({
+								pullDate: dayjs(pull.pullDate).format("MM/DD/YYYY"),
+								JOnumber: pull.JOnumber,
+								plateNum: pull.plateNum,
+								itemName: itemName,
+								brandName: brandName,
+								quantity: quantity,
+								unit: unitName,
+							});
+						}
+						index--;
+					}
+				});
+				pullTableData = JSON.stringify(pullTable);
+			} else {
+				pullData = JSON.stringify({});
+				pullTableData = JSON.stringify({});
+			}
 
 			return {
 				props: {
@@ -65,6 +141,8 @@ export const getServerSideProps = withIronSessionSsr(
 					vehicleData,
 					itemData,
 					itemBrandData,
+					pullData,
+					pullTableData,
 				},
 			};
 		} else {
@@ -85,6 +163,8 @@ function Inventory({
 	vehicleData,
 	itemData,
 	itemBrandData,
+	pullData,
+	pullTableData,
 }) {
 	const units = JSON.parse(unitData);
 	const brands = JSON.parse(brandData);
@@ -92,6 +172,8 @@ function Inventory({
 	const vehicles = JSON.parse(vehicleData);
 	const items = JSON.parse(itemData);
 	const itemBrands = JSON.parse(itemBrandData);
+	const pullInv = JSON.parse(pullData);
+	const pullTable = JSON.parse(pullTableData);
 
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [toggleState, setToggleState] = useState(1);
@@ -149,6 +231,8 @@ function Inventory({
 								vehicleData={vehicles}
 								itemData={items}
 								itemBrandData={itemBrands}
+								pullData={pullInv}
+								pullTableData={pullTable}
 							>
 								{" "}
 							</PullInventoryCreate>
