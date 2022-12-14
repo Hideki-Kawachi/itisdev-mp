@@ -1,4 +1,4 @@
-import dbConnect from "../../lib/dbConnect";
+import dbConnect from "../../../lib/dbConnect";
 import Measure from "../../../models/MeasureSchema";
 
 export default async (req, res) => {
