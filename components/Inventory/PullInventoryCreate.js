@@ -431,7 +431,7 @@ function PullInventoryCreate({
 								className="form-fields"
 								placeholder="Enter Item Code"
 								name="itemCode"
-								value={details.itemCode}
+								value={details.itemCode.toUpperCase()}
 								onChange={(e) => handleDetails(e)}
 							/>
 							{showItemIDError()}
@@ -467,8 +467,8 @@ function PullInventoryCreate({
 								onChange={(e) => handleDetails(e)}
 								disabled={disableFields()}
 							>
-								{brands.map((brand) => (
-									<option key={brand.brandID} value={brand.brandName}>
+								{brands.map((brand, index) => (
+									<option key={index} value={brand.brandName}>
 										{brand.name}
 									</option>
 								))}

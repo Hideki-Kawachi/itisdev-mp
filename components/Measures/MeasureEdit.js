@@ -56,6 +56,7 @@ function UserEdit({ unitTypes, classTypes, unitID, setShow, setEditing, setNotif
 	}
 
 	function submitForm() {
+		
 		if (
 			unitName.length == 0 ||
 			abbreviation.length == 0 ||
@@ -72,6 +73,7 @@ function UserEdit({ unitTypes, classTypes, unitID, setShow, setEditing, setNotif
 				classTypeID: classTypeID,
 				disabled: isDisabled,
 			};
+			console.log(measureData)
 
 			fetch("/api/measures/editMeasure", {
 				method: "POST",

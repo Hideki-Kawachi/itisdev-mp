@@ -100,7 +100,7 @@ export const getServerSideProps = withIronSessionSsr(
 						abbreviation: measure.abbreviation,
 						unitTypeName: unitTypeName,
 						classTypeName: classTypeName,
-						disabled: measure.isDisabled,
+						disabled: measure.disabled,
 					})
 				});
 
@@ -128,7 +128,7 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 	const unitTypes = JSON.parse(unitTypeData);
 	const classTypes = JSON.parse(classTypeData);
 	const unitConversions = JSON.parse(unitConversionData);
-	const newMeasureID = Math.max(...measures.map((measures) => (measures.unitID))) + 1;
+	// const newMeasureID = Math.max(...measures.map((measures) => (measures.unitID))) + 1;
 
 	const [search, setSearch] = useState("");
 	const [filter, setFilter] = useState("All");
@@ -138,6 +138,21 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 	const [measureShow, setMeasureShow] = useState(measures);
 	const [notifResult, setNotifResult] = useState("");
 
+	const [newMeasureID, setnewMeasureID] = useState("");
+
+	useEffect(() => {
+		if (measureData.length===2) {
+			console.log("1. am empty: " + newMeasureID)
+			setnewMeasureID("10001");
+			console.log("1. am now: " + newMeasureID)
+		} else {
+			console.log("2. am empty: " + newMeasureID)
+			setnewMeasureID(Math.max(...measures.map((measures) => (measures.unitID))) + 1)
+			console.log("2. am now: " + newMeasureID)
+		}
+	}, [newMeasureID]);
+
+
 	useEffect(() => {
 		getSearch(search);
 	}, [filter]);
@@ -145,9 +160,11 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 	function getSearch(value) {
 		let tempList = [];
 		measures.forEach((measure) => {
+			console.log("Fitler: " + filter)
+			console.log("UnitTypeID: " + JSON.stringify(measure))
 			if (
 				(measure.unitName.toLowerCase().includes(value)) &&
-				(measure.roleName == filter || filter == "All")
+				(measure.unitTypeName == filter || filter == "All")
 			) {
 				tempList.push(measure);
 			}
@@ -225,6 +242,7 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 		}
 	}
 
+	// console.log(measureShow)
 	return (
 		<>
 			<Header page={"MEASURES"} subPage={"HOME"} user={currentUser}></Header>
@@ -263,6 +281,7 @@ function Measures({ measureData, unitTypeData, classTypeData, unitConversionData
 							))}
 						</select>
 						<div className="user-list-container">
+
 							{measureShow.map((measure) => (
 								<MeasureCard
 									key={measure.unitID}
