@@ -10,6 +10,11 @@ export const COLUMNS = [
   },
   {
     Header: "",
+    id: "status",
+    accessor: "disabled",
+  },
+  {
+    Header: "",
     id: "combinationID",
     accessor: "combinationID",
   },

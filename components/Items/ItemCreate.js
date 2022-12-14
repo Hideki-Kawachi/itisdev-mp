@@ -52,7 +52,6 @@ function ItemCreate({ items, categories, brands }) {
             }) 
             return true
         })
-        console.log(detailsArray)
     }
 
     // Handle details input
@@ -109,7 +108,7 @@ function ItemCreate({ items, categories, brands }) {
 	function deleteRow(row) {
         if (detailsArray.length > 1) {
             detailsArray.every((value) => {
-                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combiID))
+                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combinationID))
             })
         }
         else {
@@ -410,7 +409,13 @@ function ItemCreate({ items, categories, brands }) {
                     { Object.keys(detailsArray[0]).length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <BrandTable tableValues={detailsArray} convertFunc={convertDetailsArray} deleteFunc={deleteRow} isEditable={false} pageType={false}></BrandTable>
+                        <BrandTable 
+							tableValues={detailsArray} 
+							convertFunc={convertDetailsArray} 
+							deleteFunc={deleteRow} 
+							isEditable={false} 
+							pageType={false}>	
+						</BrandTable>
                     )}
                 </div>
             </div>

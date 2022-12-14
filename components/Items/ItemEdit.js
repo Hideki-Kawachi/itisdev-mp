@@ -251,7 +251,8 @@ function ItemEdit({itemID, items, categories, brands}) {
     function deleteRow(row) {
         if (detailsArray.length > 1) {
             detailsArray.every((value) => {
-                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combiID))
+                value.disabled = true;
+                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combinationID))
             })
         }
         else {

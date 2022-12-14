@@ -12,8 +12,6 @@ import { COLUMNS } from "./BrandColumns";;
 
 export const BrandTable = ({
   tableValues,
-  detailsArray,
-  setDetailsArray,
   convertFunc,
   isEditable, 
   deleteFunc,
@@ -41,12 +39,20 @@ export const BrandTable = ({
 		prepareRow,
 		state,
 		setGlobalFilter,
+    filters, 
+    useFilters
 	} = useTable(
 		{
 			columns,
 			data,
       initialState: {
-        hiddenColumns: ["combinationID"]
+        hiddenColumns: ["combinationID", "status"],
+        // filters: [
+        //   {
+        //     id: "status",
+        //     value: "false"
+        //   }
+        // ]
       },
 		},
 
@@ -78,7 +84,7 @@ export const BrandTable = ({
                 </th>
               ))}
               {isEditable == true ? (<th></th>) : (<></>)}
-              <th></th>
+              {(isEditable == true || pageType == false) ? (<th></th>) : (<></>)}
             </tr>
           ))}
         </thead>
@@ -96,7 +102,8 @@ export const BrandTable = ({
                   );
                 })}
                 {isEditable == true ? (<td><button type="button" onClick={() => editFunc(row.original)}>✏️</button></td>) : (<></>)}
-                <td><button type="button" onClick={() => editFunc(row.original)}>X</button></td>
+                {(isEditable == true || pageType == false) ? (<td><button type="button" onClick={() => deleteFunc(row.original)}>X</button></td>) : (<></>)}
+                
                 
               </tr>
             );
