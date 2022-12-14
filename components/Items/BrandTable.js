@@ -11,18 +11,21 @@ import { COLUMNS } from "./BrandColumns";;
 
 
 export const BrandTable = ({
+  tableValues,
   detailsArray,
   setDetailsArray,
+  convertFunc,
   isEditable, 
   deleteFunc,
   editFunc,
-  detailsButton,
-  setDetailsButton,
+  pageType,
   }) => {
 	const columns = useMemo(() => COLUMNS, []);
-  
-	const data = useMemo(() => detailsArray, [detailsArray]);
-  
+	const data = useMemo(() => convertFunc(pageType, tableValues), [tableValues]);
+    
+  useEffect(() => {
+    console.log(tableValues)
+  }, [])
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -54,7 +57,7 @@ export const BrandTable = ({
 
 	const { globalFilter } = state;
 	const { pageIndex } = state;
-
+  
 	return (
     <>
       <br />

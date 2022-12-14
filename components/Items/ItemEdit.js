@@ -37,10 +37,11 @@ function ItemEdit({itemID, items, categories, brands}) {
         brand: "",
         partNumber: "",
         quantity: 0,
-        unit: "",
+        // unit: "",
         disabled: false,
     })
     const [detailsArray, setDetailsArray] = useState([{}]);
+    const [newCombiID, setCombiID] = useState(String(Math.floor(Math.random() * 50000)));
 
     // Modals
     const [modStatus, setModStatus] = useState(false)
@@ -130,35 +131,61 @@ function ItemEdit({itemID, items, categories, brands}) {
     }
 
     // Handle details input
-    function convertDetailsArray () {
-        let templateArray = []
-        
-        detailsArray.every((value) => {
+    function convertDetailsArray (type, arr) {
+        if (type) {
             let template = {
-                combiID: "",
-                brand: null,
-                partNumber: null,
-                quantity: null,
+                combinationID: "",
+                brand: "",
+                partNumber: "",
+                quantity: 0,
                 disabled: false,
-                unit: "",
             }
-            brands.every((brand) => {
-                if (value.itemBrandID == brand.itemBrandID) {
-                    template.combiID = value.combinationID
-                    template.brand = brand.name
-                    template.partNumber = value.partNumber
-                    template.quantity = value.quantity
-                    template.disabled = value.disabled
-                    template.unit = value.unit
-                    templateArray.push(template)
-                    return false;
+           let templateArray = [] 
+           arr.every((value) => {
+                template.combinationID = value.combinationID;
+                template.brand = convertBrandID(value.itemBrandID)
+                template.partNumber = value.partNumber;
+                template.quantity = value.quantity;
+                template.disabled = value.disabled;
+                templateArray.push(template)
+
+                template = {
+                    combinationID: "",
+                    brand: "",
+                    partNumber: "",
+                    quantity: 0,
+                    disabled: false,
                 }
-                return true;
+                return true; 
             })
-            return true; 
-        })
-        
-        return templateArray;
+            
+            return templateArray;
+        }
+
+        return arr;
+    }
+
+    function convertBrandID (value) {
+        brands.every((brand) => {
+            if (value == brand.itemBrandID) {
+                value = brand.name
+                return false;
+            }
+            return true;
+        }) 
+
+        return value;
+    }
+    function revertOneBrandToID (value) {
+        brands.every((brand) => {
+            if (value == brand.name) {
+                value = brand.itemBrandID
+                return false;
+            }
+            return true;
+        }) 
+
+        return value;
     }
 
     // Handle details input
@@ -175,6 +202,8 @@ function ItemEdit({itemID, items, categories, brands}) {
         if (Object.keys(detailsArray[0]).length == 0) {
             detailsArray.shift()
         }
+        details["combinationID"] = String(Math.floor(Math.random() * 50000)),
+        details["itemBrandID"] = details["brand"]
         setDetailsArray(detailsArray => [...detailsArray, details])
         setQuantity(quantity+parseInt(details.quantity))
         clearDetails()
@@ -188,11 +217,11 @@ function ItemEdit({itemID, items, categories, brands}) {
     function onRowEditClick(row) {
         setDetails(prevState => ({
             ...prevState,
-            combinationID: row.combiID,
+            combinationID: row.combinationID,
             brand: row.brand,
             partNumber: row.partNumber,
             quantity: row.quantity,
-            unit: row.unit,
+            // unit: row.unit,
             disabled: row.disabled,
         }));
         setDetailsButton("Edit")
@@ -200,12 +229,14 @@ function ItemEdit({itemID, items, categories, brands}) {
 
     function editRow() {
         let newQuantity = 0;
+        
         let newArr = detailsArray.map(item => {
             if (item.combinationID == details.combinationID){
+                item.combinationID == details.combinationID
                 item.itemBrandID = revertOneBrandToID(details.brand);
                 item.partNumber = details.partNumber;
                 item.quantity = details.quantity;
-                item.unit = details.unit;
+                // item.unit = details.unit;
                 item.disabled = details.disabled;
                 newQuantity += item.quantity;
             }
@@ -228,18 +259,6 @@ function ItemEdit({itemID, items, categories, brands}) {
         }
     }
     
-    function revertOneBrandToID (value) {
-        brands.every((brand) => {
-            if (value == brand.name) {
-                value = brand.itemBrandID
-                return false;
-            }
-            return true;
-        }) 
-
-        return value;
-    }
-
     return (
         <>
             <Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
@@ -466,14 +485,13 @@ function ItemEdit({itemID, items, categories, brands}) {
                         { JSON.stringify(detailsArray[0]) == "{}" ? (
                             <h1 id="gray-header-text">NO DETAILS TO SHOW</h1>
                         ) : (
-                            <BrandTable 
-                                detailsArray={convertDetailsArray()}
-                                setDetailsArray={setDetailsArray} 
+                            <BrandTable
+                                tableValues={detailsArray} 
+                                convertFunc={convertDetailsArray}
                                 isEditable={isEditable} 
                                 deleteFunc={deleteRow}
                                 editFunc={onRowEditClick}
-                                detailsButton={detailsButton}
-                                setDetailsButton={setDetailsButton}
+                                pageType={true}
                             />
                         )}
                     </div>

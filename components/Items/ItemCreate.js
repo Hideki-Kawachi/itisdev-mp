@@ -80,6 +80,32 @@ function ItemCreate({ items, categories, brands }) {
         }));
     }
 
+	function convertDetailsArray (type, arr) {
+		if (type) {
+			let template = {
+				combinationID: "",
+				brand: "",
+				partNumber: "",
+				quantity: 0,
+				disabled: false,
+			}
+			let templateArray = [] 
+			arr.every((value) => {
+				template.combinationID = value.combinationID;
+				template.brand = convertBrandID(value.itemBrandID)
+				template.partNumber = value.partNumber;
+				template.quantity = value.quantity;
+				template.disbaled = value.disabled;
+				templateArray.push(template)
+				return true; 
+			})
+
+			return templateArray;
+		}
+
+		return arr;
+	}
+
 	function deleteRow(row) {
         if (detailsArray.length > 1) {
             detailsArray.every((value) => {
@@ -384,7 +410,7 @@ function ItemCreate({ items, categories, brands }) {
                     { Object.keys(detailsArray[0]).length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <BrandTable detailsArray={detailsArray} deleteFunc={deleteRow}></BrandTable>
+                        <BrandTable tableValues={detailsArray} convertFunc={convertDetailsArray} deleteFunc={deleteRow} isEditable={false} pageType={false}></BrandTable>
                     )}
                 </div>
             </div>
