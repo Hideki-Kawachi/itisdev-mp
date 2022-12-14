@@ -73,7 +73,7 @@ function MeasureCreate ({ unitTypes, classTypes, newMeasureID, setShow }) {
 
 	return (
 		<>
-			<form className="user-create-main-container">
+			<form className="user-create-main-container" autocomplete="off">
 				<div className="user-create-top-container">
 					<h1>CREATE NEW MEASURE</h1>
 					<button className="user-create-exit-button" onClick={cancelForm}>
