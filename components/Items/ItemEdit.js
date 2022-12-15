@@ -121,20 +121,20 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
 
             console.log(detailsArray)
 
-            // fetch("/api/items/updateItem", {
-            //   method: "POST",
-            //   headers: {
-            //     "Content-Type": "application/json",
-            //   },
-            //   body: JSON.stringify({itemData, details:detailsArray}),
-            // })
-            // .then((res) => res.json())
-            // .then((data) => {
-            //     setNotifResult(data);
-            //     if (data != "No Fields Edited") {
-            //         setTimeout(() => window.location.reload(), 800);
-            //     }
-            // });
+            fetch("/api/items/updateItem", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({itemData, details:detailsArray}),
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                setNotifResult(data);
+                if (data != "No Fields Edited") {
+                    setTimeout(() => window.location.reload(), 800);
+                }
+            });
 
             // // AUDIT
             // auditTrail["physicalCount"] = quantity;
@@ -383,7 +383,7 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
                 ></Cancel>
             </Modal>
             <form className="item-column-container" id="item-add-main-container">
-                <button type="button" onClick={checkPhysicalCount}>Test</button>
+                {/* <button type="button" onClick={checkPhysicalCount}>Test</button> */}
                 <h1>IDENTIFICATION</h1>
     
                 <div id="add-item-form-identification">
