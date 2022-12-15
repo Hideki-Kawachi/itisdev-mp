@@ -3,10 +3,13 @@ import React from "react";
 import DashboardCard from "../components/DashboardCard";
 import Header from "../components/Header";
 import NavBar from "../components/NavBar";
+import { BasicTable } from "../components/Reports/BasicTable";
 import { ironOptions } from "../lib/config";
 import dbConnect from "../lib/dbConnect";
 import User from "../models/UserSchema";
 import Vehicle from "../models/VehicleSchema";
+import { COLUMNS } from "../components/Dashboard/TransactionColumns";
+import ADDINV_MOCK_DATA from "../components/Reports/ADD_INV.json";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -22,6 +25,11 @@ export const getServerSideProps = withIronSessionSsr(
 				await dbConnect();
 				const totalUsers = await User.countDocuments({ disabled: false });
 				const totalVehicles = await Vehicle.countDocuments({ disabled: false });
+
+
+				//Start here
+
+
 
 				return { props: { currentUser, totalUsers, totalVehicles } };
 			}
@@ -61,6 +69,7 @@ const Index = ({ currentUser, totalUsers, totalVehicles }) => {
 					</div>
 					<div className="dashboard-table-container">
 						<h1>Recent Inventory Records</h1>
+						<BasicTable COLUMNS={COLUMNS} ADDINV={ADDINV_MOCK_DATA}></BasicTable>
 					</div>
 				</div>
 				<div className="dashboard-right-container">
