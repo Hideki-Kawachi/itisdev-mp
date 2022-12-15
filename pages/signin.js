@@ -8,6 +8,9 @@ import { ironOptions } from "../lib/config";
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
 		if (req.session.user) {
+
+			await dbConnect();
+			
 			return {
 				redirect: { destination: "/", permanent: true },
 				props: {},
