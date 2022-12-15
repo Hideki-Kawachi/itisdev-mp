@@ -17,7 +17,7 @@ export const INVCAT_COLUMNS = [
 
   {
     Header: "Name",
-    accessor: "name",
+    accessor: "supplierName",
     Filter: GlobalFilter,
   },
 ];
