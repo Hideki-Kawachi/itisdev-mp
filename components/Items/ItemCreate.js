@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Modal from "react-modal";
-
 import ToggleSwitch from "../ToggleSwitch";
 import ItemCatTable from "./CategoryList";
 import BrandTable from "./BrandTable";
+import Info from "../../components/Pop-up/info";
 
 // TO-DO: add dropdown options as parameters
 function ItemCreate({ items, categories, brands, units, currentUser }) {
@@ -242,6 +242,12 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 		}
 	}
 
+	function showMinLength(errType, field, msg, min) {
+		if (errType && field.length < min) {
+			return <span className="vehicle-create-error">{msg}</span>;
+		}
+	}
+
 	function showNegativeNumError(errType, field, msg) {
 		if (errType && field < 0) {
 			return <span className="vehicle-create-error">{msg}</span>;
@@ -266,6 +272,9 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 				>
 					{" "}
 				</ItemCatTable>
+			</Modal>
+			<Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
+				<Info trigger={infoPop} setTrigger={setInfoPop}></Info>
 			</Modal>
 			<form className="item-column-container" id="item-add-main-container">
 				{showResult()}
@@ -327,6 +336,7 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 								onChange={(e) => setItemID(e.target.value)}
 							/>
 							{showRequiredError(error, itemID, "Input Item Code")}
+							{showMinLength(error, itemID, "Item Code must be at least 5 characters", 5)}
 							{codeError == itemID && itemID.length > 0 ? (
 								<span className="vehicle-create-error">
 									Item Code is already used
@@ -349,7 +359,15 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 						</div>
 
 						<div className="item-input" id="item-status">
-							<label htmlFor="disabled">Status:</label>
+							<label htmlFor="disabled">Status: 							
+							<button
+							type="button"
+							className="table-info-button"
+							onClick={() => setInfoPop(!infoPop)}
+							>
+							i
+							</button>
+							</label>						
 							<ToggleSwitch
 								disabled={isDisabled}
 								setDisabled={setIsDisabled}
@@ -389,18 +407,6 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 								<label htmlFor="unitID">
 									Unit: <label className="required"> * </label>
 								</label>
-								<button
-									className="item-icon-button item-add-option-button "
-									type="button"
-									onClick={() => {
-										setModStatus(true);
-										setModName("Select Unit");
-										setModType(unitID);
-										setModID("unitID");
-									}}
-								>
-									✎
-								</button>
 							</div>
 							{/* Insert Modal Here */}
 							<select

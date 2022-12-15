@@ -3,14 +3,14 @@ import mongoose from "mongoose";
 const AuditSchema = new mongoose.Schema({
   auditID: {
     type: String,
-    minlength: 5,
+    // minlength: 5,
     maxlength: 5,
     unique: true,
     required: true,
   },
   itemID: {
     type: String,
-    minlength: 5,
+    // minlength: 5,
     maxlength: 10,
     required: true,
   },

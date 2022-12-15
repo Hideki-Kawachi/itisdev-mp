@@ -209,6 +209,9 @@ function VehicleEdit({
 			<Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
 				<Info trigger={infoPop} setTrigger={setInfoPop}></Info>
 			</Modal>
+			<Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
+				<Info trigger={infoPop} setTrigger={setInfoPop}></Info>
+			</Modal>
 			{/* First Field Group */}
 			<form>
 				<div className="form-container">

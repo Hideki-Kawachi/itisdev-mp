@@ -265,8 +265,8 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 			auditTrail.shift();
 		}
 		(details["combinationID"] = String(Math.floor(Math.random() * 50000))),
-			(details["itemBrandID"] = revertOneBrandToID(details["brand"]));
-
+		(details["itemBrandID"] = revertOneBrandToID(details["brand"]));
+		(details["itemID"] = itemID);
 		setDetailsError(checkDetails());
 		setDuplicateError(checkDuplicate());
 		if (!checkDetails() && !checkDuplicate()) {
@@ -384,10 +384,13 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 					transaction={"Editing of Item"}
 				></Cancel>
 			</Modal>
+			<Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
+				<Info trigger={infoPop} setTrigger={setInfoPop}></Info>
+			</Modal>
 			<form className="item-column-container" id="item-add-main-container">
-				<button type="button" onClick={checkAudit}>
+				{/* <button type="button" onClick={checkAudit}>
 					Test
-				</button>
+				</button> */}
 				<h1>IDENTIFICATION</h1>
 
 				<div id="add-item-form-identification">
@@ -458,7 +461,14 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 						</div>
 
 						<div className="item-input" id="item-status">
-							<label htmlFor="disabled">Status:</label>
+							<label htmlFor="disabled">Status:
+							<button
+							type="button"
+							className="table-info-button"
+							onClick={() => setInfoPop(!infoPop)}
+							>
+							i
+						</button></label>
 							{isEditable == false ? (
 								<LockedToggle
 									disabled={isDisabled}
@@ -506,18 +516,6 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 								<label htmlFor="unitID">
 									Unit: <label className="required"> * </label>
 								</label>
-								<button
-									className="item-icon-button item-add-option-button "
-									type="button"
-									onClick={() => {
-										setModStatus(true);
-										setModName("Select Unit");
-										setModType(unitID);
-										setModID("unitID");
-									}}
-								>
-									✎
-								</button>
 							</div>
 							{/* Insert Modal Here */}
 							<select
@@ -639,13 +637,23 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 
 								{detailsButton == "Edit" ? (
 									<>
-										<button
-											type="button"
-											className="green-button-container add-button"
-											onClick={() => editRow()}
-										>
-											Edit
-										</button>
+										<span id="button-group">
+											<button
+												type="button"
+												className="gray-button-container"
+												onClick={() => clearDetails()}
+											>
+												Clear
+											</button>
+											<button
+												type="button"
+												className="green-button-container"
+												onClick={() => editRow()}
+											>
+												Edit
+											</button>
+										</span>
+
 									</>
 								) : (
 									<button
