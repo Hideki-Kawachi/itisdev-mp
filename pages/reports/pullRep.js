@@ -126,7 +126,7 @@ export const getServerSideProps = withIronSessionSsr(
 			pullData = JSON.stringify({});
 			pullTableData = JSON.stringify({});
 			}
-			console.log(pullTableData);
+			//console.log(pullTableData);
 			return {
 			props: {
 				currentUser,
