@@ -7,11 +7,18 @@ import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
 import { COLUMNS } from "../../components/Reports/AddColumns";
 import ADDINV_MOCK_DATA from "../../components/Reports/ADD_INV.json";
-// import dbConnect from "../../lib/dbConnect";
-// import AddInventory from "../../models/AddInvSchema";
+import dbConnect from "../../lib/dbConnect";
+
+
+import AddInventory from "../../models/AddInvSchema";
+import RecordDetails from "../../models/RecordDetailsSchema";
 
 // import unitType from "../../models/UnitTypeSchema";
 // import Item from "../../models/ItemSchema";
+import Item from "../../models/ItemSchema";
+import Measure from "../../models/MeasureSchema";
+import ItemBrand from "../../models/ItemBrandSchema";
+import ItemBrandCombination from "../../models/ItemBrandCombinationSchema";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -24,6 +31,61 @@ export const getServerSideProps = withIronSessionSsr(
 					props: {},
 				};
 			} else {
+
+				await dbConnect();
+
+				const unitList = await Measure.find({ disabled: false });
+
+				const brandList = await ItemBrand.find(
+				{ disabled: false },
+				{ itemBrandID: 1, name: 1 }
+				);
+	
+	
+				const itemList = await Item.find(
+				{ quantity: { $gt: 0 }, disabled: false },
+				{ itemID: 1, itemName: 1, itemModel: 1, unitID: 1, quantity: 1, minQuantity: 1 }
+				);
+	
+				const itemBrandList = await ItemBrandCombination.find(
+				{ quantity: { $gt: 0 }, disabled: false },
+				{ itemID: 1, itemBrandID: 1, partNumber: 1 }
+				);
+
+				const addList = await AddInventory.find({ disabled: false });
+				const recordList = await RecordDetails.find({});
+
+				let unitData = JSON.stringify(unitList);
+				let itemData = JSON.stringify(itemList);
+				let addData = "";
+				let addTable = [];
+				let addTableData;
+
+				if (addList) {
+					addData = JSON.stringify(addList);
+					addList.forEach((add) => { 
+						let index = recordList.length - 1;
+						let item = "";
+						let brand = "";
+						let quantity = 0;
+						let unit = "";
+
+						let itemName = "";
+						let itemModel = "";
+						let brandName = "";
+						let unitName = "";
+
+						// while (index >= 0) {
+
+						// 	if (add.addRecordID == recordList[index].lessRecordID) {
+						// 		item = recordList[index].itemID;
+						// 		brand = recordList[index].brandID;
+						// 		quantity = recordList[index].quantity;
+						// 		unit = recordList[index].unitID;
+					});
+				
+								
+
 
 				//await dbConnect();
 
@@ -104,7 +166,7 @@ export const getServerSideProps = withIronSessionSsr(
 				return { props: { currentUser } }; //need to edit once done
 
 
-			}
+			
 		} else {
 			return {
 				redirect: { destination: "/signin", permanent: true },
