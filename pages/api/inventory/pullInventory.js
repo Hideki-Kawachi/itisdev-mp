@@ -9,6 +9,9 @@ export default async (req, res) => {
 	const pullData = req.body.pullInvData;
 	const records = req.body.detailsArray;
 
+	const SDLeadTime = 2;
+	const serviceLevel = 1.64;
+
 	console.log("DATA:", pullData);
 	console.log("RECORDS:", records);
 
@@ -35,6 +38,12 @@ export default async (req, res) => {
 				quantity: record.quantity,
 				unitID: record.unitID,
 			});
+
+			//look for all pull out records of itemID the past 30 days(?)
+			//let aveDemand = totalConsumption / timeframe in days
+			// let safetyStock = SDLeadTime * serviceLevel * aveDemand
+			// let demandLeadTime = SDLeadTime * aveDemand
+			// let reorderPoint = demandLeadTime + safetyStock
 
 			await Item.updateOne(
 				{ itemID: record.itemCode },
