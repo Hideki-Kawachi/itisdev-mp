@@ -1414,8 +1414,8 @@ input:disabled+label {
 
     .stock-container-header{
       display: flex;
-      justify-content: space-between;
       margin: 25px 5px 10px 5px;
+      width: 100%;
     }
   }
 }
@@ -1442,14 +1442,23 @@ input:disabled+label {
 
   .dashboard-card-count{
     font-size: 40px;
+    min-width: 50px;
+    text-align: center;
   }
 
   .dashboard-card-reorder{
     font-size: 40px;
-    flex-grow: 3.5;
+    margin-right: 50px;
+    min-width: 50px;
+    text-align: center;
   }
 
 } 
+
+.stock-left-text{
+  margin-right: 20px;
+  margin-left: auto;
+}
 
 
 

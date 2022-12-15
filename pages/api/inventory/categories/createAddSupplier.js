@@ -11,15 +11,15 @@ export default async (req, res) => {
   });
 
   let invalidName = await Supplier.findOne({
-    supplierName: supplierInfo.name,
+    supplierName: supplierInfo.supplierName,
   });
 
   if (invalidID != null) {
     console.log("INVALID ID " + supplierInfo.supplierID);
     res.json(supplierInfo.supplierID);
   } else if (invalidName != null) {
-    console.log("INVALID NAME " + supplierInfo.name);
-    res.json(supplierInfo.name);
+    console.log("INVALID NAME " + supplierInfo.supplierName);
+    res.json(supplierInfo.supplierName);
   } else {
     await Supplier.create(supplierInfo);
     res.json("created");

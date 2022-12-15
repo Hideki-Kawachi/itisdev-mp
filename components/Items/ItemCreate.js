@@ -7,7 +7,7 @@ import ItemCatTable from "./CategoryList";
 import BrandTable from "./BrandTable";
 
 // TO-DO: add dropdown options as parameters
-function ItemCreate({ items, categories, brands }) {
+function ItemCreate({ items, categories, brands, units}) {
 	// Item Identification
 	const [itemID, setItemID] = useState("");
 	const [categoryID, setCategoryID] = useState("");
@@ -397,18 +397,18 @@ function ItemCreate({ items, categories, brands }) {
 									{" "}
 									Select Unit{" "}
 								</option>
-								<option key="Pieces" value="10001">
+								{/* <option key="Pieces" value="10001">
 									Pieces
 								</option>
 								<option key="Sets" value="10002">
 									Sets
-								</option>
+								</option> */}
 
-								{/* {units.map((unit) => (
-                            <option key={unit.unitID} value={unit.unitName}>
-                                {unit.unitName}
-                            </option>
-                        ))} */}
+								{units.map((unit) => (
+									<option key={unit.unitID} value={unit.unitID}>
+										{unit.unitName}
+									</option>
+                        		))}
 							</select>
 							{showRequiredError(error, unitID, "Select Unit")}
 						</div>

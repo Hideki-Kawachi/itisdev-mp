@@ -19,7 +19,7 @@ export async function getServerSideProps() {
     return { props: { data } }
   }
 
-function ItemEdit({itemID, items, categories, brands}) {
+function ItemEdit({itemID, items, categories, brands, units}) {
     // Item Identification
     const [categoryID, setCategoryID] = useState("");
     const [name, setName] = useState("");
@@ -228,10 +228,17 @@ function ItemEdit({itemID, items, categories, brands}) {
 		return details.brand.length == 0 || details.partNumber.length == 0 || parseInt(details.quantity) < 0
 	}
 
+    function createFilterArray() {
+        let filterArray = detailsArray.filter(value => value.combinationID != details.combinationID)
+        return filterArray;
+    }
+
     function checkDuplicate() {
 		let duplicate = false;
-		detailsArray.every((value) => {
-			if (value.brand == details.brand) {
+        let filterArray = createFilterArray()
+        
+		filterArray.every((value) => {
+			if (value.itemBrandID == revertOneBrandToID(details.brand)) {
 				duplicate = true;
 				return false;
 			}
@@ -250,7 +257,6 @@ function ItemEdit({itemID, items, categories, brands}) {
 
         setDetailsError(checkDetails())
         setDuplicateError(checkDuplicate())
-        console.log(checkDuplicate())
         if (!checkDetails() && !checkDuplicate()) {
             setDetailsArray(detailsArray => [...detailsArray, details])
             // setAuditTrail(auditTrail => [...auditTrail, ])
@@ -292,23 +298,26 @@ function ItemEdit({itemID, items, categories, brands}) {
 
     function editRow() {
         let newQuantity = quantity;
-        let newArr = detailsArray.map(item => {
-            if (item.combinationID == details.combinationID){
-                newQuantity -= parseInt(item.quantity);
-                newQuantity += parseInt(details.quantity);
-                item.combinationID == details.combinationID
-                item.itemBrandID = revertOneBrandToID(details.brand);
-                item.partNumber = details.partNumber;
-                item.quantity = details.quantity;
-                // item.unit = details.unit;
-                item.disabled = details.disabled;
-            }
-            return item;
-        }) 
-        setDetailsButton("Add")
-        setDetailsArray(newArr)
-        setQuantity(newQuantity)
-        clearDetails()
+        setDuplicateError(checkDuplicate())
+        if(!checkDuplicate()) {
+            let newArr = detailsArray.map(item => {
+                if (item.combinationID == details.combinationID){
+                    newQuantity -= parseInt(item.quantity);
+                    newQuantity += parseInt(details.quantity);
+                    item.combinationID == details.combinationID
+                    item.itemBrandID = revertOneBrandToID(details.brand);
+                    item.partNumber = details.partNumber;
+                    item.quantity = details.quantity;
+                    // item.unit = details.unit;
+                    item.disabled = details.disabled;
+                }
+                return item;
+            }) 
+            setDetailsButton("Add")
+            setDetailsArray(newArr)
+            setQuantity(newQuantity)
+            clearDetails()
+        }  
     }
 
     function deleteRow(row) {
@@ -363,6 +372,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                 ></Cancel>
             </Modal>
             <form className="item-column-container" id="item-add-main-container">
+                <button type="button" onClick={checkDuplicate}>Test</button>
                 <h1>IDENTIFICATION</h1>
     
                 <div id="add-item-form-identification">
@@ -472,14 +482,11 @@ function ItemEdit({itemID, items, categories, brands}) {
                                 disabled={!isEditable}
                                 onChange={(e) => setUnitID(e.target.value)}
                             >
-                                <option key="Pieces" value="10001">Pieces</option>
-                                <option key="Sets" value="10002">Sets</option>
-    
-                            {/* {units.map((unit) => (
-                                <option key={unit.unitID} value={unit.unitName}>
+                            {units.map((unit) => (
+                                <option key={unit.unitID} value={unit.unitID}>
                                     {unit.unitName}
                                 </option>
-                            ))} */}
+                            ))}
                             </select>
                             {showRequiredError(error, unitID, "Select Unit")}
                         </div>
