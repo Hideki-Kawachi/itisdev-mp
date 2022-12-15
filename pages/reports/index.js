@@ -11,14 +11,10 @@ import dbConnect from "../../lib/dbConnect";
 
 
 import AddInventory from "../../models/AddInvSchema";
-import RecordDetails from "../../models/RecordDetailsSchema";
 
-// import unitType from "../../models/UnitTypeSchema";
 // import Item from "../../models/ItemSchema";
 import Item from "../../models/ItemSchema";
 import Measure from "../../models/MeasureSchema";
-import ItemBrand from "../../models/ItemBrandSchema";
-import ItemBrandCombination from "../../models/ItemBrandCombinationSchema";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -34,200 +30,87 @@ export const getServerSideProps = withIronSessionSsr(
 
 				await dbConnect();
 
-				const unitList = await Measure.find({ disabled: false });
 
-				const brandList = await ItemBrand.find(
-				{ disabled: false },
-				{ itemBrandID: 1, name: 1 }
+				const addRecList = await AddInventory.find(
+					{},
+					//date, invoice,  item, item model, quantity, unit
+					{	
+						addRecordID: 1, 
+						acquireDate: 1, 
+						invoiceNumber: 1, 
+						itemID: 1, 
+						quantity:1, 
+						unitID: 1 
+					}
 				);
-	
-	
+
 				const itemList = await Item.find(
-				{ quantity: { $gt: 0 }, disabled: false },
-				{ itemID: 1, itemName: 1, itemModel: 1, unitID: 1, quantity: 1, minQuantity: 1 }
+					{},
+					{
+						itemID: 1,
+						itemName: 1,
+						itemModel: 1,
+						unitID: 1
+					}
 				);
-	
-				const itemBrandList = await ItemBrandCombination.find(
-				{ quantity: { $gt: 0 }, disabled: false },
-				{ itemID: 1, itemBrandID: 1, partNumber: 1 }
+
+				const measure = await Measure.find(
+						{},
+						{
+							unitID: 1,
+							unitName: 1
+						}
 				);
 
-				const addList = await AddInventory.find({ disabled: false });
-				const recordList = await RecordDetails.find({});
+				var tempAddData = [];
 
-				let unitData = JSON.stringify(unitList);
-				let itemData = JSON.stringify(itemList);
-				let addData = "";
-				let addTable = [];
-				let addTableData;
+				addRecList.forEach((addRec) => {
+					let isFound = false;
+					let isFound2 = false;
+					let itemName = "";
+					let itemModel = "";
+					let unitTypeName = "";
+					
+					while (!isFound && !isFound2) {
 
-				if (addList) {
-					addData = JSON.stringify(addList);
-					addList.forEach((add) => { 
-						let index = recordList.length - 1;
-						let item = "";
-						let brand = "";
-						let quantity = 0;
-						let unit = "";
-
-						let itemName = "";
-						let itemModel = "";
-						let brandName = "";
-						let unitName = "";
-
-						while (index >= 0) {
-							//Should it be less record for recordList?
-							if (add.addRecordID == recordList[index].lessRecordID) {
-								item = recordList[index].itemID;
-								brand = recordList[index].brandID;
-								quantity = recordList[index].quantity;
-								unit = recordList[index].unitID;
-
-								if (item.length > 0) {
-								let isFound2 = false;
-								let index2 = itemList.length - 1;
-								while (!isFound2 && index2 >= 0) {
-									if (item == itemList[index2].itemID) {
-									isFound2 = true;
-									itemName = itemList[index2].itemName;
-									itemModel = itemList[index2].itemModel;
-									}
-									index2--;
-								}
-								isFound2 = false;
-								index2 = brandList.length - 1;
-								while (!isFound2 && index2 >= 0) {
-									if (brand == brandList[index2].itemBrandID) {
-									isFound2 = true;
-									brandName = brandList[index2].name;
-									}
-									index2--;
-								}
-								isFound2 = false;
-								index2 = unitList.length - 1;
-								while (!isFound2 && index2 >= 0) {
-									if (unit == unitList[index2].unitID) {
-									isFound2 = true;
-									unitName = unitList[index2].unitName;
-									}
-									index2--;
-								}
-								}
-			
-								addTable.push({
-									addDate: dayjs(add.addDate).format("MM/DD/YYYY"),
-									itemModel: itemModel,
-									invoiceNumber: add.invoiceNumber,
-									itemName: itemName,
-									brandName: brandName,
-									quantity: quantity,
-									unit: unitName,
-								});
-							}
-							index--;
+						itemList.forEach((item) => {
+							if (addRec.itemID == item.itemID) {
+								itemName = item.itemName;
+								isFound = true;
 							}
 						});
-						addTableData = JSON.stringify(addTable);
-						} else {
-						addData = JSON.stringify({});
-						addTableData = JSON.stringify({});
-						}
-			
-						return {
-						props: {
-							currentUser,
-							unitData,
-							itemData,
-							addData,
-							addTableData,
-						},
-						};
-			
-				  //  let pullRecData = JSON.stringify(tempPullData);
-				  }
-				
 
-				//await dbConnect();
+						unitTypeList.forEach((unitType) => {
+							if (addRec.unitID == unitType.UnitTypeID ) {
+								unitTypeName = unitType.UnitTypeName;
+								isFound2 = true;
+							} 
+						});
 
-				// const addRecList = await AddInventory.find(
-				// 	{},
-				// 	//date, invoice,  item, item model, quantity, unit
-				// 	{	
-				// 		addRecordID: 1, 
-				// 		acquireDate: 1, 
-				// 		invoiceNumber: 1, 
-				// 		itemID: 1, 
-				// 		quantity:1, 
-				// 		unitID: 1 
-				// 	}
-				// );
+					}
 
-				// const itemList = await Item.find(
-				// 	{},
-				// 	{
-				// 		itemID: 1,
-				// 		itemName: 1,
-				// 		itemModel: 1,
-				// 	}
-				// );
-
-				// const unitTypeList = await unitType.find(
-				// 		{},
-				// 		{
-				// 			UnitTypeID: 1,
-				// 			UnitTypeName: 1,
-				// 			disabled: 1,
-				// 		}
-				// );
-
-				// var tempAddData = [];
-
-				// addRecList.forEach((addRec) => {
-				// 	let isFound = false;
-				// 	let isFound2 = false;
-				// 	let itemName = "";
-				// 	let itemModel = "";
-				// 	let unitTypeName = "";
-					
-				// 	while (!isFound && !isFound2) {
-
-				// 		itemList.forEach((item) => {
-				// 			if (addRec.itemID == item.itemID) {
-				// 				itemName = item.itemName;
-				// 				isFound = true;
-				// 			}
-				// 		});
-
-				// 		unitTypeList.forEach((unitType) => {
-				// 			if (addRec.unitID == unitType.UnitTypeID ) {
-				// 				unitTypeName = unitType.UnitTypeName;
-				// 				isFound2 = true;
-				// 			} 
-				// 		});
-
-				// 	}
-
-				// 	tempAddData.push({
-				// 		//date, invoice,  item n, item model, quantity, unit name
-				// 		acquireDate: addRecList.acquireDate,
-				// 		invoiceNumber: addRecList.invoiceNumber,
-				// 		itemName: itemName,
-				// 		itemModel: addRecList.itemModel,
-				// 		quantity: addRecList.quantity,
-				// 		unit: unitTypeName
-				// 	});
+					tempAddData.push({
+						//date, invoice,  item n, item model, quantity, unit name
+						acquireDate: addRecList.acquireDate,
+						invoiceNumber: addRecList.invoiceNumber,
+						itemName: itemName,
+						itemModel: addRecList.itemModel,
+						quantity: addRecList.quantity,
+						unit: unitTypeName
+					});
 
 
-				// });
+				});
 
-				// let addRecData = JSOn.stringify(tempAddData);
+				let addRecData = JSON.stringify(tempAddData);
 
-				// return { props: { currentUser, addRecData } }; 
-				return { props: { currentUser } }; //need to edit once done
+				return { props: { currentUser, addRecData } }; 
+				// return { props: { currentUser } }; //need to edit once done
 
 
 			
-		} else {
+			} 
+		}else {
 			return {
 				redirect: { destination: "/signin", permanent: true },
 				props: {},
@@ -243,7 +126,8 @@ export const getServerSideProps = withIronSessionSsr(
 // 	}
 // ];
 
-function TransactionReports({ currentUser }) {
+function TransactionReports({ currentUser, addRecData}) {
+	let ADDDATA = JSON.parse(addRecData);
 
 	return (
 		<>
@@ -251,7 +135,7 @@ function TransactionReports({ currentUser }) {
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				<ReportTabs tab="1" roleID={currentUser.roleID}></ReportTabs>
-				<BasicTable COLUMNS={COLUMNS} ADDINV={ADDINV_MOCK_DATA}></BasicTable>
+				<BasicTable COLUMNS={COLUMNS} ADDINV={ADDDATA}></BasicTable>
 			</div>
 		</>
 	);
