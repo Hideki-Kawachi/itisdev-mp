@@ -119,7 +119,7 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
               disabled: isDisabled,
             }
 
-            console.log(detailsArray)
+            console.log(JSON.stringify(auditTrail))
 
             fetch("/api/items/updateItem", {
               method: "POST",
@@ -129,33 +129,26 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
               body: JSON.stringify({itemData, details:detailsArray}),
             })
             .then((res) => res.json())
-            .then((data) => {
-                setNotifResult(data);
-                if (data != "No Fields Edited") {
-                    setTimeout(() => window.location.reload(), 800);
-                }
-            });
 
-            // // AUDIT
-            // auditTrail["physicalCount"] = quantity;
-            // fetch("/api/items/auditTrail", {
-            //   method: "POST",
-            //   headers: {
-            //     "Content-Type": "application/json",
-            //   },
-            //   body: JSON.stringify({ auditTrail }),
-            // })
-            //   .then((res) => res.json())
-            //   .then((data) => {
-            //     if (data == "created") {
-            //       console.log("SUCCESS");
-            //       setNotifResult("Successfully created!");
-            //       setError(false);
-            //       window.location.reload();
-            //     } else {
-            //       setError(true);
-            //     }
-            //   });
+            // AUDIT
+            auditTrail["physicalCount"] = quantity;
+            fetch("/api/items/auditTrail", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(auditTrail),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data == "created") {
+                  console.log("SUCCESS");
+                  setError(false);
+                  window.location.reload();
+                } else {
+                  setError(true);
+                }
+              });
             
     }}
 
@@ -163,7 +156,9 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
         auditTrail["physicalCount"] = quantity;
         console.log(auditTrail.physicalCount)
     }
-    
+    function checkAudit(){
+        console.log("Audit " + JSON.stringify(auditTrail));
+    }
     // Handle details input
     function convertDetailsArray (type, arr) {
         if (type) {
@@ -383,7 +378,7 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
                 ></Cancel>
             </Modal>
             <form className="item-column-container" id="item-add-main-container">
-                {/* <button type="button" onClick={checkPhysicalCount}>Test</button> */}
+                <button type="button" onClick={checkAudit}>Test</button>
                 <h1>IDENTIFICATION</h1>
     
                 <div id="add-item-form-identification">

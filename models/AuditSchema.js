@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const AuditSchema = new mongoose.Schema({
   auditID: {
     type: String,
-    minlength: 15,
-    maxlength: 15,
+    minlength: 5,
+    maxlength: 5,
     unique: true,
     required: true,
   },
@@ -42,6 +42,6 @@ const AuditSchema = new mongoose.Schema({
 });
 
 const Audit =
-  mongoose.models.Audit | mongoose.model("Audit", AuditSchema);
+  mongoose.models.Audit || mongoose.model("Audit", AuditSchema);
 
 export default Audit;
