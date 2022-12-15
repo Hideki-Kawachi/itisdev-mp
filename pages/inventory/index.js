@@ -51,14 +51,14 @@ export const getServerSideProps = withIronSessionSsr(
 			const unitList = await Measure.find({ disabled: false });
 
 			const brandList = await ItemBrand.find(
-        {},
-        { itemBrandID: 1, name: 1, disabled: 1 }
-      );
+				{},
+				{ itemBrandID: 1, name: 1, disabled: 1 }
+			);
 
 			const supplierList = await Supplier.find(
-        {},
-        { supplierID: 1, supplierName: 1, disabled: 1 }
-      );
+				{},
+				{ supplierID: 1, supplierName: 1, disabled: 1 }
+			);
 
 			const vehicleList = await Vehicles.find(
 				{ disabled: false },
@@ -275,6 +275,7 @@ function Inventory({
 								brands={brands}
 								suppliers={suppliers}
 								items={items}
+								currentUser={currentUser}
 							></AddInventoryCreate>
 						</div>
 

@@ -32,11 +32,11 @@ export const COLUMNS = [
     accessor: "quantity",
     disableGlobalFilter: true,
   },
-  {
-    Header: "Unit",
-    accessor: "unit",
-    disableGlobalFilter: true,
-  },
+  // {
+  //   Header: "Unit",
+  //   accessor: "unit",
+  //   disableGlobalFilter: true,
+  // },
   // {
   //   Header: "",
   //   id: "edit",

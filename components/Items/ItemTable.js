@@ -12,12 +12,6 @@ import { COLUMNS } from "./ItemColumns";
 import GlobalFilter from "../GlobalFilter";
 import { Dropdown } from "../Dropdown";
 
-// Temporary Assets
-import ITEM_MOCK_DATA from "./Temp/ITEM_MOCK_DATA.json";
-import TempFilter from "./Temp/TempSearch";
-import TempCategoryFilter from "./Temp/TempCategoryFilter";
-import { useEffect } from "react";
-
 export const ItemTable = ({itemData, categoryData, unitData}) => {
 	const columns = useMemo(() => COLUMNS, []);
 	const data = useMemo(() => itemData, []);
