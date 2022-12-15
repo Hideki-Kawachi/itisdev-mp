@@ -42,4 +42,10 @@ export const COLUMNS = [
     disableGlobalFilter: true,
     disableSortBy: true,
   },
+  {
+    Header: "Transaction",
+    accessor: "transact",
+    disableGlobalFilter: true,
+    disableSortBy: true,
+  },
 ];
