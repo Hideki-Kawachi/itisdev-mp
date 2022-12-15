@@ -33,16 +33,19 @@ export const getServerSideProps = withIronSessionSsr(
 			const unitList = await Measure.find({ disabled: false });
 
 			const brandList = await ItemBrand.find(
+			{},
 			{ itemBrandID: 1, name: 1 }
 			);
 
 
 			const itemList = await Item.find(
+			{},
 			{ itemID: 1, itemName: 1, itemModel: 1, unitID: 1, quantity: 1, minQuantity: 1 }
 			);
 
 			const itemBrandList = await ItemBrandCombination.find(
-			{ itemID: 1, itemBrandID: 1, partNumber: 1 }
+				{},
+				{ itemID: 1, itemBrandID: 1, partNumber: 1 }
 			);
 
 			const pullList = await PullInventory.find({ disabled: false });
@@ -123,7 +126,7 @@ export const getServerSideProps = withIronSessionSsr(
 			pullData = JSON.stringify({});
 			pullTableData = JSON.stringify({});
 			}
-
+			console.log(pullTableData);
 			return {
 			props: {
 				currentUser,
