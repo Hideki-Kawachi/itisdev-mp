@@ -44,7 +44,7 @@ export const COLUMNS = [
   },
   {
     Header: "Transaction",
-    accessor: "transact",
+    accessor: "transactType",
     disableGlobalFilter: true,
     disableSortBy: true,
   },
