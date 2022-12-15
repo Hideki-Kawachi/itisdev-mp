@@ -11,14 +11,10 @@ import dbConnect from "../../lib/dbConnect";
 
 
 import AddInventory from "../../models/AddInvSchema";
-import RecordDetails from "../../models/RecordDetailsSchema";
 
-// import unitType from "../../models/UnitTypeSchema";
 // import Item from "../../models/ItemSchema";
 import Item from "../../models/ItemSchema";
 import Measure from "../../models/MeasureSchema";
-import ItemBrand from "../../models/ItemBrandSchema";
-import ItemBrandCombination from "../../models/ItemBrandCombinationSchema";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -34,85 +30,82 @@ export const getServerSideProps = withIronSessionSsr(
 
 				await dbConnect();
 
-				
 
-				//await dbConnect();
+				const addRecList = await AddInventory.find(
+					{},
+					//date, invoice,  item, item model, quantity, unit
+					{	
+						addRecordID: 1, 
+						acquireDate: 1, 
+						invoiceNumber: 1, 
+						itemID: 1, 
+						quantity:1, 
+						unitID: 1 
+					}
+				);
 
-				// const addRecList = await AddInventory.find(
-				// 	{},
-				// 	//date, invoice,  item, item model, quantity, unit
-				// 	{	
-				// 		addRecordID: 1, 
-				// 		acquireDate: 1, 
-				// 		invoiceNumber: 1, 
-				// 		itemID: 1, 
-				// 		quantity:1, 
-				// 		unitID: 1 
-				// 	}
-				// );
+				const itemList = await Item.find(
+					{},
+					{
+						itemID: 1,
+						itemName: 1,
+						itemModel: 1,
+						unitID: 1
+					}
+				);
 
-				// const itemList = await Item.find(
-				// 	{},
-				// 	{
-				// 		itemID: 1,
-				// 		itemName: 1,
-				// 		itemModel: 1,
-				// 	}
-				// );
+				const measure = await Measure.find(
+						{},
+						{
+							unitID: 1,
+							unitName: 1
+						}
+				);
 
-				// const unitTypeList = await unitType.find(
-				// 		{},
-				// 		{
-				// 			UnitTypeID: 1,
-				// 			UnitTypeName: 1,
-				// 			disabled: 1,
-				// 		}
-				// );
+				var tempAddData = [];
 
-				// var tempAddData = [];
-
-				// addRecList.forEach((addRec) => {
-				// 	let isFound = false;
-				// 	let isFound2 = false;
-				// 	let itemName = "";
-				// 	let itemModel = "";
-				// 	let unitTypeName = "";
+				addRecList.forEach((addRec) => {
+					let isFound = false;
+					let isFound2 = false;
+					let itemName = "";
+					let itemModel = "";
+					let unitTypeName = "";
 					
-				// 	while (!isFound && !isFound2) {
+					while (!isFound && !isFound2) {
 
-				// 		itemList.forEach((item) => {
-				// 			if (addRec.itemID == item.itemID) {
-				// 				itemName = item.itemName;
-				// 				isFound = true;
-				// 			}
-				// 		});
+						itemList.forEach((item) => {
+							if (addRec.itemID == item.itemID) {
+								itemName = item.itemName;
+								isFound = true;
+							}
+						});
 
-				// 		unitTypeList.forEach((unitType) => {
-				// 			if (addRec.unitID == unitType.UnitTypeID ) {
-				// 				unitTypeName = unitType.UnitTypeName;
-				// 				isFound2 = true;
-				// 			} 
-				// 		});
+						unitTypeList.forEach((unitType) => {
+							if (addRec.unitID == unitType.UnitTypeID ) {
+								unitTypeName = unitType.UnitTypeName;
+								isFound2 = true;
+							} 
+						});
 
-				// 	}
+					}
 
-				// 	tempAddData.push({
-				// 		//date, invoice,  item n, item model, quantity, unit name
-				// 		acquireDate: addRecList.acquireDate,
-				// 		invoiceNumber: addRecList.invoiceNumber,
-				// 		itemName: itemName,
-				// 		itemModel: addRecList.itemModel,
-				// 		quantity: addRecList.quantity,
-				// 		unit: unitTypeName
-				// 	});
+					tempAddData.push({
+						//date, invoice,  item n, item model, quantity, unit name
+						acquireDate: addRecList.acquireDate,
+						invoiceNumber: addRecList.invoiceNumber,
+						itemName: itemName,
+						itemModel: addRecList.itemModel,
+						quantity: addRecList.quantity,
+						unit: unitTypeName
+					});
 
 
-				// });
+				});
 
-				// let addRecData = JSOn.stringify(tempAddData);
+				let addRecData = JSON.stringify(tempAddData);
 
-				// return { props: { currentUser, addRecData } }; 
-				return { props: { currentUser } }; //need to edit once done
+				return { props: { currentUser, addRecData } }; 
+				// return { props: { currentUser } }; //need to edit once done
 
 
 			
@@ -133,8 +126,8 @@ export const getServerSideProps = withIronSessionSsr(
 // 	}
 // ];
 
-function TransactionReports({ currentUser, addTableData }) {
-	let ADDDATA = JSON.parse(addTableData);
+function TransactionReports({ currentUser, addRecData}) {
+	let ADDDATA = JSON.parse(addRecData);
 
 	return (
 		<>
