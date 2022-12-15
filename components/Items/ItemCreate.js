@@ -242,6 +242,12 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 		}
 	}
 
+	function showMinLength(errType, field, msg, min) {
+		if (errType && field.length < min) {
+			return <span className="vehicle-create-error">{msg}</span>;
+		}
+	}
+
 	function showNegativeNumError(errType, field, msg) {
 		if (errType && field < 0) {
 			return <span className="vehicle-create-error">{msg}</span>;
@@ -327,6 +333,7 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 								onChange={(e) => setItemID(e.target.value)}
 							/>
 							{showRequiredError(error, itemID, "Input Item Code")}
+							{showMinLength(error, itemID, "Item Code must be at least 5 characters", 5)}
 							{codeError == itemID && itemID.length > 0 ? (
 								<span className="vehicle-create-error">
 									Item Code is already used
