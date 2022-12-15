@@ -46,109 +46,7 @@ function ItemCreate({ items, categories, brands }) {
 	const [infoPop, setInfoPop] = useState(false);
 	const [cancel, setCancel] = useState(false);
 
-	function convertBrandID (value) {
-        brands.every((brand) => {
-            if (value == brand.itemBrandID) {
-                value = brand.name
-                return false;
-            }
-            return true;
-        }) 
-
-        return value;
-    }
-
-    function revertBrandToID () {
-        detailsArray.every((value) => {
-            brands.every((brand) => {
-                if (value.brand == brand.name) {
-                    value.brand = brand.itemBrandID
-                    return false;
-                }
-                return true;
-            }) 
-            return true
-        })
-    }
-
-    // Handle details input
-    function handleDetails (e) {
-        const { name, value } = e.target
-        
-        setDetails(prevState => ({
-            ...prevState,
-            combinationID: String(Math.floor(Math.random() * 50000)),
-            [name]: value,
-        }));
-    }
-
-	function clearDetails() {
-        setDetails(prevState => ({
-            ...prevState,
-            combinationID: "",
-            brand: "",
-            partNumber: "",
-            quantity: 0,
-            unit: "",
-            disabled: false,
-        }))
-    }
-
-	function checkDetails() {
-		return details.brand.length == 0 || details.partNumber.length == 0 || details.quantity < 0
-	}
-
-    function addDetails () {
-		console.log(details)
-		if (JSON.stringify(detailsArray[0]) == "{}") {
-			detailsArray.shift()
-		}
-		setDetailsError(checkDetails())
-		if (!checkDetails()) {
-			setDetailsArray(detailsArray => [...detailsArray, details])
-        	setQuantity(quantity+parseInt(details.quantity))
-			clearDetails();	
-		} 
-    }
- 
-	function convertDetailsArray (type, arr) {
-		if (type) {
-			let template = {
-				combinationID: "",
-				brand: "",
-				partNumber: "",
-				quantity: 0,
-				disabled: false,
-			}
-			let templateArray = [] 
-			arr.every((value) => {
-				template.combinationID = value.combinationID;
-				template.brand = convertBrandID(value.itemBrandID)
-				template.partNumber = value.partNumber;
-				template.quantity = value.quantity;
-				template.disbaled = value.disabled;
-				templateArray.push(template)
-				return true; 
-			})
-
-			return templateArray;
-		}
-
-		return arr;
-	}
-
-	function deleteRow(row) {
-        if (detailsArray.length > 1) {
-            detailsArray.every((value) => {
-                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combinationID))
-            })
-        }
-        else {
-            setDetailsArray([{}]);
-        }
-    }
-    
-    // Submit Form
+	// Submit Form
     function submitForm() {
         // console.log("1. Error is " + error + ", Data is " + data);
         revertBrandToID();
@@ -194,6 +92,138 @@ function ItemCreate({ items, categories, brands }) {
             });
         }}
 
+	function convertBrandID (value) {
+        brands.every((brand) => {
+            if (value == brand.itemBrandID) {
+                value = brand.name
+                return false;
+            }
+            return true;
+        }) 
+
+        return value;
+    }
+
+    function revertBrandToID () {
+        detailsArray.every((value) => {
+            brands.every((brand) => {
+                if (value.brand == brand.name) {
+                    value.brand = brand.itemBrandID
+                    return false;
+                }
+                return true;
+            }) 
+            return true
+        })
+    }
+
+    // Handle details input
+    function handleDetails (e) {
+        const { name, value } = e.target
+        
+        setDetails(prevState => ({
+            ...prevState,
+            combinationID: String(Math.floor(Math.random() * 50000)),
+            [name]: value,
+        }));
+
+		if (name == "brand") {
+			setDuplicateError(false)
+		}
+    }
+
+	function clearDetails() {
+        setDetails(prevState => ({
+            ...prevState,
+            combinationID: "",
+            brand: "",
+            partNumber: "",
+            quantity: 0,
+            unit: "",
+            disabled: false,
+        }))
+    }
+
+	function checkDetails() {
+		return details.brand.length == 0 || details.partNumber.length == 0 || details.quantity < 0
+	}
+
+	function checkDuplicate() {
+		let duplicate = false;
+		detailsArray.every((value) => {
+			if (value.brand == details.brand) {
+				duplicate = true;
+				return false;
+			}
+			return true;
+		})
+		return duplicate;
+	}
+
+    function addDetails () {
+		if (JSON.stringify(detailsArray[0]) == "{}") {
+			detailsArray.shift()
+		}
+		setDetailsError(checkDetails())
+		setDuplicateError(checkDuplicate())
+		if (!checkDetails() && !checkDuplicate()) {
+			setDetailsArray(detailsArray => [...detailsArray, details])
+			setQuantity(quantity+parseInt(details.quantity))
+			clearDetails();	
+		} 
+    }
+	
+	// function calcTotalQty() {
+	// 	let tempQty = 0;
+	// 	detailsArray.every((value) => {
+			
+	// 		tempQty += parseInt(value.quantity);
+	// 		console.log(value)
+	// 		console.log(tempQty)
+	// 	})
+	// 	setQuantity(tempQty)
+	// }
+
+	function convertDetailsArray (type, arr) {
+		if (type) {
+			let template = {
+				combinationID: "",
+				brand: "",
+				partNumber: "",
+				quantity: 0,
+				disabled: false,
+			}
+			let templateArray = [] 
+			arr.every((value) => {
+				template.combinationID = value.combinationID;
+				template.brand = convertBrandID(value.itemBrandID)
+				template.partNumber = value.partNumber;
+				template.quantity = value.quantity;
+				template.disbaled = value.disabled;
+				templateArray.push(template)
+				return true; 
+			})
+
+			return templateArray;
+		}
+
+		return arr;
+	}
+
+	function deleteRow(row) {
+		console.log(parseInt(row.quantity))
+		setQuantity(quantity-parseInt(row.quantity))
+        if (detailsArray.length > 1) {
+            detailsArray.every((value) => {
+                setDetailsArray(detailsArray.filter(value => value.combinationID != row.combinationID))
+            })
+        }
+        else {
+            setDetailsArray([{}]);
+        }
+		clearDetails()
+    }
+
 	function cancelForm() {
 		setCancel(true);
 	}
@@ -222,6 +252,12 @@ function ItemCreate({ items, categories, brands }) {
 		}
 	}
 
+	function showDuplicateError(errType, field, msg) {
+		if (errType) {
+			return (<span className="vehicle-create-error">{field + " " + msg}</span>)
+		}
+	}
+
 	return (
 		<>
 			<Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
@@ -240,6 +276,7 @@ function ItemCreate({ items, categories, brands }) {
 				id="item-add-main-container"
 			>
 				{showResult()}
+				{/* <button type="button" onClick={()=>calcTotalQty()}>Test</button> */}
 				<h1>IDENTIFICATION</h1>
 
 				<div id="add-item-form-identification">
@@ -432,6 +469,7 @@ function ItemCreate({ items, categories, brands }) {
 								))}
 							</select>
 							{showRequiredError(detailsError, details.brand, "Select Brand")}
+							{showDuplicateError(duplicateError, details.brand, "is already in use")}
 						</div>
 
 						<div className="item-input">
@@ -470,13 +508,17 @@ function ItemCreate({ items, categories, brands }) {
                     { JSON.stringify(detailsArray[0]) == "{}" || detailsArray.length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
-                        <BrandTable 
-							tableValues={detailsArray} 
-							convertFunc={convertDetailsArray} 
-							deleteFunc={deleteRow} 
-							isEditable={false} 
-							pageType={false}>	
-						</BrandTable>
+						<>
+							<BrandTable 
+								tableValues={detailsArray} 
+								convertFunc={convertDetailsArray} 
+								deleteFunc={deleteRow} 
+								isEditable={false} 
+								pageType={false}>	
+							</BrandTable>
+							<h3>TOTAL: {quantity}</h3>
+						</>
+                        
                     )}
                 </div>
             </div>
