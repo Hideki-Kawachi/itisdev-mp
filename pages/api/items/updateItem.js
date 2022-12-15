@@ -7,7 +7,7 @@ export default async (req, res) => {
 
     const itemInfo = (req.body.itemData);
     const detailsInfo = req.body.details;
-
+    console.log(detailsInfo)
     let itemResult = await Item.updateOne(
         {   
             itemID: itemInfo.itemID
@@ -26,9 +26,11 @@ export default async (req, res) => {
     let detailsResult;
     for (var i = 0; i < detailsInfo.length; i++) {
         let updateFields = { 
+            itemID: detailsInfo[i].itemID,
             itemBrandID: detailsInfo[i].brand,
             partNumber: detailsInfo[i].partNumber,
             quantity: parseInt(detailsInfo[i].quantity),
+            disabled: detailsInfo[i].disabled,
         }
         detailsResult = await ItemBrandCombination.updateOne(
             {combinationID: detailsInfo[i].combinationID},
