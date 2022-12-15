@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Modal from "react-modal";
-
 import ToggleSwitch from "../ToggleSwitch";
 import ItemCatTable from "./CategoryList";
 import BrandTable from "./BrandTable";
+import Info from "../../components/Pop-up/info";
 
 // TO-DO: add dropdown options as parameters
 function ItemCreate({ items, categories, brands, units, currentUser }) {
@@ -273,6 +273,9 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 					{" "}
 				</ItemCatTable>
 			</Modal>
+			<Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
+				<Info trigger={infoPop} setTrigger={setInfoPop}></Info>
+			</Modal>
 			<form className="item-column-container" id="item-add-main-container">
 				{showResult()}
 				{/* <button type="button" onClick={()=>calcTotalQty()}>Test</button> */}
@@ -356,7 +359,15 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 						</div>
 
 						<div className="item-input" id="item-status">
-							<label htmlFor="disabled">Status:</label>
+							<label htmlFor="disabled">Status: 							
+							<button
+							type="button"
+							className="table-info-button"
+							onClick={() => setInfoPop(!infoPop)}
+							>
+							i
+							</button>
+							</label>						
 							<ToggleSwitch
 								disabled={isDisabled}
 								setDisabled={setIsDisabled}

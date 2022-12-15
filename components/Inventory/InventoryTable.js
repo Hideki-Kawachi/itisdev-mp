@@ -94,11 +94,7 @@ export const InventoryTableAdd = ( {InventoryData} ) => {
             {pageIndex + 1} of {pageOptions.length}
           </strong>
         </span>
-        <input type='number' defaultValue={pageIndex + 1} onChange={e => {
-          const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
-          gotoPage(pageNumber)
-        }
-        } />
+        
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
         </button>

@@ -5,8 +5,7 @@ export default async (req, res) => {
 	await dbConnect();
 
 	const addInvInfo = req.body;
-	console.log("info is:", addInvInfo);
-
+	console.log(addInvInfo);
 	let invalidRecordID = await AddInventory.findOne({
 		addRecordID: addInvInfo.addRecordID,
 	});

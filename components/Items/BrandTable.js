@@ -64,6 +64,7 @@ export const BrandTable = ({
 	return (
     <>
       <br />
+      {isEditable == true ? (<p>Click on the pencil icon to edit a row</p>) : (<></>)}
       <table id="btable" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
