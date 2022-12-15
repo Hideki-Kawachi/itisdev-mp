@@ -11,6 +11,7 @@ import ITEM_CAT_MOCK_DATA from "./Temp/ITEM_CAT_MOCK_DATA.json"
 import { COLUMNS } from "./CategoryColumns";
 import GlobalFilter from "../GlobalFilter";
 import AddItemCategory from "./CategoryCreate";
+import EditItemCategory from "./CategoryEdit";
 import Link from "next/link";
 
 function ItemCatTable({ trigger, setTrigger, name, type, id}) {
@@ -19,6 +20,8 @@ function ItemCatTable({ trigger, setTrigger, name, type, id}) {
   const [iAddOpen, setIAddOpen] = useState(false);
   const [iEditOpen, setIEditOpen] = useState(false);
   const [selected, setSelected] = useState("");
+  const [catname, setCatName] = useState("");
+  const [status, setStatus] = useState("");
 
   const {
     getTableProps,
@@ -54,6 +57,14 @@ function ItemCatTable({ trigger, setTrigger, name, type, id}) {
   }
   const { globalFilter } = state;
   const { pageIndex } = state;
+
+  function clickRow(rowid, rowname, rowstatus){
+    setSelected(rowid);
+    setCatName(rowname);
+    setStatus(rowstatus)
+    console.log("row id: " + rowid)
+    setIEditOpen(true);
+  }
 
   return (
     <>
@@ -103,7 +114,12 @@ function ItemCatTable({ trigger, setTrigger, name, type, id}) {
                 <tr
                   id="btable"
                   {...row.getRowProps()}
-                  onClick={() => clickRow(row.original[id])}
+                  onClick={() => 
+                    clickRow(
+                      row.original[id], 
+                      row.original.name,
+                      row.original.disabled
+                  )}
                 >
                   {row.cells.map((cell) => {
                     return (
@@ -175,16 +191,18 @@ function ItemCatTable({ trigger, setTrigger, name, type, id}) {
             id={id}
           />{" "}
         </Modal>
-        {/* <Modal isOpen={vEditOpen} className="modal">
-          <EditVehicleCategory
-            trigger={vEditOpen}
-            setTrigger={setvEditOpen}
+        <Modal isOpen={iEditOpen} className="modal" ariaHideApp={false}>
+          <EditItemCategory
+            trigger={iEditOpen}
+            setTrigger={setIEditOpen}
             name={name}
             type={type}
+            status={status}
+            catname={catname}
             id={id}
             selected={selected}
           />
-        </Modal> */}
+        </Modal>
       </div>
     </>
   );
