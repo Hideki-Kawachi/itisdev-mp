@@ -6,7 +6,7 @@ import BasicButton from "../../components/BasicButton";
 import Cancel from "../Pop-up/cancel";
 import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
-import ItemCatTable from "../Items/CategoryList";
+import ItemCatTable from "../Inventory/InvCategoryList";
 import days from "dayjs";
 
 
