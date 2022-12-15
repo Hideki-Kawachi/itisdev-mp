@@ -173,17 +173,6 @@ function ItemCreate({ items, categories, brands }) {
 		} 
     }
 	
-	// function calcTotalQty() {
-	// 	let tempQty = 0;
-	// 	detailsArray.every((value) => {
-			
-	// 		tempQty += parseInt(value.quantity);
-	// 		console.log(value)
-	// 		console.log(tempQty)
-	// 	})
-	// 	setQuantity(tempQty)
-	// }
-
 	function convertDetailsArray (type, arr) {
 		if (type) {
 			let template = {
@@ -211,7 +200,6 @@ function ItemCreate({ items, categories, brands }) {
 	}
 
 	function deleteRow(row) {
-		console.log(parseInt(row.quantity))
 		setQuantity(quantity-parseInt(row.quantity))
         if (detailsArray.length > 1) {
             detailsArray.every((value) => {
