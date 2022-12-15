@@ -72,7 +72,7 @@ export const getServerSideProps = withIronSessionSsr(
 
 			const itemBrandList = await ItemBrandCombination.find(
 				{ quantity: { $gt: 0 }, disabled: false },
-				{ itemID: 1, itemBrandID: 1, partNumber: 1 }
+				{ itemID: 1, itemBrandID: 1, partNumber: 1, quantity: 1 }
 			);
 
 			const pullList = await PullInventory.find({ disabled: false });
@@ -214,32 +214,32 @@ function Inventory({
 	};
 
 	useMemo(() => {
-        inventories.forEach((inventory) => {
-            items.forEach((item) =>{
-                if (inventory.itemID == item.itemID) {
-                    inventory.itemID = item.itemName;
-                }
-            })
+		inventories.forEach((inventory) => {
+			items.forEach((item) => {
+				if (inventory.itemID == item.itemID) {
+					inventory.itemID = item.itemName;
+				}
+			});
 
-            units.forEach((unit) =>{
-                if (inventory.unitID == unit.unitID) {
-                    inventory.unitID = unit.unitName;
-                }
-            })
+			units.forEach((unit) => {
+				if (inventory.unitID == unit.unitID) {
+					inventory.unitID = unit.unitName;
+				}
+			});
 
-            brands.forEach((brand) =>{
-                if (inventory.brandID == brand.itemBrandID) {
-                    inventory.brandID = brand.name;
-                }
-            })
+			brands.forEach((brand) => {
+				if (inventory.brandID == brand.itemBrandID) {
+					inventory.brandID = brand.name;
+				}
+			});
 
-            suppliers.forEach((supplier) =>{
-                if (inventory.supplierID == supplier.supplierID) {
-                    inventory.supplierID = supplier.supplierName;
-                }
-            })
-        })
-    }, [])
+			suppliers.forEach((supplier) => {
+				if (inventory.supplierID == supplier.supplierID) {
+					inventory.supplierID = supplier.supplierName;
+				}
+			});
+		});
+	}, []);
 
 	return (
 		<>

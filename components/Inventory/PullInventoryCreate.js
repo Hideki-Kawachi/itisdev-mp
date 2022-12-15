@@ -63,7 +63,7 @@ function PullInventoryCreate({
 
 	function handleDetails(e) {
 		const { name, value } = e.target;
-		console.log("NAME IS:", name, "  VALUE IS:", value);
+		//console.log("NAME IS:", name, "  VALUE IS:", value);
 
 		if (name == "itemCode") {
 			setDetails((prevState) => ({
@@ -89,7 +89,7 @@ function PullInventoryCreate({
 						}
 						index2--;
 					}
-					setMaxQuantity(itemData[index].quantity);
+					// setMaxQuantity(itemData[index].quantity);
 					setDetails((prevState) => ({
 						...prevState,
 						itemName: tempItem.itemName,
@@ -118,13 +118,12 @@ function PullInventoryCreate({
 			let isFound = false;
 			let index = itemData.length - 1;
 			while (!isFound && index >= 0) {
-				console.log("ITEM IS:", itemData[index].itemName, "  value is:", value);
+				//console.log("ITEM IS:", itemData[index].itemName, "  value is:", value);
 				if (itemData[index].itemName == value) {
 					let tempItem = itemData[index];
 
 					let unitName = "";
 					let unitID = "";
-					console.log("item data is:", itemData[index]);
 
 					let isFound2 = false;
 					let index2 = unitData.length - 1;
@@ -136,7 +135,7 @@ function PullInventoryCreate({
 						}
 						index2--;
 					}
-					setMaxQuantity(itemData[index].quantity);
+					// setMaxQuantity(itemData[index].quantity);
 					setDetails((prevState) => ({
 						...prevState,
 						itemCode: tempItem.itemID,
@@ -164,6 +163,7 @@ function PullInventoryCreate({
 					let part = brands[index].partNum;
 					let brandID = brands[index].brandID;
 					let brandName = brands[index].brandName;
+					setMaxQuantity(brands[index].quantity);
 					setDetails((prevState) => ({
 						...prevState,
 						brandID: brandID,
@@ -182,6 +182,7 @@ function PullInventoryCreate({
 					let part = brands[index].partNum;
 					let brandID = brands[index].brandID;
 					let brandName = brands[index].brandName;
+					setMaxQuantity(brands[index].quantity);
 					setDetails((prevState) => ({
 						...prevState,
 						brandID: brandID,
@@ -192,6 +193,11 @@ function PullInventoryCreate({
 				}
 				index--;
 			}
+		} else if (name == "quantity") {
+			setDetails((prevState) => ({
+				...prevState,
+				quantity: value,
+			}));
 		}
 	}
 
@@ -204,10 +210,13 @@ function PullInventoryCreate({
 				let index = brandData.length - 1;
 				let name = "";
 				let part = "";
+				let quantity = 0;
 				while (!isFound && index >= 0) {
 					if (itemBrand.itemBrandID == brandData[index].itemBrandID) {
 						name = brandData[index].name;
 						part = itemBrand.partNumber;
+						quantity = itemBrand.quantity;
+						setMaxQuantity(quantity);
 						isFound = true;
 					}
 					index--;
@@ -216,13 +225,15 @@ function PullInventoryCreate({
 					brandID: itemBrand.itemBrandID,
 					brandName: name,
 					partNum: part,
+					quantity: quantity,
 				};
 				tempBrandList.push(tempItemBrand);
 			}
 		});
 		setDetails((prevState) => ({
 			...prevState,
-			brand: tempBrandList[0]?.brandID,
+			brandID: tempBrandList[0]?.brandID,
+			brandName: tempBrandList[0]?.brandName,
 			partNum: tempBrandList[0]?.partNum,
 		}));
 		setBrands(tempBrandList);
@@ -239,7 +250,7 @@ function PullInventoryCreate({
 	// }, []);
 
 	useEffect(() => {
-		console.log("DETAILS ARE:", details);
+		console.log("DETAILS ARE:", details, maxQuantity);
 	}, [details]);
 
 	function submitForm() {
@@ -312,7 +323,7 @@ function PullInventoryCreate({
 		if (
 			details.itemCode.length == 0 ||
 			details.itemName.length == 0 ||
-			details.brand.length == 0 ||
+			details.brandID.length == 0 ||
 			details.partNum.length == 0 ||
 			details.quantity == 0
 		) {
@@ -419,7 +430,7 @@ function PullInventoryCreate({
 		if (
 			details.itemCode.length == 0 ||
 			details.itemName.length == 0 ||
-			details.brand.length == 0 ||
+			details.brandID.length == 0 ||
 			details.partNum.length == 0 ||
 			details.quantity == 0 ||
 			details.unit.length == 0 ||

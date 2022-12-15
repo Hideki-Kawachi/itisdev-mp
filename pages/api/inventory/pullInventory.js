@@ -1,4 +1,5 @@
 import dbConnect from "../../../lib/dbConnect";
+import ItemBrandCombination from "../../../models/ItemBrandCombinationSchema";
 import Item from "../../../models/ItemSchema";
 import PullInventory from "../../../models/PullInvSchema";
 import RecordDetails from "../../../models/RecordDetailsSchema";
@@ -34,7 +35,7 @@ export default async (req, res) => {
 			await RecordDetails.create({
 				lessRecordID: pullData.lessRecordID,
 				itemID: record.itemCode,
-				brandID: record.brand,
+				brandID: record.brandID,
 				quantity: record.quantity,
 				unitID: record.unitID,
 				pullDate: pullData.pullDate,
@@ -48,7 +49,7 @@ export default async (req, res) => {
 			let past = await RecordDetails.find(
 				{
 					itemID: record.itemCode,
-					brandID: record.brand,
+					brandID: record.brandID,
 					pullDate: { $gte: lastMonth },
 				},
 				{ pullDate: 1, quantity: 1 }
@@ -86,6 +87,10 @@ export default async (req, res) => {
 					}
 				);
 			}
+			await ItemBrandCombination.updateOne(
+				{ itemID: record.itemCode, brandID: record.brandID },
+				{ $inc: { quantity: -record.quantity } }
+			);
 		});
 	} else {
 		res.json("invalid");
