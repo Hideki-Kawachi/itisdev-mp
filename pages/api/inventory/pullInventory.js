@@ -9,7 +9,7 @@ export default async (req, res) => {
 	const pullData = req.body.pullInvData;
 	const records = req.body.detailsArray;
 
-	const SDLeadTime = 2;
+	const SDLeadTime = 5;
 	const serviceLevel = 1.64;
 
 	console.log("DATA:", pullData);
@@ -37,17 +37,45 @@ export default async (req, res) => {
 				brandID: record.brand,
 				quantity: record.quantity,
 				unitID: record.unitID,
+				pullDate: pullData.pullDate,
+			});
+
+			let lastMonth = new Date();
+			lastMonth.setMonth(lastMonth.getMonth() - 1);
+			lastMonth.setHours(0, 0, 0, 0);
+			console.log("LAST MONTH IS:", lastMonth);
+
+			let past = await RecordDetails.find(
+				{
+					itemID: record.itemCode,
+					brandID: record.brand,
+					pullDate: { $gte: lastMonth },
+				},
+				{ pullDate: 1, quantity: 1 }
+			).sort({ pullDate: -1 });
+
+			let totalConsumption = 0;
+			past.forEach((past) => {
+				totalConsumption += past.quantity;
 			});
 
 			//look for all pull out records of itemID the past 30 days(?)
-			//let aveDemand = totalConsumption / timeframe in days
-			// let safetyStock = SDLeadTime * serviceLevel * aveDemand
-			// let demandLeadTime = SDLeadTime * aveDemand
-			// let reorderPoint = demandLeadTime + safetyStock
+			let aveDemand = totalConsumption / 30;
+			let safetyStock = SDLeadTime * serviceLevel * aveDemand;
+			let demandLeadTime = SDLeadTime * aveDemand;
+			let reorderPoint = Math.floor(demandLeadTime + safetyStock);
+
+			console.log("TOTAL IS:", totalConsumption);
+			console.log("SAFETY IS:", safetyStock);
+			console.log("DEMAND LEAD IS:", demandLeadTime);
+			console.log("REORDER IS:", reorderPoint);
 
 			await Item.updateOne(
 				{ itemID: record.itemCode },
-				{ $inc: { quantity: -record.quantity } }
+				{
+					$inc: { quantity: -record.quantity },
+					minQuantity: reorderPoint,
+				}
 			);
 		});
 	} else {
