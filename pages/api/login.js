@@ -15,6 +15,8 @@ async function login(req, res) {
 	// 	"User: " + employeeID + " Pass: " + password + " Disabled:" + disabled
 	// );
 
+	await dbConnect();
+
 	const user = await User.findOne({ userID: employeeID});
 
 	let isDisabled = true;
