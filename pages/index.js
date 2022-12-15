@@ -218,7 +218,10 @@ const Index = ({ currentUser, totalUsers, totalVehicles, tempRepData }) => {
 					</div>
 					<div className="dashboard-table-container">
 						<h1>Recent Inventory Records</h1>
-						<DashboardTable COLUMNS={COLUMNS} ADDINV={tempRepData}></DashboardTable>
+						<DashboardTable
+							COLUMNS={COLUMNS}
+							ADDINV={tempRepData}
+						></DashboardTable>
 					</div>
 				</div>
 				<div className="dashboard-right-container">
@@ -236,6 +239,48 @@ const Index = ({ currentUser, totalUsers, totalVehicles, tempRepData }) => {
 							<span>Count</span>
 						</div>
 						<div className="dashboard-card-list-container">
+							<DashboardCard
+								itemName={"oil filter"}
+								itemModel={"#JC-721"}
+								reorder={5}
+								quantity={2}
+							></DashboardCard>
+							<DashboardCard
+								itemName={"oil filter"}
+								itemModel={"#JC-721"}
+								reorder={5}
+								quantity={2}
+							></DashboardCard>
+							<DashboardCard
+								itemName={"oil filter"}
+								itemModel={"#JC-721"}
+								reorder={5}
+								quantity={2}
+							></DashboardCard>
+							<DashboardCard
+								itemName={"oil filter"}
+								itemModel={"#JC-721"}
+								reorder={5}
+								quantity={2}
+							></DashboardCard>
+							<DashboardCard
+								itemName={"oil filter"}
+								itemModel={"#JC-721"}
+								reorder={5}
+								quantity={2}
+							></DashboardCard>
+							<DashboardCard
+								itemName={"oil filter"}
+								itemModel={"#JC-721"}
+								reorder={5}
+								quantity={2}
+							></DashboardCard>
+							<DashboardCard
+								itemName={"oil filter"}
+								itemModel={"#JC-721"}
+								reorder={5}
+								quantity={2}
+							></DashboardCard>
 							<DashboardCard
 								itemName={"oil filter"}
 								itemModel={"#JC-721"}

@@ -43,7 +43,7 @@ export const DashboardTable = (props) => {
             desc: true,
           },
         ],
-        pageSize : 15,
+        pageSize : 13,
       },
       data,
     },
@@ -87,7 +87,7 @@ export const DashboardTable = (props) => {
 
   return (
     <div>
-      <br />
+    <br/>
       <table id="btable" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -124,55 +124,6 @@ export const DashboardTable = (props) => {
       </table>
 
       <br />
-
-      <div className="page-buttons">
-        {/* <input
-          type="number"
-          defaultValue={pageIndex + 1}
-          onChange={(e) => {
-            const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0;
-            gotoPage(pageNumber);
-          }}
-        /> */}
-        <span>
-          Page{" "}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>
-        </span>
-
-        <span className="vehicle-nav-buttons-div">
-          <button
-            className="navigate-page"
-            onClick={() => gotoPage(0)}
-            disabled={!canPreviousPage}
-          >
-            {"<<"}
-          </button>
-
-          <button
-            className="navigate-page"
-            onClick={() => previousPage()}
-            disabled={!canPreviousPage}
-          >
-            {"<"}
-          </button>
-          <button
-            className="navigate-page"
-            onClick={() => nextPage()}
-            disabled={!canNextPage}
-          >
-            {">"}
-          </button>
-          <button
-            className="navigate-page"
-            onClick={() => gotoPage(pageCount - 1)}
-            disabled={!canNextPage}
-          >
-            {">>"}
-          </button>
-        </span>
-      </div>
     </div>
   );
 };
