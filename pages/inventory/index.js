@@ -150,6 +150,10 @@ export const getServerSideProps = withIronSessionSsr(
 						index--;
 					}
 				});
+
+				pullTable.sort((a, b) => {
+					return new Date(b.pullDate) - new Date(a.pullDate);
+				});
 				pullTableData = JSON.stringify(pullTable);
 			} else {
 				pullData = JSON.stringify({});

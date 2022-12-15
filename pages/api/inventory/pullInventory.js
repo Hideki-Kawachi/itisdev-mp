@@ -54,29 +54,38 @@ export default async (req, res) => {
 				{ pullDate: 1, quantity: 1 }
 			).sort({ pullDate: -1 });
 
-			let totalConsumption = 0;
-			past.forEach((past) => {
-				totalConsumption += past.quantity;
-			});
+			if (past.length >= 3) {
+				let totalConsumption = 0;
+				past.forEach((past) => {
+					totalConsumption += past.quantity;
+				});
 
-			//look for all pull out records of itemID the past 30 days(?)
-			let aveDemand = totalConsumption / 30;
-			let safetyStock = SDLeadTime * serviceLevel * aveDemand;
-			let demandLeadTime = SDLeadTime * aveDemand;
-			let reorderPoint = Math.floor(demandLeadTime + safetyStock);
+				//look for all pull out records of itemID the past 30 days(?)
+				let aveDemand = totalConsumption / 30;
+				let safetyStock = SDLeadTime * serviceLevel * aveDemand;
+				let demandLeadTime = SDLeadTime * aveDemand;
+				let reorderPoint = Math.floor(demandLeadTime + safetyStock);
 
-			console.log("TOTAL IS:", totalConsumption);
-			console.log("SAFETY IS:", safetyStock);
-			console.log("DEMAND LEAD IS:", demandLeadTime);
-			console.log("REORDER IS:", reorderPoint);
+				console.log("TOTAL IS:", totalConsumption);
+				console.log("SAFETY IS:", safetyStock);
+				console.log("DEMAND LEAD IS:", demandLeadTime);
+				console.log("REORDER IS:", reorderPoint);
 
-			await Item.updateOne(
-				{ itemID: record.itemCode },
-				{
-					$inc: { quantity: -record.quantity },
-					minQuantity: reorderPoint,
-				}
-			);
+				await Item.updateOne(
+					{ itemID: record.itemCode },
+					{
+						$inc: { quantity: -record.quantity },
+						minQuantity: reorderPoint,
+					}
+				);
+			} else {
+				await Item.updateOne(
+					{ itemID: record.itemCode },
+					{
+						$inc: { quantity: -record.quantity },
+					}
+				);
+			}
 		});
 	} else {
 		res.json("invalid");
