@@ -40,6 +40,35 @@ export const getServerSideProps = withIronSessionSsr(
       const userList = await User.find({});
       
       const auditList = await Audit.find({});
+
+      // Item: itemName, itemModel 
+      // user: UserID for creatorID - kunin yung name
+      // Unit: Measure (connect sa itemS)
+
+      auditList.forEach((audit) => {
+
+        let isFound = false;
+        let isFound2 = false;
+
+        //Item 
+        let itemName = "";
+        let itemModel = "";
+
+        //Measure
+        let unitType = "";
+
+        //User
+        let name = "";
+
+        // while (!isFound && ) {
+
+        // }
+
+
+
+      });
+
+
       
       
       
