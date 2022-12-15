@@ -56,6 +56,8 @@ export const getServerSideProps = withIronSessionSsr(
 						itemName: 1,
 						itemModel: 1,
 						unitID: 1,
+						quantity: 1,
+						minQuantity: 1,
 					}
 				);
 
@@ -104,6 +106,7 @@ export const getServerSideProps = withIronSessionSsr(
 						unit: unitType,
 						transactType: "Add",
 					});
+
 					let pullData = "";
 					let pullTable = [];
 					let pullTableData;
@@ -178,8 +181,47 @@ export const getServerSideProps = withIronSessionSsr(
 					}
 				});
 
+				let lastMonth = new Date();
+				lastMonth.setMonth(lastMonth.getMonth() - 1);
+				lastMonth.setHours(0, 0, 0, 0);
+
+				let inFlow = tempRepData.filter(
+					(curr) =>
+						new Date(curr.transactionDate) > lastMonth &&
+						curr.transactType == "Add"
+				).length;
+
+				let outFlow = tempRepData.filter(
+					(curr) =>
+						new Date(curr.transactionDate) > lastMonth &&
+						curr.transactType == "Pull"
+				).length;
+
+				let tempStock = [];
+
+				itemList.forEach((item) => {
+					if (item.quantity <= item.minQuantity) {
+						tempStock.push({
+							itemName: item.itemName,
+							itemModel: item.itemModel,
+							reorder: item.minQuantity,
+							quantity: item.quantity,
+						});
+					}
+				});
+
+				let lowStock = JSON.stringify(tempStock);
+
 				return {
-					props: { currentUser, totalUsers, totalVehicles, tempRepData },
+					props: {
+						currentUser,
+						totalUsers,
+						totalVehicles,
+						tempRepData,
+						inFlow,
+						outFlow,
+						lowStock,
+					},
 				};
 			}
 		}
@@ -192,9 +234,16 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-const Index = ({ currentUser, totalUsers, totalVehicles, tempRepData }) => {
-	const inFlow = 45;
-	const outFlow = 72;
+const Index = ({
+	currentUser,
+	totalUsers,
+	totalVehicles,
+	tempRepData,
+	lowStock,
+	inFlow,
+	outFlow,
+}) => {
+	const lowStockList = JSON.parse(lowStock);
 
 	return (
 		<>
@@ -233,60 +282,18 @@ const Index = ({ currentUser, totalUsers, totalVehicles, tempRepData }) => {
 						<h1>Low Stock</h1>
 						<div className="stock-container-header">
 							<span>Item</span>
-							<span style={{ marginLeft: "110px", marginRight: "10px" }}>
-								Reorder
-							</span>
-							<span>Count</span>
+							<span className="stock-left-text">Reorder &nbsp; Count</span>
 						</div>
 						<div className="dashboard-card-list-container">
-							<DashboardCard
-								itemName={"oil filter"}
-								itemModel={"#JC-721"}
-								reorder={5}
-								quantity={2}
-							></DashboardCard>
-							<DashboardCard
-								itemName={"oil filter"}
-								itemModel={"#JC-721"}
-								reorder={5}
-								quantity={2}
-							></DashboardCard>
-							<DashboardCard
-								itemName={"oil filter"}
-								itemModel={"#JC-721"}
-								reorder={5}
-								quantity={2}
-							></DashboardCard>
-							<DashboardCard
-								itemName={"oil filter"}
-								itemModel={"#JC-721"}
-								reorder={5}
-								quantity={2}
-							></DashboardCard>
-							<DashboardCard
-								itemName={"oil filter"}
-								itemModel={"#JC-721"}
-								reorder={5}
-								quantity={2}
-							></DashboardCard>
-							<DashboardCard
-								itemName={"oil filter"}
-								itemModel={"#JC-721"}
-								reorder={5}
-								quantity={2}
-							></DashboardCard>
-							<DashboardCard
-								itemName={"oil filter"}
-								itemModel={"#JC-721"}
-								reorder={5}
-								quantity={2}
-							></DashboardCard>
-							<DashboardCard
-								itemName={"oil filter"}
-								itemModel={"#JC-721"}
-								reorder={5}
-								quantity={2}
-							></DashboardCard>
+							{lowStockList.map((lowStock, index) => (
+								<DashboardCard
+									key={index}
+									itemName={lowStock.itemName}
+									itemModel={lowStock.itemModel}
+									reorder={lowStock.reorder}
+									quantity={lowStock.quantity}
+								></DashboardCard>
+							))}
 						</div>
 					</div>
 				</div>

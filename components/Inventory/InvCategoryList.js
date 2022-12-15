@@ -6,13 +6,13 @@ import {
   useGlobalFilter,
   usePagination,
 } from "react-table";
-import { INVCAT_COLUMNS } from "./InvCategoryColumns";
 import GlobalFilter from "../GlobalFilter";
 import AddInventoryCategory from "./InvCategoryCreate";
+
 // import EditInventoryCategory from "./InvCategoryEdit";
 
-function InvCatTable({ trigger, setTrigger, name, type, id}) {
-  const columns = useMemo(() => INVCAT_COLUMNS, []);
+function InvCatTable({ trigger, setTrigger, name, type, id, column}) {
+  const columns = useMemo(() => column, []);
   const data = useMemo(() => type, []);
   const [InvAddOpen, setInvAddOpen] = useState(false);
  // const [InvEditOpen, setvEditOpen] = useState(false);
@@ -52,6 +52,8 @@ function InvCatTable({ trigger, setTrigger, name, type, id}) {
     setCatName(rowname);
     setStatus(rowstatus)
     console.log("row id: " + rowid)
+    console.log("row name: " + rowname);
+    console.log("row name: " + rowstatus);
     // setvEditOpen(true);
   }
   const { globalFilter } = state;
