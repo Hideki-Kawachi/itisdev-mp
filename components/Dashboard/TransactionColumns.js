@@ -1,11 +1,5 @@
-import { GlobalFilter } from "../GlobalFilter";
 
 export const COLUMNS = [
-  {
-    Header: "",
-    id: "index",
-    accessor: (/** @type {any} */ _row, /** @type {number} */ i) => i + 1,
-  },
   {
     Header: "Date",
     id: "date",
@@ -39,6 +33,12 @@ export const COLUMNS = [
   {
     Header: "Unit",
     accessor: "unit",
+    disableGlobalFilter: true,
+    disableSortBy: true,
+  },
+  {
+    Header: "Transaction",
+    accessor: "transactType",
     disableGlobalFilter: true,
     disableSortBy: true,
   },

@@ -1430,12 +1430,18 @@ input:disabled+label {
   .dashboard-card-left-container{
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 4;
   }
 
   .dashboard-card-count{
     font-size: 40px;
   }
+
+  .dashboard-card-reorder{
+    font-size: 40px;
+    flex-grow: 3.5;
+  }
+
 } 
 
 

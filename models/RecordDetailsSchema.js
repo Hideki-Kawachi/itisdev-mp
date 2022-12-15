@@ -29,6 +29,10 @@ const RecordDetailsSchema = new mongoose.Schema({
 		maxlength: 5,
 		required: true,
 	},
+	pullDate: {
+		type: Date,
+		required: true,
+	},
 });
 
 const RecordDetails =
