@@ -6,7 +6,15 @@ import { BasicTable } from "../../components/Reports/BasicTable";
 import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
 import { COLUMNS } from "../../components/Reports/AuditColumns";
+
 import AUDIT_MOCK_DATA from "../../components/reports/AUDIT_MOCK_DATA.json";
+
+import Item from "../../models/ItemSchema";
+import Measure from "../../models/MeasureSchema";
+import User from "../../models/UserSchema";
+import Audit from "../../models/AuditSchema";
+
+
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
@@ -19,7 +27,25 @@ export const getServerSideProps = withIronSessionSsr(
           props: {},
         };
       } else {
-        return { props: { currentUser } };
+
+			await dbConnect();
+
+      const unitList = await Measure.find({});
+      
+      const itemList = await Item.find(
+        {},
+        { itemID: 1, itemName: 1, itemModel: 1, unitID: 1, quantity: 1, minQuantity: 1 }
+			);
+
+      const userList = await User.find({});
+      
+      const auditList = await Audit.find({});
+      
+      
+      
+
+
+      return { props: { currentUser } };
       }
     } else {
       return {
