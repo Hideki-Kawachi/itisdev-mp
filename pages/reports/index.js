@@ -8,7 +8,7 @@ import ReportTabs from "./ReportTabs";
 import { COLUMNS } from "../../components/Reports/AddColumns";
 import ADDINV_MOCK_DATA from "../../components/Reports/ADD_INV.json";
 import dbConnect from "../../lib/dbConnect";
-
+import dayjs from "dayjs";
 
 import AddInventory from "../../models/AddInvSchema";
 
@@ -68,6 +68,7 @@ export const getServerSideProps = withIronSessionSsr(
 					let isFound = false;
 					let isFound2 = false;
 					let itemName = "";
+					let itemModel = "";
 					let unitType= "";
 					
 					while (!isFound && !isFound2) {
@@ -75,13 +76,14 @@ export const getServerSideProps = withIronSessionSsr(
 						itemList.forEach((item) => {
 							if (addRec.itemID == item.itemID) {
 								itemName = item.itemName;
+								itemModel = item.itemModel;
 								isFound = true;
 							}
 						});
 
 						measureList.forEach((measure) => {
-							if (addRec.unitID == measure.unitName) {
-								unitType= measure.unitTypeName;
+							if (addRec.unitID == measure.unitID) {
+								unitType= measure.unitName;
 								isFound2 = true;
 							} 
 						});
@@ -90,11 +92,11 @@ export const getServerSideProps = withIronSessionSsr(
 
 					tempAddData.push({
 						//date, invoice,  item n, item model, quantity, unit name
-						acquireDate: addRecList.acquireDate,
-						invoiceNumber: addRecList.invoiceNumber,
+						acquireDate: dayjs(addRec.acquireDate).format("MM/DD/YYYY"),
+						invoiceNumber: addRec.invoiceNumber,
 						itemName: itemName,
-						itemModel: addRecList.itemModel,
-						quantity: addRecList.quantity,
+						itemModel: itemModel,
+						quantity: addRec.quantity,
 						unit: unitType
 					});
 
