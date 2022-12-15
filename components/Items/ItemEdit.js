@@ -627,13 +627,23 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 
 								{detailsButton == "Edit" ? (
 									<>
-										<button
-											type="button"
-											className="green-button-container add-button"
-											onClick={() => editRow()}
-										>
-											Edit
-										</button>
+										<span id="button-group">
+											<button
+												type="button"
+												className="gray-button-container"
+												onClick={() => clearDetails()}
+											>
+												Clear
+											</button>
+											<button
+												type="button"
+												className="green-button-container"
+												onClick={() => editRow()}
+											>
+												Edit
+											</button>
+										</span>
+
 									</>
 								) : (
 									<button
