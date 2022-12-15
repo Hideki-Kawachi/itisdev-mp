@@ -5,14 +5,7 @@ export const COLUMNS = [
     id: "date",
     accessor: "transactionDate",
     disableGlobalFilter: true,
-    filter: (rows, id, filterValue) => {
-      return rows.filter(
-        (row) =>
-          filterValue.length <= 0 ||
-          !filterValue ||
-          filterValue.includes(row.values[id])
-      );
-    },
+    disableSortBy: true,
   },
   {
     Header: "Item",
@@ -24,16 +17,19 @@ export const COLUMNS = [
     Header: "Model",
     accessor: "itemModel",
     disableGlobalFilter: true,
+    disableSortBy: true,
   },
   {
     Header: "Quantity",
     accessor: "quantity",
     disableGlobalFilter: true,
+    disableSortBy: true,
   },
   {
     Header: "Unit",
     accessor: "unit",
     disableGlobalFilter: true,
+    disableSortBy: true,
     disableSortBy: true,
   },
   {
