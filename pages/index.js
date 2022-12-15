@@ -3,10 +3,13 @@ import React from "react";
 import DashboardCard from "../components/DashboardCard";
 import Header from "../components/Header";
 import NavBar from "../components/NavBar";
+import { BasicTable } from "../components/Reports/BasicTable";
 import { ironOptions } from "../lib/config";
 import dbConnect from "../lib/dbConnect";
 import User from "../models/UserSchema";
 import Vehicle from "../models/VehicleSchema";
+import { COLUMNS } from "../components/Dashboard/TransactionColumns";
+import ADDINV_MOCK_DATA from "../components/Reports/ADD_INV.json";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -22,6 +25,83 @@ export const getServerSideProps = withIronSessionSsr(
 				await dbConnect();
 				const totalUsers = await User.countDocuments({ disabled: false });
 				const totalVehicles = await Vehicle.countDocuments({ disabled: false });
+
+
+				//Start here
+				const addRecList = await AddInventory.find(
+					{},
+					//date, invoice,  item, item model, quantity, unit
+					{	
+						addRecordID: 1, 
+						acquireDate: 1, 
+						invoiceNumber: 1, 
+						itemID: 1, 
+						quantity:1, 
+						unitID: 1 
+					}
+				);
+
+				const itemList = await Item.find(
+					{},
+					{
+						itemID: 1,
+						itemName: 1,
+						itemModel: 1,
+						unitID: 1
+					}
+				);
+
+				const measureList = await Measure.find(
+						{},
+						{
+							unitID: 1,
+							unitName: 1
+						}
+				);
+
+				var tempRepData = [];
+
+				addRecList.forEach((addRec) => {
+					let isFound = false;
+					let isFound2 = false;
+					let itemName = "";
+					let itemModel = "";
+					let unitType= "";
+					
+					while (!isFound && !isFound2) {
+
+						itemList.forEach((item) => {
+							if (addRec.itemID == item.itemID) {
+								itemName = item.itemName;
+								itemModel = item.itemModel;
+								isFound = true;
+							}
+						});
+
+						measureList.forEach((measure) => {
+							if (addRec.unitID == measure.unitID) {
+								unitType= measure.unitName;
+								isFound2 = true;
+							} 
+						});
+
+					}
+
+
+					tempRepData.push({
+						//date, invoice,  item n, item model, quantity, unit name
+						transactionDate: dayjs(addRec.acquireDate).format("MM/DD/YYYY"),
+						itemName: itemName,
+						itemModel: itemModel,
+						quantity: addRec.quantity,
+						unit: unitType,
+						transactType: "Add"
+					});
+
+
+				});
+
+
 
 				return { props: { currentUser, totalUsers, totalVehicles } };
 			}
@@ -61,6 +141,7 @@ const Index = ({ currentUser, totalUsers, totalVehicles }) => {
 					</div>
 					<div className="dashboard-table-container">
 						<h1>Recent Inventory Records</h1>
+						<BasicTable COLUMNS={COLUMNS} ADDINV={ADDINV_MOCK_DATA}></BasicTable>
 					</div>
 				</div>
 				<div className="dashboard-right-container">

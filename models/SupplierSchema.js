@@ -12,6 +12,7 @@ const SupplierSchema = new mongoose.Schema({
         type: String,
         required: true,
         maxLength: 50,
+        required: true,
     },
 
     disabled: {

@@ -14,7 +14,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [name, setName] = useState("");
 	const [cancel, setCancel] = useState(false);
-	const [acquireDate, setAcquireDate] = useState("");
+	const [acquireDate, setAcquireDate] = useState(new Date());
 	const [addRecordID, setAddRecordID] = useState("");
 	const [invoiceNumber, setInvoiceNumber] = useState("");
 	const [itemID, setItemID] = useState("");
@@ -137,7 +137,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 				return <span className="vehicle-create-error">Input Invoice Number</span>;
 			}
 			//Invoice Number reached max char length
-			else if (invoiceNumber.length > 15 || invoiceNumber.length < 15) {
+			else if (invoiceNumber.length > 15 || invoiceNumber.length < 5) {
 				return (
 					<span className="vehicle-create-error">
 						Invoice Number must be 15 numbers long.
@@ -152,7 +152,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 		if (error) {
 			if (partNumber.length > 0) {
 				//Part Number reached max char length
-				if (partNumber.length > 15 || partNumber.length < 15) {
+				if (partNumber.length > 15 || partNumber.length < 5) {
 					return (
 						<span className="vehicle-create-error">
 							Part Number must be 15 numbers long.
@@ -335,7 +335,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                 <label className="form-labels">
                   Unit: <label className="required"> * </label>{" "}
                 </label>{" "}
-                <button
+                { /*<button
                   id="select-unit"
                   className="item-icon-button item-add-option-button "
                   type="button"
@@ -347,7 +347,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                   }}
                 >
                   ✎
-                </button>
+                </button> */}
                 <br />
                 <select
                   className="form-fields"
@@ -474,10 +474,10 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                   onChange={(e) => setSupplierID(e.target.value)}
                   required
                 >
-                  <option value="Select Supplier">Select Supplier</option>
+                 {/* } <option value="Select Supplier">Select Supplier</option>
                   <option value="2001">Iriga Joe Hardware</option>
-                  <option value="2002">Anderson Depot</option>
-                  {/* {suppliers.map((supplier) => (
+				<option value="2002">Anderson Depot</option> */}
+                   {suppliers.map((supplier) => (
                     <option
                       key={supplier.supplierID}
                       value={supplier.supplierID}
@@ -485,7 +485,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                       {supplier.supplierName}
                     </option>
                   )
-				  )} */}
+				  )} 
                 </select>
               </div>
             </div>

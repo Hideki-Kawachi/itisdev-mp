@@ -218,10 +218,26 @@ function ItemEdit({itemID, items, categories, brands}) {
             ...prevState,
             [name]: value,
         }));
+
+        if (name == "brand") {
+			setDuplicateError(false)
+		}
     }
 
     function checkDetails() {
-		return details.brand.length == 0 || details.partNumber.length == 0 || details.quantity < 0
+		return details.brand.length == 0 || details.partNumber.length == 0 || parseInt(details.quantity) < 0
+	}
+
+    function checkDuplicate() {
+		let duplicate = false;
+		detailsArray.every((value) => {
+			if (value.brand == details.brand) {
+				duplicate = true;
+				return false;
+			}
+			return true;
+		})
+		return duplicate;
 	}
 
     function addDetails () {
@@ -233,14 +249,15 @@ function ItemEdit({itemID, items, categories, brands}) {
         details["itemBrandID"] = revertOneBrandToID(details["brand"]);
 
         setDetailsError(checkDetails())
-        if (!checkDetails()) {
+        setDuplicateError(checkDuplicate())
+        console.log(checkDuplicate())
+        if (!checkDetails() && !checkDuplicate()) {
             setDetailsArray(detailsArray => [...detailsArray, details])
             // setAuditTrail(auditTrail => [...auditTrail, ])
             setQuantity(quantity+parseInt(details.quantity))    
             auditTrail[""]
             clearDetails()
         }
-        
     }
 
     function clearDetails() {
@@ -274,31 +291,32 @@ function ItemEdit({itemID, items, categories, brands}) {
     }
 
     function editRow() {
-        let newQuantity = 0;
-        
+        let newQuantity = quantity;
         let newArr = detailsArray.map(item => {
             if (item.combinationID == details.combinationID){
+                newQuantity -= parseInt(item.quantity);
+                newQuantity += parseInt(details.quantity);
                 item.combinationID == details.combinationID
                 item.itemBrandID = revertOneBrandToID(details.brand);
                 item.partNumber = details.partNumber;
                 item.quantity = details.quantity;
                 // item.unit = details.unit;
                 item.disabled = details.disabled;
-                newQuantity += item.quantity;
             }
             return item;
-        })
+        }) 
         setDetailsButton("Add")
-        setQuantity(newQuantity)
         setDetailsArray(newArr)
+        setQuantity(newQuantity)
         clearDetails()
     }
 
     function deleteRow(row) {
+        setQuantity(quantity-parseInt(row.quantity))
         if (detailsArray.length > 1) {
             detailsArray.every((value) => {
                 value.disabled = true;
-                setDetailsArray(detailsArray.filter(value => value.combinationID == row.combinationID))
+                setDetailsArray(detailsArray.filter(value => value.combinationID != row.combinationID))
             })
         }
         else {
@@ -315,6 +333,12 @@ function ItemEdit({itemID, items, categories, brands}) {
 	function showNegativeNumError(errType, field, msg) {
 		if (errType && field < 0) {
 			return (<span className="vehicle-create-error">{msg}</span>)
+		}
+	}
+
+    function showDuplicateError(errType, field, msg) {
+		if (errType) {
+			return (<span className="vehicle-create-error">{field + " " + msg}</span>)
 		}
 	}
     
@@ -496,6 +520,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                             ))}
                         </select>
                         {showRequiredError(detailsError, details.brand, "Select Brand")}
+                        {showDuplicateError(duplicateError, details.brand, "is already in use")}
                     </div>
 
                     <div className="item-input">
@@ -550,14 +575,17 @@ function ItemEdit({itemID, items, categories, brands}) {
                         { JSON.stringify(detailsArray[0]) == "{}" ? (
                             <h1 id="gray-header-text">NO DETAILS TO SHOW</h1>
                         ) : (
-                            <BrandTable
-                                tableValues={detailsArray} 
-                                convertFunc={convertDetailsArray}
-                                isEditable={isEditable} 
-                                deleteFunc={deleteRow}
-                                editFunc={onRowEditClick}
-                                pageType={true}
-                            />
+                            <>
+                                <BrandTable
+                                    tableValues={detailsArray} 
+                                    convertFunc={convertDetailsArray}
+                                    isEditable={isEditable} 
+                                    deleteFunc={deleteRow}
+                                    editFunc={onRowEditClick}
+                                    pageType={true}
+                                />
+                                <h3>TOTAL: {quantity}</h3>
+                            </>
                         )}
                     </div>
                         
