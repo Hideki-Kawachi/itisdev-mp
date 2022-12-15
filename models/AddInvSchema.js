@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const AddInventorySchema = new mongoose.Schema({
 	addRecordID: {
 		type: String,
-		minlength: 15,
-		maxlength: 15,
+		minlength: 5,
+		maxlength: 5,
 		unique: true,
 		required: true,
 	},
@@ -34,8 +34,7 @@ const AddInventorySchema = new mongoose.Schema({
 	},
 	itemID: {
 		type: String,
-		minlength: 10,
-		maxlength: 10,
+		maxlength: 5,
 		unique: true,
 		required: true,
 	},

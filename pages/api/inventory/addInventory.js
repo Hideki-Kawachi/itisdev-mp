@@ -4,7 +4,7 @@ import AddInventory from "../../../models/AddInvSchema";
 export default async (req, res) => {
 	await dbConnect();
 
-	const addInvInfo = req.body.addInvData;
+	const addInvInfo = req.body;
 
 	let invalidRecordID = await AddInventory.findOne({ addRecordID: addInvInfo.addRecordID });
 

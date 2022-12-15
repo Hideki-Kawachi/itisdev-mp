@@ -8,22 +8,17 @@ export const COLUMNS = [
   },
   {
     Header: "Date",
-    accessor: "date",
+    accessor: "acquireDate",
     Filter: GlobalFilter,
   },
   {
     Header: "Invoice Number",
-    accessor: "invoiceNum",
+    accessor: "invoiceNumber",
     Filter: GlobalFilter,
   },
   {
     Header: "Item",
-    accessor: "item",
-    disableGlobalFilter: true,
-  },
-  {
-    Header: "Model",
-    accessor: "model",
+    accessor: "itemID",
     disableGlobalFilter: true,
   },
   {
@@ -33,7 +28,7 @@ export const COLUMNS = [
   },
   {
     Header: "Unit",
-    accessor: "unit",
+    accessor: "unitID",
     disableGlobalFilter: true,
   },
 ];

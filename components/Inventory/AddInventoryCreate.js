@@ -7,6 +7,7 @@ import Cancel from "../Pop-up/cancel";
 import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
 import ItemCatTable from "../Items/CategoryList";
+import days from "dayjs";
 
 
 function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
@@ -49,20 +50,42 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 	function submitForm() {
 		// console.log("1. Error is " + error + ", Data is " + data);
 		if (
+
 			acquireDate.length == 0 ||
-			addRecordID.length == 0 ||
+			//addRecordID.length == 0 ||
 			invoiceNumber.length == 0 ||
 			itemID.length == 0 ||
 			quantity.length == 0 ||
-			unitID.length == 0 ||
+			//unitID.length == 0 ||
 			unitPrice.length == 0 ||
 			brandID.length == 0 ||
 			// partNumber.length == 0 ||
-			supplierID.length == 0 ||
-			checkSpecial() == true ||
-			checkYear() == true
+			supplierID.length == 0 
+		//checkSpecial() == true ||
+		//	checkYear() == true
+	
 		) {
 			setError(true);
+					console.log(
+            "" +
+              "Date: " +
+              acquireDate.length +
+              "Invoice: " +
+              invoiceNumber.length +
+              "Item: " +
+              itemID.length +
+              "Quantity: " +
+              quantity.length +
+              "Unit: " +
+              unitPrice.length +
+              "brand: " +
+              brandID.length +
+              "Supp: " +
+              supplierID.length
+          );
+//			console.log("Error is: " + error);
+		    console.log("date is: "+ acquireDate);
+			console.log("Record id is " + addRecordID);
 
 		} else {
 			let addInvData = {
@@ -77,6 +100,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 				supplierID: supplierID,
 				creatorID: currentUserID,
 				creationDate: new Date(),
+				editorID: currentUserID,
 				disabled: isDisabled,
 			};
 
@@ -89,7 +113,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 			})
 				.then((res) => res.json())
 				.then((data) => {
-					if (data == "created") {
+					if (data == "Added Inventory") {
 						console.log("SUCCESS");
 						setError(false);
 						window.location.reload();
@@ -175,315 +199,333 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 	}
 
 	function generateRandomID() {
-		var min = 100000000000000;
-		var max = 999999999999999;
+		var min = 10000;
+		var max = 99999;
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
 	return (
-		<>
-			<div className="container">
+    <>
+      <div className="container">
+        <Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
+          <ItemCatTable
+            trigger={modStatus}
+            setTrigger={setModStatus}
+            name={modName}
+            type={modType}
+            id={modID}
+          >
+            {" "}
+          </ItemCatTable>
+        </Modal>
 
-				<Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
-					<ItemCatTable
-						trigger={modStatus}
-						setTrigger={setModStatus}
-						name={modName}
-						type={modType}
-						id={modID}
-					>
-						{" "}
-					</ItemCatTable>
-				</Modal>
+        <div className="content-tabs">
+          <TableInventoryAdd InventoryData={inventories}> </TableInventoryAdd>
+          <br />
+          <br />
 
-				<div className="content-tabs">
-					<TableInventoryAdd InventoryData={inventories}> </TableInventoryAdd>
-					<br />
-					<br />
+          {/* First Field Row */}
+          <form>
+            <br />
 
-					{/* First Field Row */}
-					<form>
-						<br />
+            {/*Second Field Row*/}
+            <div className="form-container">
+              <div className="form-item">
+                <label className="form-labels">Acquired Date: </label> <br />
+                <input
+                  type="date"
+                  id="acquireDate"
+                  defaultValue={date}
+                  className="form-fields"
+                  placeholder="Acquired Date"
+                  onChange={(e) => setAcquireDate(e.target.value)}
+                  required
+                />
+              </div>
 
-						{/*Second Field Row*/}
-						<div className="form-container">
+              <div className="form-item">
+                <label className="form-labels">
+                  Invoice Number: <label className="required"> * </label>{" "}
+                </label>{" "}
+                <label className="label-format"> Format: Numbers only. </label>{" "}
+                <br />
+                <input
+                  type="number"
+                  id="invoiceNumber"
+                  className="form-fields"
+                  placeholder="Enter Invoice Number"
+                  onChange={(e) => setInvoiceNumber(e.target.value)}
+                  required
+                />
+                {showInvoiceNumberError()}
+                {invoiceNumberError == invoiceNumber &&
+                invoiceNumber.length > 0 ? (
+                  <span className="inventory-add-invoiceNum-error">
+                    Invoice Number has already been registered.
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </div>
 
-							<div className="form-item">
-								<label className="form-labels">Acquired Date: </label> <br />
-								<input
-									type="date"
-									id="acquireDate"
-									defaultValue={date}
-									className="form-fields"
-									placeholder="Acquired Date"
-									onChange={(e) => setAcquireDate(e.target.value)}
-									required />
-							</div>
+              <div className="form-item">
+                <label className="form-labels">
+                  Item Name: <label className="required"> * </label>{" "}
+                </label>{" "}
+                <br />
+                <select
+                  className="form-fields"
+                  id="itemID"
+                  defaultValue={"Item Name"}
+                  onChange={(e) => setItemID(e.target.value)}
+                  required
+                >
+                  <option value="">Item Name</option>
+                  {items.map((item) => (
+                    <option key={item.itemID} value={item.itemID}>
+                      {item.itemName}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-							<div className="form-item">
-								<label className="form-labels">
-									Invoice Number: <label className="required"> * </label>{" "}
-								</label>{" "}
-								<label className="label-format">
-									{" "}
-									Format: Numbers only.{" "}
-								</label>{" "}
-								<br />
-								<input
-									type="number"
-									id="invoiceNumber"
-									className="form-fields"
-									placeholder="Enter Invoice Number"
-									onChange={(e) => setInvoiceNumber(e.target.value)}
-									required />
-								{showInvoiceNumberError()}
-								{invoiceNumberError == invoiceNumber && invoiceNumber.length > 0 ? (
-									<span className="inventory-add-invoiceNum-error">
-										Invoice Number has already been registered.
-									</span>
-								) : (
-									<></>
-								)}
-							</div>
+              <div className="form-item form-toggle">
+                {" "}
+                Status:{" "}
+                <button
+                  type="button"
+                  className="table-info-button"
+                  onClick={() => setInfoPop(!infoPop)}
+                >
+                  i
+                </button>
+                <br />
+                <ToggleSwitch
+                  disabled={isDisabled}
+                  setDisabled={setIsDisabled}
+                ></ToggleSwitch>
+              </div>
+            </div>
+            <hr />
 
-							<div className="form-item">
-								<label className="form-labels">
-									Item Name: <label className="required"> * </label>{" "}
-								</label>{" "}
-								<br />
+            {/* Third Field Row */}
+            <br />
+            <div className="form-container">
+              <div className="form-item">
+                <label className="form-labels">
+                  Quantity: <label className="required"> * </label>{" "}
+                </label>{" "}
+                <input
+                  type="number"
+                  id="quantity"
+                  className="form-fields"
+                  placeholder="Enter Quantity"
+                  onChange={(e) => setQuantity(e.target.value)}
+                  required
+                />
+                {ShowQuantityError()}
+                {error && quantity.length == 0 ? (
+                  <span className="vehicle-create-error">Input Quantity</span>
+                ) : (
+                  <></>
+                )}
+              </div>
 
-								<select
-									className="form-fields"
-									id="itemID"
-									defaultValue={"Item Name"}
-									onChange={(e) => setItemID(e.target.value)}
-									required >
-									<option value="">Item Name</option>
-									{items.map((item) => (
-										<option key={item.itemName} value={item.itemName}>
-											{item.itemName}
-										</option>
-									))}
-								</select>
-							</div>
+              <div className="form-item">
+                <label className="form-labels">
+                  Unit: <label className="required"> * </label>{" "}
+                </label>{" "}
+                <button
+                  id="select-unit"
+                  className="item-icon-button item-add-option-button "
+                  type="button"
+                  onClick={() => {
+                    setModStatus(true);
+                    setModName("Add Unit");
+                    setModType(units);
+                    setModID("UnitTypeID");
+                  }}
+                >
+                  ✎
+                </button>
+                <br />
+                <select
+                  className="form-fields"
+                  id="unitID"
+                  defaultValue={"Unit"}
+                  onChange={(e) => setUnitID(e.target.value)}
+                  required
+                >
+                  <option value="">Select Unit</option>
+                  {units.map((unit) => (
+                    <option key={unit.unitID} value={unit.unitID}>
+                      {unit.unitName}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-							<div className="form-item form-toggle">
-								{" "}
-								Status:{" "}
-								<button
-									type="button"
-									className="table-info-button"
-									onClick={() => setInfoPop(!infoPop)}
-								>
-									i
-								</button>
-								<br />
-								<ToggleSwitch
-									disabled={isDisabled}
-									setDisabled={setIsDisabled}
-								></ToggleSwitch>
-							</div>
+              <div className="form-item">
+                <label className="form-labels">
+                  Unit Price: <label className="required"> * </label>{" "}
+                </label>{" "}
+                <label className="label-format"> Format: "0000.00" </label>{" "}
+                <br />
+                <input
+                  type="number"
+                  id="unitPrice"
+                  step=".01"
+                  className="form-fields"
+                  placeholder="Enter Unit Price"
+                  onChange={(e) => setUnitPrice(e.target.value)}
+                  required
+                />
+                {ShowPriceError()}
+                {error && unitPrice.length == 0 ? (
+                  <span className="vehicle-create-error">Input Unit Price</span>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
 
-						</div>
-						<hr />
+            <br />
 
-						{/* Third Field Row */}
-						<br />
-						<div className="form-container">
-							<div className="form-item">
-								<label className="form-labels">
-									Quantity: <label className="required"> * </label>{" "}
-								</label>{" "}
-								<input
-									type="number"
-									id="quantity"
-									className="form-fields"
-									placeholder="Enter Quantity"
-									onChange={(e) => setQuantity(e.target.value)}
-									required />
-								{ShowQuantityError()}
-								{error && quantity.length == 0 ? (
-									<span className="vehicle-create-error">
-										Input Quantity
-									</span>
-								) : (
-									<></>
-								)}
-							</div>
+            {/* Fourth Field Row */}
 
-							<div className="form-item">
-								<label className="form-labels">
-									Unit: <label className="required"> * </label>{" "}
-								</label>{" "}
+            <div className="form-container">
+              <div className="form-item">
+                <label className="form-labels">
+                  Brand: <label className="required"> * </label>{" "}
+                </label>{" "}
+                <button
+                  id="select-brand"
+                  className="item-icon-button item-add-option-button "
+                  type="button"
+                  onClick={() => {
+                    setModStatus(true);
+                    setModName("Add Brand");
+                    setModType(brands);
+                    setModID("itemBrandID");
+                  }}
+                >
+                  ✎
+                </button>
+                <br />
+                <select
+                  className="form-fields"
+                  id="brandID"
+                  defaultValue={"Brand"}
+                  onChange={(e) => setBrandID(e.target.value)}
+                  required
+                >
+                  <option value="">Select Brand</option>
+                  {brands.map((brand) => (
+                    <option key={brand.itemBrandID} value={brand.itemBrandID}>
+                      {brand.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-								<button id="select-unit" className="item-icon-button item-add-option-button " type="button" onClick={() => {
-									setModStatus(true);
-									setModName("Add Unit");
-									setModType(units);
-									setModID("UnitTypeID");
-								}}>✎</button>
+              <div className="form-item">
+                <label className="form-labels">Part Number: </label>{" "}
+                <label className="label-format"> Format: Numbers only. </label>{" "}
+                <br />
+                <input
+                  type="number"
+                  className="form-fields"
+                  placeholder="Enter Part Number"
+                  onChange={(e) => setpartNumber(e.target.value)}
+                  required
+                />
+                {showPartNumberError()}
+                {partNumberError == partNumber && partNumber.length > 0 ? (
+                  <span className="inventory-add-partNum-error">
+                    Part Number has already been registered.
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </div>
 
-								<br />
-								<select
-									className="form-fields"
-									id="unitID"
-									defaultValue={"Unit"}
-									onChange={(e) => setUnitID(e.target.value)}
-									required >
-									<option value="">Select Unit</option>
-									{units.map((unit) => (
-										<option key={unit.UnitTypeID} value={unit.UnitTypeID}>
-											{unit.UnitTypeName}
-										</option>
-									))}
-								</select>
-							</div>
+              <div className="form-item">
+                <label className="form-labels">
+                  Supplier: <label className="required"> * </label>{" "}
+                </label>{" "}
+                <button
+                  id="select-supplier"
+                  className="item-icon-button item-add-option-button "
+                  type="button"
+                  onClick={() => {
+                    setModStatus(true);
+                    setModName("Add Supplier");
+                    setModType(suppliers);
+                    setModID("supplierID");
+                  }}
+                >
+                  ✎
+                </button>
+                <br />
+                <select
+                  className="form-fields"
+                  id="supplierID"
+                  defaultValue={"Supplier"}
+                  onChange={(e) => setSupplierID(e.target.value)}
+                  required
+                >
+                  <option value="Select Supplier">Select Supplier</option>
+                  <option value="2001">Iriga Joe Hardware</option>
+                  <option value="2002">Anderson Depot</option>
+                  {/* {suppliers.map((supplier) => (
+                    <option
+                      key={supplier.supplierID}
+                      value={supplier.supplierID}
+                    >
+                      {supplier.supplierName}
+                    </option>
+                  )
+				  )} */}
+                </select>
+              </div>
+            </div>
+            <br />
+            <hr />
 
-							<div className="form-item">
-								<label className="form-labels">
-									Unit Price: <label className="required"> * </label>{" "}
-								</label>{" "}
-								<label className="label-format"> Format: "0000.00" </label> <br />
-								<input
-									type="number"
-									id="unitPrice"
-									step=".01"
-									className="form-fields"
-									placeholder="Enter Unit Price"
-									onChange={(e) => setUnitPrice(e.target.value)}
-									required />
-								{ShowPriceError()}
-								{error && unitPrice.length == 0 ? (
-									<span className="vehicle-create-error">
-										Input Unit Price
-									</span>
-								) : (
-									<></>
-								)}
-							</div>
-						</div>
+            {/*Remarks */}
 
-						<br />
+            <div className="form-item">
+              <label className="form-labels">Remarks:</label> <br />
+              <input type="textarea" className="form-fields-remarks" required />
+            </div>
 
-						{/* Fourth Field Row */}
-
-						<div className="form-container">
-							<div className="form-item">
-								<label className="form-labels">Brand: <label className="required"> * </label>{" "}</label>{" "}
-								<button id="select-brand" className="item-icon-button item-add-option-button " type="button" onClick={() => {
-									setModStatus(true);
-									setModName("Add Brand");
-									setModType(brands);
-									setModID("itemBrandID");
-								}}>✎</button>
-								<br />
-								<select
-									className="form-fields"
-									id="brandID"
-									defaultValue={"Brand"}
-									onChange={(e) => setBrandID(e.target.value)}
-									required>
-									<option value="">Select Brand</option>
-									{brands.map((brand) => (
-										<option key={brand.brandID} value={brand.brandID}>
-											{brand.name}
-										</option>
-									))}
-								</select>
-							</div>
-
-							<div className="form-item">
-								<label className="form-labels">
-									Part Number: {" "}
-								</label>{" "}
-								<label className="label-format">
-									{" "}
-									Format: Numbers only.{" "}
-								</label>{" "}
-								<br />
-								<input
-									type="number"
-									className="form-fields"
-									placeholder="Enter Part Number"
-									onChange={(e) => setpartNumber(e.target.value)}
-									required />
-								{showPartNumberError()}
-								{partNumberError == partNumber && partNumber.length > 0 ? (
-									<span className="inventory-add-partNum-error">
-										Part Number has already been registered.
-									</span>
-								) : (
-									<></>
-								)}
-							</div>
-
-							<div className="form-item">
-								<label className="form-labels">
-									Supplier: <label className="required"> * </label>{" "}
-								</label>{" "}
-								<button id="select-supplier" className="item-icon-button item-add-option-button " type="button" onClick={() => {
-									setModStatus(true);
-									setModName("Add Supplier");
-									setModType(suppliers);
-									setModID("supplierID");
-								}}>✎</button>
-								<br />
-
-								<select
-									className="form-fields"
-									id="supplierID"
-									defaultValue={"Supplier"}
-									onChange={(e) => setSupplierID(e.target.value)}
-									required
-								>
-									<option value="Select Supplier">Select Supplier</option>
-									<option>Iriga Joe Hardware</option>
-									<option>Anderson Depot</option>
-									{suppliers.map((supplier) => (
-										<option key={supplier.supplierID} value={supplier.supplierID}>
-											{supplier.supplierName}
-										</option>
-									))}
-								</select>
-							</div>
-						</div>
-						<br />
-						<hr />
-
-						{/*Remarks */}
-
-						<div className="form-item">
-							<label className="form-labels">Remarks:</label> <br />
-							<input type="textarea" className="form-fields-remarks" required />
-						</div>
-
-						<br />
-						{/* Buttons */}
-						<div className="form-container">
-							<span className="required-text">
-								Fields marked with <label className="required"> * </label> are
-								required.
-							</span>
-							<span className="form-item-buttons">
-								<BasicButton
-									label={"Cancel"}
-									color={"gray"}
-									type={"reset"}
-									clickFunction={cancelForm}
-								></BasicButton>
-								<BasicButton
-									label={"Save"}
-									color={"green"}
-									type={"button"}
-									clickFunction={submitForm}
-								></BasicButton>
-							</span>
-						</div>
-					</form>
-				</div>
-			</div >
-		</>
-	);
+            <br />
+            {/* Buttons */}
+            <div className="form-container">
+              <span className="required-text">
+                Fields marked with <label className="required"> * </label> are
+                required.
+              </span>
+              <span className="form-item-buttons">
+                <BasicButton
+                  label={"Cancel"}
+                  color={"gray"}
+                  type={"reset"}
+                  clickFunction={cancelForm}
+                ></BasicButton>
+                <BasicButton
+                  label={"Save"}
+                  color={"green"}
+                  type={"button"}
+                  clickFunction={submitForm}
+                ></BasicButton>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default AddInventoryCreate;
