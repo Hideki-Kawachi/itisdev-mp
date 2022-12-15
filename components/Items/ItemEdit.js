@@ -384,6 +384,9 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 					transaction={"Editing of Item"}
 				></Cancel>
 			</Modal>
+			<Modal isOpen={infoPop} className="modal" ariaHideApp={false}>
+				<Info trigger={infoPop} setTrigger={setInfoPop}></Info>
+			</Modal>
 			<form className="item-column-container" id="item-add-main-container">
 				{/* <button type="button" onClick={checkAudit}>
 					Test
@@ -458,7 +461,14 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 						</div>
 
 						<div className="item-input" id="item-status">
-							<label htmlFor="disabled">Status:</label>
+							<label htmlFor="disabled">Status:
+							<button
+							type="button"
+							className="table-info-button"
+							onClick={() => setInfoPop(!infoPop)}
+							>
+							i
+						</button></label>
 							{isEditable == false ? (
 								<LockedToggle
 									disabled={isDisabled}
