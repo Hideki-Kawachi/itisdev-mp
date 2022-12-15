@@ -25,13 +25,13 @@ function AddInventoryCreate({
 	const [acquireDate, setAcquireDate] = useState(new Date());
 	const [addRecordID, setAddRecordID] = useState("");
 	const [invoiceNumber, setInvoiceNumber] = useState("");
-	const [itemID, setItemID] = useState("");
+	const [itemID, setItemID] = useState(items[0].itemID);
 	const [quantity, setQuantity] = useState("");
-	const [unitID, setUnitID] = useState("");
+	const [unitID, setUnitID] = useState(units[0].unitID);
 	const [unitPrice, setUnitPrice] = useState("");
-	const [brandID, setBrandID] = useState("");
+	const [brandID, setBrandID] = useState(brands[0].itemBrandID);
 	const [partNumber, setpartNumber] = useState("");
-	const [supplierID, setSupplierID] = useState("");
+	const [supplierID, setSupplierID] = useState(suppliers[0].supplierID);
 	const [remarks, setRemarks] = useState("");
 	const [notifResult, setNotifResult] = useState("");
 	const [error, setError] = useState(false);
@@ -162,7 +162,7 @@ function AddInventoryCreate({
 				if (partNumber.length > 15 || partNumber.length < 5) {
 					return (
 						<span className="vehicle-create-error">
-							Part Number must be 15 numbers long.
+							Part Number must be 5-15 characters long.
 						</span>
 					);
 				}
@@ -289,13 +289,13 @@ function AddInventoryCreate({
                 <select
                   className="form-fields"
                   id="itemID"
-                  defaultValue={"Item Name"}
+                  defaultValue={itemID}
                   onChange={(e) => setItemID(e.target.value)}
                   required
                 >
-                  <option value="">Item Name</option>
+                  {/* <option value="">Item Name</option> */}
                   {items.map((item) => (
-                    <option key={item.itemID} value={item.itemName}>
+                    <option key={item.itemID} value={item.itemID}>
                       {item.itemName}
                     </option>
                   ))}
@@ -365,7 +365,7 @@ function AddInventoryCreate({
 								<select
 									className="form-fields"
 									id="unitID"
-									defaultValue={"Unit"}
+									defaultValue={unitID}
 									onChange={(e) => setUnitID(e.target.value)}
 									required
 								>
@@ -429,7 +429,7 @@ function AddInventoryCreate({
 								<select
 									className="form-fields"
 									id="brandID"
-									defaultValue={"Brand"}
+									defaultValue={brandID}
 									onChange={(e) => setBrandID(e.target.value)}
 									required
 								>
@@ -444,10 +444,10 @@ function AddInventoryCreate({
 
 							<div className="form-item">
 								<label className="form-labels">Part Number: </label>{" "}
-								<label className="label-format"> Format: Numbers only. </label>{" "}
+								{/* <label className="label-format"> Format: Numbers only. </label>{" "} */}
 								<br />
 								<input
-									type="number"
+									type="text"
 									className="form-fields"
 									placeholder="Enter Part Number"
 									onChange={(e) => setpartNumber(e.target.value)}
@@ -485,7 +485,7 @@ function AddInventoryCreate({
 								<select
 									className="form-fields"
 									id="supplierID"
-									defaultValue={"Supplier"}
+									defaultValue={supplierID}
 									onChange={(e) => setSupplierID(e.target.value)}
 									required
 								>
