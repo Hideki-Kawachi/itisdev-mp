@@ -22,13 +22,13 @@ export const COLUMNS = [
   },
   {
     Header: "Item Name",
-    accessor: "Item Name",
+    accessor: "itemName",
     Filter: GlobalFilter,
     disableSortBy: true,
   },
   {
     Header: "Model",
-    accessor: "Model",
+    accessor: "itemModel",
     disableGlobalFilter: true,
     disableSortBy: true,
   },
@@ -44,13 +44,13 @@ export const COLUMNS = [
   },
   {
     Header: "Unit",
-    accessor: "Unit",
+    accessor: "unit",
     disableGlobalFilter: true,
     disableSortBy: true,
   },
   {
     Header: "Recorded by",
-    accessor: "Recorded by",
+    accessor: "creatorID",
     disableGlobalFilter: true,
     disableSortBy: true,
   },

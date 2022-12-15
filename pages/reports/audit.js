@@ -14,6 +14,8 @@ import Measure from "../../models/MeasureSchema";
 import User from "../../models/UserSchema";
 import Audit from "../../models/AuditSchema";
 
+import dbConnect from "../../lib/dbConnect";
+import dayjs from "dayjs";
 
 
 export const getServerSideProps = withIronSessionSsr(
@@ -45,6 +47,8 @@ export const getServerSideProps = withIronSessionSsr(
       // user: UserID for creatorID - kunin yung name
       // Unit: Measure (connect sa itemS)
 
+      var auditData = [];
+
       auditList.forEach((audit) => {
 
         let isFound = false;
@@ -54,6 +58,7 @@ export const getServerSideProps = withIronSessionSsr(
         let itemName = "";
         let itemModel = "";
 
+
         //Measure
         let unitType = "";
 
@@ -62,7 +67,29 @@ export const getServerSideProps = withIronSessionSsr(
 
         // while (!isFound && ) {
 
-        // }
+          itemList.forEach((item) => {
+            if (auditList.itemID == item.itemID) {
+              itemName = item.itemName;
+              itemModel = item.itemModel;
+              isFound = true;
+
+
+
+            }
+          })
+
+        // } 
+
+        auditData.push({
+          //date, invoice,  item n, item model, quantity, unit name
+          auditDate: dayjs(auditList.auditDate).format("MM/DD/YYYY"),
+          itemName: itemName,
+          itemModel: itemModel,
+          systemCount: auditList.systemCount,
+          physicalcount: auditList.physicalcount,
+          unit: unitType,
+          creatorID: name
+        });
 
 
 
@@ -74,7 +101,7 @@ export const getServerSideProps = withIronSessionSsr(
       
 
 
-      return { props: { currentUser } };
+      return { props: { currentUser, } };
       }
     } else {
       return {
@@ -92,7 +119,7 @@ export const getServerSideProps = withIronSessionSsr(
 // 	}
 // ];
 
-function AuditReports({ currentUser }) {
+function AuditReports({ currentUser,  }) {
   return (
     <>
       <Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
