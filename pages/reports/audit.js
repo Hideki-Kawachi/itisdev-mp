@@ -32,7 +32,7 @@ export const getServerSideProps = withIronSessionSsr(
 
 			await dbConnect();
 
-      const unitList = await Measure.find({});
+      const measureList = await Measure.find({});
       
       const itemList = await Item.find(
         {},
@@ -58,7 +58,8 @@ export const getServerSideProps = withIronSessionSsr(
         //Item 
         let itemName = "";
         let itemModel = "";
-
+        let systemCount = audit.systemCount;
+        let physicalCount = audit.physicalCount;
 
         //Measure
         let unitType = "";
@@ -70,28 +71,27 @@ export const getServerSideProps = withIronSessionSsr(
 
           itemList.forEach((item) => {
             if (audit.itemID == item.itemID) {
+
               itemName = item.itemName;
               itemModel = item.itemModel;
               isFound = true;
             }
+                measureList.forEach((measure) => {
+                  if (item.unitID == measure.unitID) {
+                      unitType = measure.unitName;
+                      isFound2 = true;
+                }
+              });
           })
 
-          measureList.forEach((measure) => {
-            if (audit.unitID == measure.unitID) {
-              unitType= measure.unitName;
-              isFound2 = true;
-            } 	
-          });
+
 
           userList.forEach((user) => {
             if (audit.creatorID == user.userID) {
-              name = user.firstName + " " + user.LastName;
+              name = user.firstName + " " + user.lastName;
               isFound3 = true;
-
             }
           })
-
-
 
         } 
 
@@ -100,13 +100,11 @@ export const getServerSideProps = withIronSessionSsr(
           auditDate: dayjs(audit.auditDate).format("MM/DD/YYYY"),
           itemName: itemName,
           itemModel: itemModel,
-          systemCount: audit.systemCount,
-          physicalcount: audit.physicalcount,
+          systemCount: systemCount,
+          physicalCount: physicalCount,
           unit: unitType,
           creatorID: name
         });
-
-
 
       });
 
