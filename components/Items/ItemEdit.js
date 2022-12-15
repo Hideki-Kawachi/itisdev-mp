@@ -394,11 +394,15 @@ function ItemEdit({itemID, items, categories, brands, units}) {
                                 disabled={!isEditable}
                                 onChange={(e) => setCategoryID(e.target.value)}
                             >
-                                {categories.map((category) => (
-                                    <option key={category.categoryID} value={category.categoryID}>
-                                        {category.name}
-                                    </option>
-                                ))}
+                            {categories.map((category) => {
+                                if (category.disabled == false) {
+                                    return (
+                                        <option key={category.categoryID} value={category.categoryID}>
+                                            {category.name}
+                                        </option>
+                                    )}
+                                })
+                            }
                             </select>
                             
                         </div>
@@ -482,11 +486,16 @@ function ItemEdit({itemID, items, categories, brands, units}) {
                                 disabled={!isEditable}
                                 onChange={(e) => setUnitID(e.target.value)}
                             >
-                            {units.map((unit) => (
-                                <option key={unit.unitID} value={unit.unitID}>
-                                    {unit.unitName}
-                                </option>
-                            ))}
+                            {units.map((unit) => {
+                                if (unit.disabled == false) {
+                                    return (
+                                        <option key={unit.unitID} value={unit.unitID}>
+                                            {unit.unitName}
+                                        </option>
+                                    )
+                                }
+                            }
+                            )}
                             </select>
                             {showRequiredError(error, unitID, "Select Unit")}
                         </div>
@@ -520,11 +529,15 @@ function ItemEdit({itemID, items, categories, brands, units}) {
                                 {" "}
                                 Select Brand{" "}
                             </option>
-                            {brands.map((brand) => (
-                                <option key={brand.itemBrandID} value={brand.name}>
-                                    {brand.name}
-                                </option>
-                            ))}
+                            {brands.map((brand) => {
+                                if (brand.disabled == false) {
+                                    return (
+                                        <option key={brand.itemBrandID} value={brand.name}>
+                                            {brand.name}
+                                        </option>
+                                    )}
+                                })
+                            }
                         </select>
                         {showRequiredError(detailsError, details.brand, "Select Brand")}
                         {showDuplicateError(duplicateError, details.brand, "is already in use")}
