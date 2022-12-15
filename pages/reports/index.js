@@ -34,117 +34,6 @@ export const getServerSideProps = withIronSessionSsr(
 
 				await dbConnect();
 
-				const unitList = await Measure.find({ disabled: false });
-
-				const brandList = await ItemBrand.find(
-				{ disabled: false },
-				{ itemBrandID: 1, name: 1 }
-				);
-	
-	
-				const itemList = await Item.find(
-				{ quantity: { $gt: 0 }, disabled: false },
-				{ itemID: 1, itemName: 1, itemModel: 1, unitID: 1, quantity: 1, minQuantity: 1 }
-				);
-	
-				const itemBrandList = await ItemBrandCombination.find(
-				{ quantity: { $gt: 0 }, disabled: false },
-				{ itemID: 1, itemBrandID: 1, partNumber: 1 }
-				);
-
-				const addList = await AddInventory.find({ disabled: false });
-				const recordList = await RecordDetails.find({});
-
-				let unitData = JSON.stringify(unitList);
-				let itemData = JSON.stringify(itemList);
-				let addData = "";
-				let addTable = [];
-				let addTableData;
-
-				if (addList) {
-					addData = JSON.stringify(addList);
-					addList.forEach((add) => { 
-						let index = recordList.length - 1;
-						let item = "";
-						let brand = "";
-						let quantity = 0;
-						let unit = "";
-
-						let itemName = "";
-						let itemModel = "";
-						let brandName = "";
-						let unitName = "";
-
-						while (index >= 0) {
-							//Should it be less record for recordList?
-							if (add.addRecordID == recordList[index].lessRecordID) {
-								item = recordList[index].itemID;
-								brand = recordList[index].brandID;
-								quantity = recordList[index].quantity;
-								unit = recordList[index].unitID;
-
-								if (item.length > 0) {
-								let isFound2 = false;
-								let index2 = itemList.length - 1;
-								while (!isFound2 && index2 >= 0) {
-									if (item == itemList[index2].itemID) {
-									isFound2 = true;
-									itemName = itemList[index2].itemName;
-									itemModel = itemList[index2].itemModel;
-									}
-									index2--;
-								}
-								isFound2 = false;
-								index2 = brandList.length - 1;
-								while (!isFound2 && index2 >= 0) {
-									if (brand == brandList[index2].itemBrandID) {
-									isFound2 = true;
-									brandName = brandList[index2].name;
-									}
-									index2--;
-								}
-								isFound2 = false;
-								index2 = unitList.length - 1;
-								while (!isFound2 && index2 >= 0) {
-									if (unit == unitList[index2].unitID) {
-									isFound2 = true;
-									unitName = unitList[index2].unitName;
-									}
-									index2--;
-								}
-								}
-			
-								addTable.push({
-									addDate: dayjs(add.addDate).format("MM/DD/YYYY"),
-									itemModel: itemModel,
-									invoiceNumber: add.invoiceNumber,
-									itemName: itemName,
-									brandName: brandName,
-									quantity: quantity,
-									unit: unitName,
-								});
-							}
-							index--;
-							}
-						});
-						addTableData = JSON.stringify(addTable);
-						} else {
-						addData = JSON.stringify({});
-						addTableData = JSON.stringify({});
-						}
-			
-						return {
-						props: {
-							currentUser,
-							unitData,
-							itemData,
-							addData,
-							addTableData,
-						},
-						};
-			
-				  //  let pullRecData = JSON.stringify(tempPullData);
-				  }
 				
 
 				//await dbConnect();
@@ -227,7 +116,8 @@ export const getServerSideProps = withIronSessionSsr(
 
 
 			
-		} else {
+			} 
+		}else {
 			return {
 				redirect: { destination: "/signin", permanent: true },
 				props: {},
