@@ -9,7 +9,12 @@ import dbConnect from "../lib/dbConnect";
 import User from "../models/UserSchema";
 import Vehicle from "../models/VehicleSchema";
 import { COLUMNS } from "../components/Dashboard/TransactionColumns";
-import ADDINV_MOCK_DATA from "../components/Reports/ADD_INV.json";
+
+import AddInventory from "../models/AddInvSchema";
+import Item from "../models/ItemSchema";
+import Measure from "../models/MeasureSchema";
+import dayjs from "dayjs";
+
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -103,7 +108,7 @@ export const getServerSideProps = withIronSessionSsr(
 
 
 
-				return { props: { currentUser, totalUsers, totalVehicles } };
+				return { props: { currentUser, totalUsers, totalVehicles, tempRepData} };
 			}
 		}
 
@@ -115,7 +120,7 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-const Index = ({ currentUser, totalUsers, totalVehicles }) => {
+const Index = ({ currentUser, totalUsers, totalVehicles, tempRepData}) => {
 	const inFlow = 45;
 	const outFlow = 72;
 
@@ -141,7 +146,7 @@ const Index = ({ currentUser, totalUsers, totalVehicles }) => {
 					</div>
 					<div className="dashboard-table-container">
 						<h1>Recent Inventory Records</h1>
-						<BasicTable COLUMNS={COLUMNS} ADDINV={ADDINV_MOCK_DATA}></BasicTable>
+						<BasicTable COLUMNS={COLUMNS} ADDINV={tempRepData}></BasicTable>
 					</div>
 				</div>
 				<div className="dashboard-right-container">
