@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
@@ -212,6 +212,34 @@ function Inventory({
 	const toggleTab = (index) => {
 		setToggleState(index);
 	};
+
+	useMemo(() => {
+        inventories.forEach((inventory) => {
+            items.forEach((item) =>{
+                if (inventory.itemID == item.itemID) {
+                    inventory.itemID = item.itemName;
+                }
+            })
+
+            units.forEach((unit) =>{
+                if (inventory.unitID == unit.unitID) {
+                    inventory.unitID = unit.unitName;
+                }
+            })
+
+            brands.forEach((brand) =>{
+                if (inventory.brandID == brand.itemBrandID) {
+                    inventory.brandID = brand.name;
+                }
+            })
+
+            suppliers.forEach((supplier) =>{
+                if (inventory.supplierID == supplier.supplierID) {
+                    inventory.supplierID = supplier.supplierName;
+                }
+            })
+        })
+    }, [])
 
 	return (
 		<>

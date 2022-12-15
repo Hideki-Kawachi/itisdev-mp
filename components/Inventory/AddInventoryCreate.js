@@ -294,7 +294,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                 >
                   <option value="">Item Name</option>
                   {items.map((item) => (
-                    <option key={item.itemID} value={item.itemID}>
+                    <option key={item.itemID} value={item.itemName}>
                       {item.itemName}
                     </option>
                   ))}
