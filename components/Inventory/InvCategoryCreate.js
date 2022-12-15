@@ -17,7 +17,7 @@ function AddInventoryCategory({ trigger, setTrigger, name, type, id }) {
         
       let categoryData = {
         [id] : defaultID,
-        name : categoryName,
+        supplierName : categoryName,
         disabled: isDisabled,
       }
 
@@ -59,20 +59,20 @@ function AddInventoryCategory({ trigger, setTrigger, name, type, id }) {
       }
     }
 
-  useEffect(() => {
-  if (JSON.stringify(type) === "{}") {
-    if(name == "Brand")
-      setDefaultID("60000");
-    else if (name == "Unit")
-      setDefaultID("70000");
-    else if (name == "Supplier")
-      setDefaultID("21000");
-    console.log(defaultID + " Empty Collection: " + name.replace(/ /g, ""));
-  } else {
-    setDefaultID(Math.max(...type.map((type) => JSON.parse(type[id]))) + 1);
-    console.log(defaultID + " " + name.replace(/ /g, ""));
-  }
-  }, [defaultID]);
+    useEffect(() => {
+        if (type.length == 0) {
+          if(name == "Brand")
+            setDefaultID("60000");
+          else if (name == "Unit")
+            setDefaultID("70000");
+          else if (name == "Add Supplier")
+            setDefaultID("1001");
+          console.log(defaultID + " Empty Collection: " + name.replace(/ /g, ""));
+        } else {
+          setDefaultID(String(Math.max(...type.map((type) => JSON.parse(type[id]))) + 1));
+          console.log(defaultID + " " + name.replace(/ /g, ""));
+        }
+        }, [defaultID]);
 
   return (
     <>
