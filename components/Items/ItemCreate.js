@@ -7,7 +7,7 @@ import ItemCatTable from "./CategoryList";
 import BrandTable from "./BrandTable";
 
 // TO-DO: add dropdown options as parameters
-function ItemCreate({ items, categories, brands, units}) {
+function ItemCreate({ items, categories, brands, units, currentUser }) {
 	// Item Identification
 	const [itemID, setItemID] = useState("");
 	const [categoryID, setCategoryID] = useState("");
@@ -17,17 +17,17 @@ function ItemCreate({ items, categories, brands, units}) {
 	const [quantity, setQuantity] = useState(0);
 	const [minQuantity, setMinQuantity] = useState(0);
 	const [isDisabled, setIsDisabled] = useState(false);
-	const currentUserID = "00000001";
-    // Item Details
-    const [details, setDetails] = useState({
-        combinationID: String(Math.floor(Math.random() * 50000)),
-        brand: "",
-        partNumber: "",
-        quantity: 0,
-        unit: "",
-        disabled: false,
-    })
-    const [detailsArray, setDetailsArray] = useState([{}]);
+	const currentUserID = currentUser.userID;
+	// Item Details
+	const [details, setDetails] = useState({
+		combinationID: String(Math.floor(Math.random() * 50000)),
+		brand: "",
+		partNumber: "",
+		quantity: 0,
+		unit: "",
+		disabled: false,
+	});
+	const [detailsArray, setDetailsArray] = useState([{}]);
 
 	// Modals
 	const [modStatus, setModStatus] = useState(false);
@@ -47,105 +47,110 @@ function ItemCreate({ items, categories, brands, units}) {
 	const [cancel, setCancel] = useState(false);
 
 	// Submit Form
-    function submitForm() {
-        // console.log("1. Error is " + error + ", Data is " + data);
-        revertBrandToID();
-        if (
-          itemID.length == 0 ||
-          categoryID.length == 0 ||
-          name.length == 0 ||
-          unitID.length == 0 ||
-          quantity == 0 
-        ) {
-          setError(true);
-        } else {
-          let itemData = {
-            itemID: itemID,
-            categoryID: categoryID,
-            itemName: name,
-            itemModel: model,
-            unitID: unitID,
-            quantity: quantity,
-            minQuantity: minQuantity,
-			creatorID: currentUserID,
-            disabled: isDisabled,
-          }
-    
-          fetch("/api/items/createItem", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({itemData, details:detailsArray}),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data == "created") {
-                console.log("SUCCESS");
-                setNotifResult("Successfully created!")
-                setError(false);
-                window.location.reload();
-              } else  {
-                setError(true);
-				setCodeError(data);
-              }
-            });
-        }}
+	function submitForm() {
+		// console.log("1. Error is " + error + ", Data is " + data);
+		revertBrandToID();
+		if (
+			itemID.length == 0 ||
+			categoryID.length == 0 ||
+			name.length == 0 ||
+			unitID.length == 0 ||
+			quantity == 0
+		) {
+			setError(true);
+		} else {
+			let itemData = {
+				itemID: itemID,
+				categoryID: categoryID,
+				itemName: name,
+				itemModel: model,
+				unitID: unitID,
+				quantity: quantity,
+				minQuantity: minQuantity,
+				creatorID: currentUserID,
+				disabled: isDisabled,
+			};
 
-	function convertBrandID (value) {
-        brands.every((brand) => {
-            if (value == brand.itemBrandID) {
-                value = brand.name
-                return false;
-            }
-            return true;
-        }) 
+			fetch("/api/items/createItem", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ itemData, details: detailsArray }),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					if (data == "created") {
+						console.log("SUCCESS");
+						setNotifResult("Successfully created!");
+						setError(false);
+						window.location.reload();
+					} else {
+						setError(true);
+						setCodeError(data);
+					}
+				});
+		}
+	}
 
-        return value;
-    }
+	function convertBrandID(value) {
+		brands.every((brand) => {
+			if (value == brand.itemBrandID) {
+				value = brand.name;
+				return false;
+			}
+			return true;
+		});
 
-    function revertBrandToID () {
-        detailsArray.every((value) => {
-            brands.every((brand) => {
-                if (value.brand == brand.name) {
-                    value.brand = brand.itemBrandID
-                    return false;
-                }
-                return true;
-            }) 
-            return true
-        })
-    }
+		return value;
+	}
 
-    // Handle details input
-    function handleDetails (e) {
-        const { name, value } = e.target
-        
-        setDetails(prevState => ({
-            ...prevState,
-            combinationID: String(Math.floor(Math.random() * 50000)),
-            [name]: value,
-        }));
+	function revertBrandToID() {
+		detailsArray.every((value) => {
+			brands.every((brand) => {
+				if (value.brand == brand.name) {
+					value.brand = brand.itemBrandID;
+					return false;
+				}
+				return true;
+			});
+			return true;
+		});
+	}
+
+	// Handle details input
+	function handleDetails(e) {
+		const { name, value } = e.target;
+
+		setDetails((prevState) => ({
+			...prevState,
+			combinationID: String(Math.floor(Math.random() * 50000)),
+			[name]: value,
+		}));
 
 		if (name == "brand") {
-			setDuplicateError(false)
+			setDuplicateError(false);
 		}
-    }
+	}
 
 	function clearDetails() {
-        setDetails(prevState => ({
-            ...prevState,
-            combinationID: "",
-            brand: "",
-            partNumber: "",
-            quantity: 0,
-            unit: "",
-            disabled: false,
-        }))
-    }
+		setDetails((prevState) => ({
+			...prevState,
+			combinationID: "",
+			brand: "",
+			partNumber: "",
+			quantity: 0,
+			unit: "",
+			disabled: false,
+		}));
+	}
 
 	function checkDetails() {
-		return details.brand.length == 0 || details.partNumber.length == 0 || details.quantity < 0
+		return (
+			details.brand.length == 0 ||
+			details.partNumber.length == 0 ||
+			details.quantity < 0
+		);
 	}
 
 	function checkDuplicate() {
@@ -156,24 +161,24 @@ function ItemCreate({ items, categories, brands, units}) {
 				return false;
 			}
 			return true;
-		})
+		});
 		return duplicate;
 	}
 
-    function addDetails () {
+	function addDetails() {
 		if (JSON.stringify(detailsArray[0]) == "{}") {
-			detailsArray.shift()
+			detailsArray.shift();
 		}
-		setDetailsError(checkDetails())
-		setDuplicateError(checkDuplicate())
+		setDetailsError(checkDetails());
+		setDuplicateError(checkDuplicate());
 		if (!checkDetails() && !checkDuplicate()) {
-			setDetailsArray(detailsArray => [...detailsArray, details])
-			setQuantity(quantity+parseInt(details.quantity))
-			clearDetails();	
-		} 
-    }
-	
-	function convertDetailsArray (type, arr) {
+			setDetailsArray((detailsArray) => [...detailsArray, details]);
+			setQuantity(quantity + parseInt(details.quantity));
+			clearDetails();
+		}
+	}
+
+	function convertDetailsArray(type, arr) {
 		if (type) {
 			let template = {
 				combinationID: "",
@@ -181,17 +186,17 @@ function ItemCreate({ items, categories, brands, units}) {
 				partNumber: "",
 				quantity: 0,
 				disabled: false,
-			}
-			let templateArray = [] 
+			};
+			let templateArray = [];
 			arr.every((value) => {
 				template.combinationID = value.combinationID;
-				template.brand = convertBrandID(value.itemBrandID)
+				template.brand = convertBrandID(value.itemBrandID);
 				template.partNumber = value.partNumber;
 				template.quantity = value.quantity;
 				template.disbaled = value.disabled;
-				templateArray.push(template)
-				return true; 
-			})
+				templateArray.push(template);
+				return true;
+			});
 
 			return templateArray;
 		}
@@ -200,17 +205,20 @@ function ItemCreate({ items, categories, brands, units}) {
 	}
 
 	function deleteRow(row) {
-		setQuantity(quantity-parseInt(row.quantity))
-        if (detailsArray.length > 1) {
-            detailsArray.every((value) => {
-                setDetailsArray(detailsArray.filter(value => value.combinationID != row.combinationID))
-            })
-        }
-        else {
-            setDetailsArray([{}]);
-        }
-		clearDetails()
-    }
+		setQuantity(quantity - parseInt(row.quantity));
+		if (detailsArray.length > 1) {
+			detailsArray.every((value) => {
+				setDetailsArray(
+					detailsArray.filter(
+						(value) => value.combinationID != row.combinationID
+					)
+				);
+			});
+		} else {
+			setDetailsArray([{}]);
+		}
+		clearDetails();
+	}
 
 	function cancelForm() {
 		setCancel(true);
@@ -230,19 +238,19 @@ function ItemCreate({ items, categories, brands, units}) {
 
 	function showRequiredError(errType, field, msg) {
 		if (errType && field.length == 0) {
-			return (<span className="vehicle-create-error">{msg}</span>)
+			return <span className="vehicle-create-error">{msg}</span>;
 		}
 	}
-	
+
 	function showNegativeNumError(errType, field, msg) {
 		if (errType && field < 0) {
-			return (<span className="vehicle-create-error">{msg}</span>)
+			return <span className="vehicle-create-error">{msg}</span>;
 		}
 	}
 
 	function showDuplicateError(errType, field, msg) {
 		if (errType) {
-			return (<span className="vehicle-create-error">{field + " " + msg}</span>)
+			return <span className="vehicle-create-error">{field + " " + msg}</span>;
 		}
 	}
 
@@ -259,10 +267,7 @@ function ItemCreate({ items, categories, brands, units}) {
 					{" "}
 				</ItemCatTable>
 			</Modal>
-			<form
-				className="item-column-container"
-				id="item-add-main-container"
-			>
+			<form className="item-column-container" id="item-add-main-container">
 				{showResult()}
 				{/* <button type="button" onClick={()=>calcTotalQty()}>Test</button> */}
 				<h1>IDENTIFICATION</h1>
@@ -299,12 +304,15 @@ function ItemCreate({ items, categories, brands, units}) {
 								{categories.map((category) => {
 									if (category.disabled == false) {
 										return (
-											<option key={category.categoryID} value={category.categoryID}>
+											<option
+												key={category.categoryID}
+												value={category.categoryID}
+											>
 												{category.name}
 											</option>
-										)}
-									})
-								}
+										);
+									}
+								})}
 							</select>
 							{showRequiredError(error, categoryID, "Select Category")}
 						</div>
@@ -318,14 +326,14 @@ function ItemCreate({ items, categories, brands, units}) {
 								value={itemID}
 								onChange={(e) => setItemID(e.target.value)}
 							/>
-						{showRequiredError(error, itemID, "Input Item Code")}
-						{codeError == itemID && itemID.length > 0 ? (
-							<span className="vehicle-create-error">
-								Item Code is already used
-							</span>
-						) : (
-							<></>
-						)}
+							{showRequiredError(error, itemID, "Input Item Code")}
+							{codeError == itemID && itemID.length > 0 ? (
+								<span className="vehicle-create-error">
+									Item Code is already used
+								</span>
+							) : (
+								<></>
+							)}
 						</div>
 						<div className="item-input">
 							<label htmlFor="itemName">
@@ -337,7 +345,7 @@ function ItemCreate({ items, categories, brands, units}) {
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 							/>
-						{showRequiredError(error, name, "Input Item Name")}
+							{showRequiredError(error, name, "Input Item Name")}
 						</div>
 
 						<div className="item-input" id="item-status">
@@ -369,7 +377,11 @@ function ItemCreate({ items, categories, brands, units}) {
 								value={minQuantity}
 								onChange={(e) => setMinQuantity(e.target.valueAsNumber)}
 							/>
-							{showNegativeNumError(error, minQuantity, "Input cannot be negative")}
+							{showNegativeNumError(
+								error,
+								minQuantity,
+								"Input cannot be negative"
+							)}
 						</div>
 
 						<div className="item-input">
@@ -408,10 +420,9 @@ function ItemCreate({ items, categories, brands, units}) {
 											<option key={unit.unitID} value={unit.unitID}>
 												{unit.unitName}
 											</option>
-										)
+										);
 									}
-								}
-                        		)}
+								})}
 							</select>
 							{showRequiredError(error, unitID, "Select Unit")}
 						</div>
@@ -459,23 +470,33 @@ function ItemCreate({ items, categories, brands, units}) {
 											<option key={brand.itemBrandID} value={brand.name}>
 												{brand.name}
 											</option>
-										)}
-									})
-								}
+										);
+									}
+								})}
 							</select>
 							{showRequiredError(detailsError, details.brand, "Select Brand")}
-							{showDuplicateError(duplicateError, details.brand, "is already in use")}
+							{showDuplicateError(
+								duplicateError,
+								details.brand,
+								"is already in use"
+							)}
 						</div>
 
 						<div className="item-input">
-							<label htmlFor="partNumber">Part Number:<label className="required"> * </label></label>
+							<label htmlFor="partNumber">
+								Part Number:<label className="required"> * </label>
+							</label>
 							<input
 								type="text"
 								name="partNumber"
 								value={details.partNumber}
 								onChange={(e) => handleDetails(e)}
 							/>
-							{showRequiredError(detailsError, details.partNumber, "Input Part Number")}
+							{showRequiredError(
+								detailsError,
+								details.partNumber,
+								"Input Part Number"
+							)}
 						</div>
 
 						<div className="item-input">
@@ -487,7 +508,11 @@ function ItemCreate({ items, categories, brands, units}) {
 								value={details.quantity}
 								onChange={(e) => handleDetails(e)}
 							/>
-							{showNegativeNumError(detailsError, details.quantity, "Input cannot be negative")}
+							{showNegativeNumError(
+								detailsError,
+								details.quantity,
+								"Input cannot be negative"
+							)}
 						</div>
 						<button
 							type="button"
@@ -498,31 +523,34 @@ function ItemCreate({ items, categories, brands, units}) {
 						</button>
 					</div>
 
-                <div className="details-right-container">
-                    
-                    { JSON.stringify(detailsArray[0]) == "{}" || detailsArray.length == 0 ? (
-                        <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
-                    ) : (
-						<>
-							<BrandTable 
-								tableValues={detailsArray} 
-								convertFunc={convertDetailsArray} 
-								deleteFunc={deleteRow} 
-								isEditable={false} 
-								pageType={false}>	
-							</BrandTable>
-							<h3>TOTAL: {quantity}</h3>
-						</>
-                        
-                    )}
-                </div>
-            </div>
+					<div className="details-right-container">
+						{JSON.stringify(detailsArray[0]) == "{}" ||
+						detailsArray.length == 0 ? (
+							<h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
+						) : (
+							<>
+								<BrandTable
+									tableValues={detailsArray}
+									convertFunc={convertDetailsArray}
+									deleteFunc={deleteRow}
+									isEditable={false}
+									pageType={false}
+								></BrandTable>
+								<h3>TOTAL: {quantity}</h3>
+							</>
+						)}
+					</div>
+				</div>
 
 				<div className="item-footer">
 					<Link href="/items">
 						<button className="gray-button-container">Cancel</button>
 					</Link>
-					<button type="button" onClick={submitForm} className="green-button-container">
+					<button
+						type="button"
+						onClick={submitForm}
+						className="green-button-container"
+					>
 						Save
 					</button>
 				</div>

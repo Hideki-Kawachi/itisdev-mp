@@ -13,6 +13,7 @@ function VehicleCreate({
 	sensor,
 	transmission,
 	gpsDATA,
+	currentUser,
 }) {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [vTypeOpen, setvTypeOpen] = useState(false);
@@ -36,7 +37,7 @@ function VehicleCreate({
 	const [categoryID, setCategoryID] = useState("");
 	const [notifResult, setNotifResult] = useState("");
 	const [infoPop, setInfoPop] = useState(false);
-	const currentUserID = "00000001";
+	const currentUserID = currentUser.userID;
 	const dt = new Date();
 
 	function submitForm() {

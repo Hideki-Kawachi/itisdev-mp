@@ -4,7 +4,6 @@ import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import BasicButton from "../../components/BasicButton";
 
-
 import ItemCreate from "../../components/Items/ItemCreate";
 import AddItemCategory from "../../components/Items/CategoryCreate";
 import ItemTable from "../../components/Items/ItemTable";
@@ -12,7 +11,7 @@ import Measure from "../../models/MeasureSchema";
 
 import dbConnect from "../../lib/dbConnect";
 import Item from "../../models/ItemSchema";
-import ItemCategory from "../../models/ItemCategorySchema"
+import ItemCategory from "../../models/ItemCategorySchema";
 import ItemBrand from "../../models/ItemBrandSchema";
 
 import { ironOptions } from "../../lib/config";
@@ -34,8 +33,8 @@ export const getServerSideProps = withIronSessionSsr(
 					unitID: 1,
 					quantity: 1,
 					minQuantity: 1,
-					brandCombination: 1, 
-					disabled: 1,	
+					brandCombination: 1,
+					disabled: 1,
 				}
 			);
 			const categoryList = await ItemCategory.find(
@@ -49,9 +48,9 @@ export const getServerSideProps = withIronSessionSsr(
 			const unitList = await Measure.find(
 				{},
 				{
-					unitID: 1, 
-					unitName: 1, 
-					abbreviation: 1, 
+					unitID: 1,
+					unitName: 1,
+					abbreviation: 1,
 					unitTypeID: 1,
 					// classTypeID: 1,
 					disabled: 1,
@@ -71,13 +70,15 @@ export const getServerSideProps = withIronSessionSsr(
 			let brandData = JSON.stringify(brandList);
 			let unitData = JSON.stringify(unitList);
 
-			return { props: { 
-				currentUser,
-				itemData,
-				categoryData,
-				brandData,
-				unitData, 
-			} };
+			return {
+				props: {
+					currentUser,
+					itemData,
+					categoryData,
+					brandData,
+					unitData,
+				},
+			};
 		} else {
 			return {
 				redirect: { destination: "/signin", permanent: true },
@@ -88,30 +89,25 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-function Items({ 
-	currentUser,
-	itemData,
-	categoryData,
-	brandData, 
-	unitData,
-}) {
+function Items({ currentUser, itemData, categoryData, brandData, unitData }) {
 	const items = JSON.parse(itemData);
 	const categories = JSON.parse(categoryData);
 	const brands = JSON.parse(brandData);
 	const units = JSON.parse(unitData);
-	
+
 	return (
 		<>
 			<Header page={"ITEMS"} subPage={"ADD ITEM"} user={currentUser}></Header>
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
-				<ItemCreate 
-					items = {items}
-					categories = {categories}
-					brands = {brands}
-					units = {units}
+				<ItemCreate
+					items={items}
+					categories={categories}
+					brands={brands}
+					units={units}
+					currentUser={currentUser}
 				/>
-			</div>	
+			</div>
 		</>
 	);
 }

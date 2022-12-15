@@ -156,6 +156,7 @@ function AddVehicle({
 						sensor={sensors}
 						transmission={transmissions}
 						gpsDATA={gps}
+						currentUser={currentUser}
 					/>
 				</>
 			</div>

@@ -1,10 +1,10 @@
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import { Router, useRouter } from "next/router";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import dbConnect from "../../lib/dbConnect";
 import Item from "../../models/ItemSchema";
-import ItemCategory from "../../models/ItemCategorySchema"
+import ItemCategory from "../../models/ItemCategorySchema";
 import ItemBrand from "../../models/ItemBrandSchema";
 import Measure from "../../models/MeasureSchema";
 import ItemTable from "../../components/Items/ItemTable";
@@ -29,8 +29,8 @@ export const getServerSideProps = withIronSessionSsr(
 					unitID: 1,
 					quantity: 1,
 					minQuantity: 1,
-					brandCombination: 1, 
-					disabled: 1,	
+					brandCombination: 1,
+					disabled: 1,
 				}
 			);
 			const categoryList = await ItemCategory.find(
@@ -44,9 +44,9 @@ export const getServerSideProps = withIronSessionSsr(
 			const unitList = await Measure.find(
 				{},
 				{
-					unitID: 1, 
-					unitName: 1, 
-					abbreviation: 1, 
+					unitID: 1,
+					unitName: 1,
+					abbreviation: 1,
 					unitTypeID: 1,
 					// classTypeID: 1,
 					disabled: 1,
@@ -66,13 +66,15 @@ export const getServerSideProps = withIronSessionSsr(
 			let brandData = JSON.stringify(brandList);
 			let unitData = JSON.stringify(unitList);
 
-			return { props: { 
-				currentUser,
-				itemData,
-				categoryData,
-				brandData, 
-				unitData,
-			} };
+			return {
+				props: {
+					currentUser,
+					itemData,
+					categoryData,
+					brandData,
+					unitData,
+				},
+			};
 		} else {
 			return {
 				redirect: { destination: "/signin", permanent: true },
@@ -83,39 +85,40 @@ export const getServerSideProps = withIronSessionSsr(
 	ironOptions
 );
 
-function ItemDetails({currentUser, itemData, categoryData, brandData, unitData}) {
-    const router = useRouter();
-    const itemID = router.query.itemID;
+function ItemDetails({
+	currentUser,
+	itemData,
+	categoryData,
+	brandData,
+	unitData,
+}) {
+	const router = useRouter();
+	const itemID = router.query.itemID;
 
-    const items = JSON.parse(itemData);
+	const items = JSON.parse(itemData);
 	const categories = JSON.parse(categoryData);
-    const brands = JSON.parse(brandData);
+	const brands = JSON.parse(brandData);
 	const units = JSON.parse(unitData);
 
-    return (
-        <>
-            <Header
-				page={"ITEMS"}
-				subPage={"EDIT ITEM"}
-				user={currentUser}
-			></Header>
+	return (
+		<>
+			<Header page={"ITEMS"} subPage={"EDIT ITEM"} user={currentUser}></Header>
 			<NavBar user={currentUser}></NavBar>
 			<br />
 			<div id="main-container">
 				<>
-                    <ItemEdit 
-                        itemID={itemID}
-                        items={items}
-                        categories={categories}
-                        brands={brands}
+					<ItemEdit
+						itemID={itemID}
+						items={items}
+						categories={categories}
+						brands={brands}
 						units={units}
 						userID={currentUser.userID}
-					>
-                    </ItemEdit>
+					></ItemEdit>
 				</>
 			</div>
-        </>
-    )
+		</>
+	);
 }
 
 export default ItemDetails;
