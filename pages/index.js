@@ -282,7 +282,7 @@ const Index = ({
 						<h1>Low Stock</h1>
 						<div className="stock-container-header">
 							<span>Item</span>
-							<span style={{ marginLeft: "auto" }}>Reorder &nbsp; Count</span>
+							<span className="stock-left-text">Reorder &nbsp; Count</span>
 						</div>
 						<div className="dashboard-card-list-container">
 							{lowStockList.map((lowStock, index) => (
