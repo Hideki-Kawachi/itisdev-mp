@@ -4,16 +4,19 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../lib/config";
+import dbConnect from "../lib/dbConnect";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
+
 		if (req.session.user) {
-			
 			return {
 				redirect: { destination: "/", permanent: true },
 				props: {},
 			};
 		} else {
+			await dbConnect();
+			
 			return {
 				props: {},
 			};

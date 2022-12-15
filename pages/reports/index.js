@@ -54,7 +54,7 @@ export const getServerSideProps = withIronSessionSsr(
 					}
 				);
 
-				const measure = await Measure.find(
+				const measureList = await Measure.find(
 						{},
 						{
 							unitID: 1,
@@ -68,8 +68,7 @@ export const getServerSideProps = withIronSessionSsr(
 					let isFound = false;
 					let isFound2 = false;
 					let itemName = "";
-					let itemModel = "";
-					let unitTypeName = "";
+					let unitType= "";
 					
 					while (!isFound && !isFound2) {
 
@@ -80,9 +79,9 @@ export const getServerSideProps = withIronSessionSsr(
 							}
 						});
 
-						unitTypeList.forEach((unitType) => {
-							if (addRec.unitID == unitType.UnitTypeID ) {
-								unitTypeName = unitType.UnitTypeName;
+						measureList.forEach((measure) => {
+							if (addRec.unitID == measure.unitName) {
+								unitType= measure.unitTypeName;
 								isFound2 = true;
 							} 
 						});
@@ -96,7 +95,7 @@ export const getServerSideProps = withIronSessionSsr(
 						itemName: itemName,
 						itemModel: addRecList.itemModel,
 						quantity: addRecList.quantity,
-						unit: unitTypeName
+						unit: unitType
 					});
 
 
