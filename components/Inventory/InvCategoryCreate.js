@@ -21,13 +21,15 @@ function AddInventoryCategory({ trigger, setTrigger, name, type, id }) {
         disabled: isDisabled,
       }
 
-      fetch("/api/inventory/categories/Create" + name.replace(/ /g, ""), {
+      console.log("ERRORRRR" + nameError);
+      fetch("/api/inventory/categories/create" + name.replace(/ /g, ""), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(categoryData),
       })
+      
         .then((res) => res.json())
         .then((data) => {
         //    console.log(JSON.stringify(categoryData));

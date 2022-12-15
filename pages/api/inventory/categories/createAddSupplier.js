@@ -3,7 +3,7 @@ import Supplier from "../../../../models/SupplierSchema";
 
 export default async (req, res) => {
   await dbConnect();
-
+  console.log(req.body);
   const supplierInfo = req.body;
 
   let invalidID = await Supplier.findOne({
@@ -11,7 +11,7 @@ export default async (req, res) => {
   });
 
   let invalidName = await Supplier.findOne({
-    name: supplierInfo.name,
+    supplierName: supplierInfo.name,
   });
 
   if (invalidID != null) {

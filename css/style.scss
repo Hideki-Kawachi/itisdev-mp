@@ -1391,7 +1391,7 @@ input:disabled+label {
       background: map-get($colors-neutral, 300);
       padding: 25px 25px 25px 25px;
       margin: 25px 0px 0px 0px;
-      height: calc(100vh - 375px);
+      max-height: calc(100% - 90px);
     }
 }
 
@@ -1401,6 +1401,7 @@ input:disabled+label {
   flex-direction: column;
   gap: 25px;
   margin: 25px 25px 0px 0px;
+  height: fit-content;
 
   .dashboard-gray-containers{
     background: map-get($colors-neutral, 300);
@@ -1408,7 +1409,6 @@ input:disabled+label {
   }
 
   .dashboard-stock-container{
-    height: calc(100vh - 375px);
     background: map-get($colors-neutral, 300);
     padding: 25px 25px 25px 25px;
 
@@ -1422,10 +1422,10 @@ input:disabled+label {
 
 .dashboard-card-list-container{
   overflow-y: scroll;
-  max-height: calc(100% - 100px);
   gap: 10px;
   display: flex;
   flex-direction: column;
+  max-height: calc(100vh - 340px);
 }
 
 .dashboard-card-main-container{
