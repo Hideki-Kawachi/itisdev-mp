@@ -48,7 +48,8 @@ function PullInventoryCreate({
 	const [details, setDetails] = useState({
 		itemCode: "",
 		itemName: "",
-		brand: "",
+		brandID: "",
+		brandName: "",
 		partNum: "",
 		quantity: 0,
 		unit: "",
@@ -63,11 +64,12 @@ function PullInventoryCreate({
 	function handleDetails(e) {
 		const { name, value } = e.target;
 		console.log("NAME IS:", name, "  VALUE IS:", value);
-		setDetails((prevState) => ({
-			...prevState,
-			[name]: value,
-		}));
+
 		if (name == "itemCode") {
+			setDetails((prevState) => ({
+				...prevState,
+				[name]: value,
+			}));
 			//if input is item code
 			let isFound = false;
 			let index = itemData.length - 1;
@@ -108,6 +110,10 @@ function PullInventoryCreate({
 				}));
 			}
 		} else if (name == "itemName") {
+			setDetails((prevState) => ({
+				...prevState,
+				[name]: value,
+			}));
 			//if input is item name
 			let isFound = false;
 			let index = itemData.length - 1;
@@ -150,6 +156,42 @@ function PullInventoryCreate({
 					unitID: "",
 				}));
 			}
+		} else if (name == "brand") {
+			let isFound = false;
+			let index = brands.length - 1;
+			while (!isFound && index >= 0) {
+				if (value == brands[index].brandID) {
+					let part = brands[index].partNum;
+					let brandID = brands[index].brandID;
+					let brandName = brands[index].brandName;
+					setDetails((prevState) => ({
+						...prevState,
+						brandID: brandID,
+						brandName: brandName,
+						partNum: part,
+					}));
+					isFound = true;
+				}
+				index--;
+			}
+		} else if (name == "partNum") {
+			let isFound = false;
+			let index = brands.length - 1;
+			while (!isFound && index >= 0) {
+				if (value == brands[index].partNum) {
+					let part = brands[index].partNum;
+					let brandID = brands[index].brandID;
+					let brandName = brands[index].brandName;
+					setDetails((prevState) => ({
+						...prevState,
+						brandID: brandID,
+						brandName: brandName,
+						partNum: part,
+					}));
+					isFound = true;
+				}
+				index--;
+			}
 		}
 	}
 
@@ -186,15 +228,15 @@ function PullInventoryCreate({
 		setBrands(tempBrandList);
 	}
 
-	useEffect(() => {
-		console.log("currentUser", currentUser);
-		console.log("unitData", unitData);
-		console.log("brandData", brandData);
-		console.log("supplierData", supplierData);
-		console.log("vehicleData", vehicleData);
-		console.log("itemData", itemData);
-		console.log("itemBrandData", itemBrandData);
-	}, []);
+	// useEffect(() => {
+	// 	console.log("currentUser", currentUser);
+	// 	console.log("unitData", unitData);
+	// 	console.log("brandData", brandData);
+	// 	console.log("supplierData", supplierData);
+	// 	console.log("vehicleData", vehicleData);
+	// 	console.log("itemData", itemData);
+	// 	console.log("itemBrandData", itemBrandData);
+	// }, []);
 
 	useEffect(() => {
 		console.log("DETAILS ARE:", details);
@@ -246,6 +288,16 @@ function PullInventoryCreate({
 						console.log("SUCCESS");
 						setError(false);
 						window.location.reload();
+						setDetails((prevState) => ({
+							...prevState,
+							itemCode: "",
+							itemName: "",
+							brandID: "",
+							brandName: "",
+							partNum: "",
+							quantity: 0,
+							unit: "",
+						}));
 					} else {
 						setError(true);
 					}
@@ -275,7 +327,8 @@ function PullInventoryCreate({
 				...prevState,
 				itemCode: "",
 				itemName: "",
-				brand: "",
+				brandID: "",
+				brandName: "",
 				partNum: "",
 				quantity: 0,
 				unit: "",
@@ -539,7 +592,7 @@ function PullInventoryCreate({
 							<select
 								className="form-fields"
 								name="brand"
-								value={details.brand}
+								value={details.brandID}
 								onChange={(e) => handleDetails(e)}
 								disabled={disableFields()}
 							>
