@@ -75,17 +75,77 @@ export const getServerSideProps = withIronSessionSsr(
 						let brandName = "";
 						let unitName = "";
 
-						// while (index >= 0) {
+						while (index >= 0) {
+							//Should it be less record for recordList?
+							if (add.addRecordID == recordList[index].lessRecordID) {
+								item = recordList[index].itemID;
+								brand = recordList[index].brandID;
+								quantity = recordList[index].quantity;
+								unit = recordList[index].unitID;
 
-						// 	if (add.addRecordID == recordList[index].lessRecordID) {
-						// 		item = recordList[index].itemID;
-						// 		brand = recordList[index].brandID;
-						// 		quantity = recordList[index].quantity;
-						// 		unit = recordList[index].unitID;
-					});
+								if (item.length > 0) {
+								let isFound2 = false;
+								let index2 = itemList.length - 1;
+								while (!isFound2 && index2 >= 0) {
+									if (item == itemList[index2].itemID) {
+									isFound2 = true;
+									itemName = itemList[index2].itemName;
+									itemModel = itemList[index2].itemModel;
+									}
+									index2--;
+								}
+								isFound2 = false;
+								index2 = brandList.length - 1;
+								while (!isFound2 && index2 >= 0) {
+									if (brand == brandList[index2].itemBrandID) {
+									isFound2 = true;
+									brandName = brandList[index2].name;
+									}
+									index2--;
+								}
+								isFound2 = false;
+								index2 = unitList.length - 1;
+								while (!isFound2 && index2 >= 0) {
+									if (unit == unitList[index2].unitID) {
+									isFound2 = true;
+									unitName = unitList[index2].unitName;
+									}
+									index2--;
+								}
+								}
+			
+								addTable.push({
+									addDate: dayjs(add.addDate).format("MM/DD/YYYY"),
+									itemModel: itemModel,
+									invoiceNumber: add.invoiceNumber,
+									itemName: itemName,
+									brandName: brandName,
+									quantity: quantity,
+									unit: unitName,
+								});
+							}
+							index--;
+							}
+						});
+						addTableData = JSON.stringify(addTable);
+						} else {
+						addData = JSON.stringify({});
+						addTableData = JSON.stringify({});
+						}
+			
+						return {
+						props: {
+							currentUser,
+							unitData,
+							itemData,
+							addData,
+							addTableData,
+						},
+						};
+			
+				  //  let pullRecData = JSON.stringify(tempPullData);
+				  }
 				
-								
-
 
 				//await dbConnect();
 
