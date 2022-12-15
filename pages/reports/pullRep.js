@@ -28,98 +28,20 @@ export const getServerSideProps = withIronSessionSsr(
 				};
 			} else {
 
-        // await dbConnect();
-
-        // const pullRecList = await PullInventory.find({},
-        // 	{
-        // 		lessRecordID: 1,
-        // 		pullDate: 1,
-        // 		plateNum: 1,
-        // 	}
-        // 	);
-        // const recordList = await RecordDetails.find({},
-        // 	{
-        // 		lessRecordID: 1,
-        // 		itemID: 1,
-        // 		quantity: 1,
-        // 		unitID: 1,
-        // 	}
-        // 	);
-
-        // const itemList = await Item.find({},
-        // 	{
-        // 		itemID: 1,
-        // 		itemName: 1,
-        // 		itemModel: 1,
-        // 	}
-        // );
-
-        // const unitTypeList = await unitType.find({},
-        // 	{
-        // 		UnitTypeID: 1,
-        // 		UnitTypeName: 1,
-        // 		disabled: 1,
-        // 	})
-
-        // var tempPullData = [];
-
-        // pullRecList.forEach((pullRec) => {
-        //   let isFound = false;
-        //   let isFound2 = false;
-        //   let isFound3 = false;
-        //   let tempItemName = "";
-        //   let tempItemModel = "";
-        //   let unitTypeName = "";
-        //   let tempQuantity = "";
-
-        //   while (!isFound && !isFound2 && !isFound3) {
-        //     recordList.forEach((record) => {
-        //       if (pullRec.lessRecordID == record.lessRecordID) {
-        //         tempQuantity = record.quantity;
-        //         itemList.forEach((item) => {
-        //           if ((record.itemID = item.itemID)) {
-        //             tempItemName = item.itemName;
-        //             tempItemModel = item.itemModel;
-        //             isFound = true;
-        //           }
-        //         });
-
-        //         unitTypeList.forEach((unit) => {
-        //           if (record.unitID == unit.UnitTypeID) {
-        //             unitTypeName = unit.unitTypeName;
-        //             isFound2 = true;
-        //           }
-        //         });
-        //         isFound3 = true;
-        //       }
-        //     });
-        //   }
-        //   tempPullData.push({
-        //     pulloutDate: pullRec.pullDate,
-        //     plateNum: pullRec.plateNum,
-        //     itemName: tempItemName,
-        //     itemModel: tempItemModel,
-        //     quantity: tempQuantity,
-        //     unit: unitTypeName,
-        //   });
-        // });
 			await dbConnect();
 
 			const unitList = await Measure.find({ disabled: false });
 
 			const brandList = await ItemBrand.find(
-			{ disabled: false },
 			{ itemBrandID: 1, name: 1 }
 			);
 
 
 			const itemList = await Item.find(
-			{ quantity: { $gt: 0 }, disabled: false },
 			{ itemID: 1, itemName: 1, itemModel: 1, unitID: 1, quantity: 1, minQuantity: 1 }
 			);
 
 			const itemBrandList = await ItemBrandCombination.find(
-			{ quantity: { $gt: 0 }, disabled: false },
 			{ itemID: 1, itemBrandID: 1, partNumber: 1 }
 			);
 

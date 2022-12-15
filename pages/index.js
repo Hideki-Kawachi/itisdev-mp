@@ -10,6 +10,12 @@ import User from "../models/UserSchema";
 import Vehicle from "../models/VehicleSchema";
 import { COLUMNS } from "../components/Dashboard/TransactionColumns";
 import ADDINV_MOCK_DATA from "../components/Reports/ADD_INV.json";
+import PullInventory from "../models/PullInvSchema";
+import AddInventory from "../models/AddInvSchema";
+import RecordDetails from "../models/RecordDetailsSchema";
+import Measure from "../models/MeasureSchema";
+import Item from "../models/ItemSchema";
+import dayjs from "dayjs"
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
@@ -25,7 +31,8 @@ export const getServerSideProps = withIronSessionSsr(
 				await dbConnect();
 				const totalUsers = await User.countDocuments({ disabled: false });
 				const totalVehicles = await Vehicle.countDocuments({ disabled: false });
-
+				const pullList = await PullInventory.find({ disabled: false });
+          		const recordList = await RecordDetails.find({});
 
 				//Start here
 				const addRecList = await AddInventory.find(
