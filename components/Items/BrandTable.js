@@ -20,10 +20,7 @@ export const BrandTable = ({
   }) => {
 	const columns = useMemo(() => COLUMNS, []);
 	const data = useMemo(() => convertFunc(pageType, tableValues), [tableValues]);
-    
-  useEffect(() => {
-    console.log(tableValues)
-  }, [])
+  
 	const {
 		getTableProps,
 		getTableBodyProps,

@@ -35,11 +35,28 @@ function ItemCreate({ items, categories, brands }) {
 	const [modName, setModName] = useState("");
 	const [modID, setModID] = useState("");
 
-	// Others
+	// Errors
 	const [error, setError] = useState(false);
+	const [codeError, setCodeError] = useState("");
+	const [detailsError, setDetailsError] = useState(false);
+	const [duplicateError, setDuplicateError] = useState(false);
+
+	// Others
 	const [notifResult, setNotifResult] = useState("");
 	const [infoPop, setInfoPop] = useState(false);
 	const [cancel, setCancel] = useState(false);
+
+	function convertBrandID (value) {
+        brands.every((brand) => {
+            if (value == brand.itemBrandID) {
+                value = brand.name
+                return false;
+            }
+            return true;
+        }) 
+
+        return value;
+    }
 
     function revertBrandToID () {
         detailsArray.every((value) => {
@@ -65,20 +82,35 @@ function ItemCreate({ items, categories, brands }) {
         }));
     }
 
-    function addDetails () {
-        if (Object.keys(detailsArray[0]).length == 0) {
-            detailsArray.shift()
-        }
-        setDetailsArray(detailsArray => [...detailsArray, details])
-        setQuantity(quantity+parseInt(details.quantity))
+	function clearDetails() {
         setDetails(prevState => ({
             ...prevState,
+            combinationID: "",
             brand: "",
             partNumber: "",
             quantity: 0,
-        }));
+            unit: "",
+            disabled: false,
+        }))
     }
 
+	function checkDetails() {
+		return details.brand.length == 0 || details.partNumber.length == 0 || details.quantity < 0
+	}
+
+    function addDetails () {
+		console.log(details)
+		if (JSON.stringify(detailsArray[0]) == "{}") {
+			detailsArray.shift()
+		}
+		setDetailsError(checkDetails())
+		if (!checkDetails()) {
+			setDetailsArray(detailsArray => [...detailsArray, details])
+        	setQuantity(quantity+parseInt(details.quantity))
+			clearDetails();	
+		} 
+    }
+ 
 	function convertDetailsArray (type, arr) {
 		if (type) {
 			let template = {
@@ -125,9 +157,7 @@ function ItemCreate({ items, categories, brands }) {
           categoryID.length == 0 ||
           name.length == 0 ||
           unitID.length == 0 ||
-          quantity == 0 ||
-          minQuantity == 0 ||
-          detailsArray.length == 0    
+          quantity == 0 
         ) {
           setError(true);
         } else {
@@ -159,6 +189,7 @@ function ItemCreate({ items, categories, brands }) {
                 window.location.reload();
               } else  {
                 setError(true);
+				setCodeError(data);
               }
             });
         }}
@@ -178,6 +209,19 @@ function ItemCreate({ items, categories, brands }) {
 			return <></>;
 		}
 	}
+
+	function showRequiredError(errType, field, msg) {
+		if (errType && field.length == 0) {
+			return (<span className="vehicle-create-error">{msg}</span>)
+		}
+	}
+	
+	function showNegativeNumError(errType, field, msg) {
+		if (errType && field < 0) {
+			return (<span className="vehicle-create-error">{msg}</span>)
+		}
+	}
+
 	return (
 		<>
 			<Modal isOpen={modStatus} className="modal" ariaHideApp={false}>
@@ -192,10 +236,10 @@ function ItemCreate({ items, categories, brands }) {
 				</ItemCatTable>
 			</Modal>
 			<form
-				onSubmit={submitForm}
 				className="item-column-container"
 				id="item-add-main-container"
 			>
+				{showResult()}
 				<h1>IDENTIFICATION</h1>
 
 				<div id="add-item-form-identification">
@@ -233,6 +277,7 @@ function ItemCreate({ items, categories, brands }) {
 									</option>
 								))}
 							</select>
+							{showRequiredError(error, categoryID, "Select Category")}
 						</div>
 						<div className="item-input">
 							<label htmlFor="itemID">
@@ -244,6 +289,14 @@ function ItemCreate({ items, categories, brands }) {
 								value={itemID}
 								onChange={(e) => setItemID(e.target.value)}
 							/>
+						{showRequiredError(error, itemID, "Input Item Code")}
+						{codeError == itemID && itemID.length > 0 ? (
+							<span className="vehicle-create-error">
+								Item Code is already used
+							</span>
+						) : (
+							<></>
+						)}
 						</div>
 						<div className="item-input">
 							<label htmlFor="itemName">
@@ -255,6 +308,7 @@ function ItemCreate({ items, categories, brands }) {
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 							/>
+						{showRequiredError(error, name, "Input Item Name")}
 						</div>
 
 						<div className="item-input" id="item-status">
@@ -282,9 +336,11 @@ function ItemCreate({ items, categories, brands }) {
 							<input
 								type="number"
 								name="minQuantity"
+								min="0"
 								value={minQuantity}
 								onChange={(e) => setMinQuantity(e.target.valueAsNumber)}
 							/>
+							{showNegativeNumError(error, minQuantity, "Input cannot be negative")}
 						</div>
 
 						<div className="item-input">
@@ -329,6 +385,7 @@ function ItemCreate({ items, categories, brands }) {
                             </option>
                         ))} */}
 							</select>
+							{showRequiredError(error, unitID, "Select Unit")}
 						</div>
 					</div>
 				</div>
@@ -374,16 +431,18 @@ function ItemCreate({ items, categories, brands }) {
 									</option>
 								))}
 							</select>
+							{showRequiredError(detailsError, details.brand, "Select Brand")}
 						</div>
 
 						<div className="item-input">
-							<label htmlFor="partNumber">Part Number:</label>
+							<label htmlFor="partNumber">Part Number:<label className="required"> * </label></label>
 							<input
 								type="text"
 								name="partNumber"
 								value={details.partNumber}
 								onChange={(e) => handleDetails(e)}
 							/>
+							{showRequiredError(detailsError, details.partNumber, "Input Part Number")}
 						</div>
 
 						<div className="item-input">
@@ -391,11 +450,12 @@ function ItemCreate({ items, categories, brands }) {
 							<input
 								type="number"
 								name="quantity"
+								min="0"
 								value={details.quantity}
 								onChange={(e) => handleDetails(e)}
 							/>
+							{showNegativeNumError(detailsError, details.quantity, "Input cannot be negative")}
 						</div>
-
 						<button
 							type="button"
 							className="green-button-container add-button"
@@ -407,7 +467,7 @@ function ItemCreate({ items, categories, brands }) {
 
                 <div className="details-right-container">
                     
-                    { Object.keys(detailsArray[0]).length == 0 ? (
+                    { JSON.stringify(detailsArray[0]) == "{}" || detailsArray.length == 0 ? (
                         <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
                     ) : (
                         <BrandTable 
@@ -425,7 +485,7 @@ function ItemCreate({ items, categories, brands }) {
 					<Link href="/items">
 						<button className="gray-button-container">Cancel</button>
 					</Link>
-					<button type="submit" className="green-button-container">
+					<button type="button" onClick={submitForm} className="green-button-container">
 						Save
 					</button>
 				</div>

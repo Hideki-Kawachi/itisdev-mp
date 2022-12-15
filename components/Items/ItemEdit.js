@@ -60,8 +60,13 @@ function ItemEdit({itemID, items, categories, brands}) {
     const [modName, setModName] = useState("")
     const [modID, setModID] = useState("")
 
-    // Others
+    // Errors
     const [error, setError] = useState(false);
+    const [detailsError, setDetailsError] = useState(false);
+	const [duplicateError, setDuplicateError] = useState(false);
+
+    // Others
+    
     const [notifResult, setNotifResult] = useState("");
     const [infoPop, setInfoPop] = useState(false);
     const [cancel, setCancel] = useState(false);
@@ -97,9 +102,7 @@ function ItemEdit({itemID, items, categories, brands}) {
             categoryID.length == 0 ||
             name.length == 0 ||
             unitID.length == 0 ||
-            quantity == 0 ||
-            minQuantity == 0 ||
-            detailsArray.length == 0    
+            quantity == 0 
           ) {
             setError(true);
           } else {
@@ -150,18 +153,6 @@ function ItemEdit({itemID, items, categories, brands}) {
             
     }}
     
-    function clearDetails() {
-        setDetails(prevState => ({
-            ...prevState,
-            combinationID: "",
-            brand: "",
-            partNumber: "",
-            quantity: 0,
-            unit: "",
-            disabled: false,
-        }))
-    }
-
     // Handle details input
     function convertDetailsArray (type, arr) {
         if (type) {
@@ -229,6 +220,9 @@ function ItemEdit({itemID, items, categories, brands}) {
         }));
     }
 
+    function checkDetails() {
+		return details.brand.length == 0 || details.partNumber.length == 0 || details.quantity < 0
+	}
 
     function addDetails () {
         if (Object.keys(detailsArray[0]).length == 0) {
@@ -237,12 +231,28 @@ function ItemEdit({itemID, items, categories, brands}) {
         }
         details["combinationID"] = String(Math.floor(Math.random() * 50000)),
         details["itemBrandID"] = revertOneBrandToID(details["brand"]);
-        setDetailsArray(detailsArray => [...detailsArray, details])
-        setAuditTrail(auditTrail => [...auditTrail, ])
-        setQuantity(quantity+parseInt(details.quantity))
 
-        auditTrail[""]
-        clearDetails()
+        setDetailsError(checkDetails())
+        if (!checkDetails()) {
+            setDetailsArray(detailsArray => [...detailsArray, details])
+            // setAuditTrail(auditTrail => [...auditTrail, ])
+            setQuantity(quantity+parseInt(details.quantity))    
+            auditTrail[""]
+            clearDetails()
+        }
+        
+    }
+
+    function clearDetails() {
+        setDetails(prevState => ({
+            ...prevState,
+            combinationID: "",
+            brand: "",
+            partNumber: "",
+            quantity: 0,
+            unit: "",
+            disabled: false,
+        }))
     }
 
     function enableEdit(e){
@@ -295,6 +305,18 @@ function ItemEdit({itemID, items, categories, brands}) {
             setDetailsArray([{}]);
         }
     }
+
+    function showRequiredError(errType, field, msg) {
+		if (errType && field.length == 0) {
+			return (<span className="vehicle-create-error">{msg}</span>)
+		}
+	}
+	
+	function showNegativeNumError(errType, field, msg) {
+		if (errType && field < 0) {
+			return (<span className="vehicle-create-error">{msg}</span>)
+		}
+	}
     
     return (
         <>
@@ -316,7 +338,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                 transaction={"Editing of Item"}
                 ></Cancel>
             </Modal>
-            <form onSubmit={submitForm} className="item-column-container" id="item-add-main-container">
+            <form className="item-column-container" id="item-add-main-container">
                 <h1>IDENTIFICATION</h1>
     
                 <div id="add-item-form-identification">
@@ -365,6 +387,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                                 onChange={(e) => setName(e.target.value)}
                                 disabled={!isEditable}
                             />
+                            {showRequiredError(error, name, "Input Item Name")}
                         </div>
     
                         <div className="item-input" id="item-status">
@@ -404,6 +427,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                                 disabled={!isEditable}
                                 onChange={(e) => setMinQuantity(e.target.valueAsNumber)}
                             />
+                            {showNegativeNumError(error, minQuantity, "Input cannot be negative")}
                         </div>
     
                         <div className="item-input">
@@ -433,6 +457,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                                 </option>
                             ))} */}
                             </select>
+                            {showRequiredError(error, unitID, "Select Unit")}
                         </div>
                     </div>
                 </div>
@@ -470,6 +495,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                                 </option>
                             ))}
                         </select>
+                        {showRequiredError(detailsError, details.brand, "Select Brand")}
                     </div>
 
                     <div className="item-input">
@@ -480,6 +506,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                             value={details.partNumber}
                             onChange={(e) => {handleDetails(e)}}
                         />
+                        {showRequiredError(detailsError, details.partNumber, "Input Part Number")}
                     </div>
 
                     <div className="item-input">
@@ -490,6 +517,7 @@ function ItemEdit({itemID, items, categories, brands}) {
                             value={details.quantity}
                             onChange={(e) => {handleDetails(e)}}
                         />
+                        {showNegativeNumError(detailsError, details.quantity, "Input cannot be negative")}
                     </div>
                     
                     { detailsButton == "Edit" ? 
@@ -542,16 +570,16 @@ function ItemEdit({itemID, items, categories, brands}) {
                     </Link> 
                     { isEditable ? (
                         <button 
-                            type="submit" 
+                            type="button" 
                             className="green-button-container"
+                            onClick={submitForm}
                         >Save
                         </button>
                     ) : (
                         <button 
                             type="button" 
                             className="green-button-container" 
-                            onClick={(e) => enableEdit(e)
-                            }
+                            onClick={(e) => enableEdit(e)}
                         >Edit ✎
                         </button>
                     )}
