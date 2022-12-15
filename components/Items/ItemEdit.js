@@ -19,7 +19,7 @@ export async function getServerSideProps() {
     return { props: { data } }
   }
 
-function ItemEdit({itemID, items, categories, brands}) {
+function ItemEdit({itemID, items, categories, brands, units}) {
     // Item Identification
     const [categoryID, setCategoryID] = useState("");
     const [name, setName] = useState("");
@@ -244,7 +244,6 @@ function ItemEdit({itemID, items, categories, brands}) {
 			}
 			return true;
 		})
-        console.log(duplicate)
 		return duplicate;
 	}
 
@@ -483,14 +482,11 @@ function ItemEdit({itemID, items, categories, brands}) {
                                 disabled={!isEditable}
                                 onChange={(e) => setUnitID(e.target.value)}
                             >
-                                <option key="Pieces" value="10001">Pieces</option>
-                                <option key="Sets" value="10002">Sets</option>
-    
-                            {/* {units.map((unit) => (
-                                <option key={unit.unitID} value={unit.unitName}>
+                            {units.map((unit) => (
+                                <option key={unit.unitID} value={unit.unitID}>
                                     {unit.unitName}
                                 </option>
-                            ))} */}
+                            ))}
                             </select>
                             {showRequiredError(error, unitID, "Select Unit")}
                         </div>
