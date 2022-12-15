@@ -47,7 +47,7 @@ export const getServerSideProps = withIronSessionSsr(
       // user: UserID for creatorID - kunin yung name
       // Unit: Measure (connect sa itemS)
 
-      var auditData = [];
+      var tempAuditData = [];
 
       auditList.forEach((audit) => {
 
@@ -72,15 +72,14 @@ export const getServerSideProps = withIronSessionSsr(
               itemName = item.itemName;
               itemModel = item.itemModel;
               isFound = true;
-
-
-
             }
+
+
           })
 
         // } 
 
-        auditData.push({
+        tempAuditData.push({
           //date, invoice,  item n, item model, quantity, unit name
           auditDate: dayjs(auditList.auditDate).format("MM/DD/YYYY"),
           itemName: itemName,
@@ -97,11 +96,11 @@ export const getServerSideProps = withIronSessionSsr(
 
 
       
-      
+      let auditData = JSON.stringify(tempAuditData);
       
 
 
-      return { props: { currentUser, } };
+      return { props: { currentUser, auditData} };
       }
     } else {
       return {
@@ -119,14 +118,16 @@ export const getServerSideProps = withIronSessionSsr(
 // 	}
 // ];
 
-function AuditReports({ currentUser,  }) {
+function AuditReports({ currentUser,  auditData}) {
+  let TEMPDATA = JSON.parse(auditData);
+
   return (
     <>
       <Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
       <NavBar user={currentUser}></NavBar>
       <div id="main-container">
         <ReportTabs tab="4" roleID={currentUser.roleID}></ReportTabs>
-        <BasicTable COLUMNS={COLUMNS} ADDINV={AUDIT_MOCK_DATA}></BasicTable>
+        <BasicTable COLUMNS={COLUMNS} ADDINV={TEMPDATA}></BasicTable>
       </div>
     </>
   );
