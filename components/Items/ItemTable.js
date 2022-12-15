@@ -18,7 +18,7 @@ import TempFilter from "./Temp/TempSearch";
 import TempCategoryFilter from "./Temp/TempCategoryFilter";
 import { useEffect } from "react";
 
-export const ItemTable = ({itemData, categoryData}) => {
+export const ItemTable = ({itemData, categoryData, unitData}) => {
 	const columns = useMemo(() => COLUMNS, []);
 	const data = useMemo(() => itemData, []);
   const router = useRouter();
@@ -70,22 +70,6 @@ export const ItemTable = ({itemData, categoryData}) => {
                   filter={filter}
                   setFilter={setFilter}
                 ></Dropdown>
-                {/* <span className="form-item">
-                    <label className="form-labels">Item Category:</label>
-                    <br />
-                    <select className="sort-dropdown" id="item-category-filter" onChange={(e) => handleFilter("categoryID", e)}>
-                      <option value="" key="00000" defaultValue hidden>
-                          {" "}
-                          All{" "}
-                      </option>
-                      {categoryData.map((category) => (
-                          <option key={category.categoryID} value={category.categoryID}>
-                              {category.name}
-                          </option>
-                      ))}
-                    </select>
-                </span> */}
-
                 <span className="form-item" id="search-item-code-container">
                     <br />
                     <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />

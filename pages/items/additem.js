@@ -8,6 +8,7 @@ import BasicButton from "../../components/BasicButton";
 import ItemCreate from "../../components/Items/ItemCreate";
 import AddItemCategory from "../../components/Items/CategoryCreate";
 import ItemTable from "../../components/Items/ItemTable";
+import Measure from "../../models/MeasureSchema";
 
 import dbConnect from "../../lib/dbConnect";
 import Item from "../../models/ItemSchema";
@@ -45,12 +46,17 @@ export const getServerSideProps = withIronSessionSsr(
 					disabled: 1,
 				}
 			);
-			// const unitList = await .find(
-			// 	{},
-			// 	{
-					
-			// 	}
-			// )
+			const unitList = await Measure.find(
+				{},
+				{
+					unitID: 1, 
+					unitName: 1, 
+					abbreviation: 1, 
+					unitTypeID: 1,
+					// classTypeID: 1,
+					disabled: 1,
+				}
+			);
 			const brandList = await ItemBrand.find(
 				{},
 				{
@@ -63,12 +69,14 @@ export const getServerSideProps = withIronSessionSsr(
 			let itemData = JSON.stringify(itemList);
 			let categoryData = JSON.stringify(categoryList);
 			let brandData = JSON.stringify(brandList);
+			let unitData = JSON.stringify(unitList);
 
 			return { props: { 
 				currentUser,
 				itemData,
 				categoryData,
-				brandData, 
+				brandData,
+				unitData, 
 			} };
 		} else {
 			return {
@@ -85,10 +93,12 @@ function Items({
 	itemData,
 	categoryData,
 	brandData, 
+	unitData,
 }) {
 	const items = JSON.parse(itemData);
 	const categories = JSON.parse(categoryData);
 	const brands = JSON.parse(brandData);
+	const units = JSON.parse(unitData);
 	
 	return (
 		<>
@@ -99,6 +109,7 @@ function Items({
 					items = {items}
 					categories = {categories}
 					brands = {brands}
+					units = {units}
 				/>
 			</div>	
 		</>
