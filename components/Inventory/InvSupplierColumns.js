@@ -1,6 +1,6 @@
 import { GlobalFilter } from "../GlobalFilter";
 
-export const INVCAT_COLUMNS = [
+export const INVSUPP_COLUMNS = [
   {
     Header: "Status",
     id: "disabled",
@@ -17,6 +17,7 @@ export const INVCAT_COLUMNS = [
 
   {
     Header: "Name",
+    id: "name",
     accessor: "supplierName",
     Filter: GlobalFilter,
   },

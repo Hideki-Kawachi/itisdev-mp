@@ -8,7 +8,8 @@ import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
 import ItemCatTable from "../Inventory/InvCategoryList";
 import days from "dayjs";
-
+import { INVSUPP_COLUMNS } from "./InvSupplierColumns";
+import { INVBRAND_COLUMNS } from "./InvBrandColumns";
 
 function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 	const [isDisabled, setIsDisabled] = useState(false);
@@ -36,16 +37,19 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 	const uniqueRecordID = uuid();
 	const autoRecordID = uniqueRecordID.slice(0, 8)
 	const [toggleState, setToggleState] = useState(1);
+  const [accessor, setAccessor] = useState("");
 
 	// Modals
 	const [modStatus, setModStatus] = useState(false)
 	const [modType, setModType] = useState("")
 	const [modName, setModName] = useState("")
 	const [modID, setModID] = useState("")
+  const [column, setColumn] = useState()
 
 	const toggleTab = (index) => {
 		setToggleState(index);
 	};
+
 
 	function submitForm() {
 		// console.log("1. Error is " + error + ", Data is " + data);
@@ -198,6 +202,13 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
 		}
 	}
 
+  function changeAccessor(){
+    if(modName == "Add Supplier"){
+      return "supplierName";
+    }
+    else
+      return "brandName";
+  }
 	function generateRandomID() {
 		var min = 10000;
 		var max = 99999;
@@ -214,6 +225,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
             name={modName}
             type={modType}
             id={modID}
+            column={column}
           >
             {" "}
           </ItemCatTable>
@@ -407,6 +419,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                     setModName("Add Brand");
                     setModType(brands);
                     setModID("itemBrandID");
+                    setColumn(INVBRAND_COLUMNS);
                   }}
                 >
                   ✎
@@ -462,6 +475,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                     setModName("Add Supplier");
                     setModType(suppliers);
                     setModID("supplierID");
+                    setColumn(INVSUPP_COLUMNS);
                   }}
                 >
                   ✎
