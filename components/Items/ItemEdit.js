@@ -33,7 +33,7 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
         brand: "",
         partNumber: "",
         quantity: 0,
-        unit: "",
+        // unit: "",
         disabled: false,
     })
     const [detailsArray, setDetailsArray] = useState([{}]);
@@ -262,6 +262,7 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
         }
         details["combinationID"] = String(Math.floor(Math.random() * 50000)),
         details["itemBrandID"] = revertOneBrandToID(details["brand"]);
+        details["itemID"] = itemID;
 
         setDetailsError(checkDetails())
         setDuplicateError(checkDuplicate())
@@ -279,7 +280,7 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
             brand: "",
             partNumber: "",
             quantity: 0,
-            unit: "",
+            // unit: "",
             disabled: false,
         }))
     }
@@ -378,7 +379,7 @@ function ItemEdit({ userID, itemID, items, categories, brands, units}) {
                 ></Cancel>
             </Modal>
             <form className="item-column-container" id="item-add-main-container">
-                <button type="button" onClick={checkAudit}>Test</button>
+                {/* <button type="button" onClick={checkAudit}>Test</button> */}
                 <h1>IDENTIFICATION</h1>
     
                 <div id="add-item-form-identification">
