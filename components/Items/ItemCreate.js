@@ -296,11 +296,15 @@ function ItemCreate({ items, categories, brands, units}) {
 									{" "}
 									Select Category{" "}
 								</option>
-								{categories.map((category) => (
-									<option key={category.categoryID} value={category.categoryID}>
-										{category.name}
-									</option>
-								))}
+								{categories.map((category) => {
+									if (category.disabled == false) {
+										return (
+											<option key={category.categoryID} value={category.categoryID}>
+												{category.name}
+											</option>
+										)}
+									})
+								}
 							</select>
 							{showRequiredError(error, categoryID, "Select Category")}
 						</div>
@@ -397,18 +401,17 @@ function ItemCreate({ items, categories, brands, units}) {
 									{" "}
 									Select Unit{" "}
 								</option>
-								{/* <option key="Pieces" value="10001">
-									Pieces
-								</option>
-								<option key="Sets" value="10002">
-									Sets
-								</option> */}
 
-								{units.map((unit) => (
-									<option key={unit.unitID} value={unit.unitID}>
-										{unit.unitName}
-									</option>
-                        		))}
+								{units.map((unit) => {
+									if (unit.disabled == false) {
+										return (
+											<option key={unit.unitID} value={unit.unitID}>
+												{unit.unitName}
+											</option>
+										)
+									}
+								}
+                        		)}
 							</select>
 							{showRequiredError(error, unitID, "Select Unit")}
 						</div>
@@ -450,11 +453,15 @@ function ItemCreate({ items, categories, brands, units}) {
 									{" "}
 									Select Brand{" "}
 								</option>
-								{brands.map((brand) => (
-									<option key={brand.itemBrandID} value={brand.name}>
-										{brand.name}
-									</option>
-								))}
+								{brands.map((brand) => {
+									if (brand.disabled == false) {
+										return (
+											<option key={brand.itemBrandID} value={brand.name}>
+												{brand.name}
+											</option>
+										)}
+									})
+								}
 							</select>
 							{showRequiredError(detailsError, details.brand, "Select Brand")}
 							{showDuplicateError(duplicateError, details.brand, "is already in use")}
