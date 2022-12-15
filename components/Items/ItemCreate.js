@@ -389,18 +389,6 @@ function ItemCreate({ items, categories, brands, units, currentUser }) {
 								<label htmlFor="unitID">
 									Unit: <label className="required"> * </label>
 								</label>
-								<button
-									className="item-icon-button item-add-option-button "
-									type="button"
-									onClick={() => {
-										setModStatus(true);
-										setModName("Select Unit");
-										setModType(unitID);
-										setModID("unitID");
-									}}
-								>
-									✎
-								</button>
 							</div>
 							{/* Insert Modal Here */}
 							<select

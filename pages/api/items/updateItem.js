@@ -7,7 +7,7 @@ export default async (req, res) => {
 
     const itemInfo = (req.body.itemData);
     const detailsInfo = req.body.details;
-    console.log(detailsInfo)
+    console.log(req.body)
     let itemResult = await Item.updateOne(
         {   
             itemID: itemInfo.itemID

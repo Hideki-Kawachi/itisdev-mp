@@ -265,8 +265,8 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 			auditTrail.shift();
 		}
 		(details["combinationID"] = String(Math.floor(Math.random() * 50000))),
-			(details["itemBrandID"] = revertOneBrandToID(details["brand"]));
-
+		(details["itemBrandID"] = revertOneBrandToID(details["brand"]));
+		(details["itemID"] = itemID);
 		setDetailsError(checkDetails());
 		setDuplicateError(checkDuplicate());
 		if (!checkDetails() && !checkDuplicate()) {
@@ -385,9 +385,9 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 				></Cancel>
 			</Modal>
 			<form className="item-column-container" id="item-add-main-container">
-				<button type="button" onClick={checkAudit}>
+				{/* <button type="button" onClick={checkAudit}>
 					Test
-				</button>
+				</button> */}
 				<h1>IDENTIFICATION</h1>
 
 				<div id="add-item-form-identification">
@@ -506,18 +506,6 @@ function ItemEdit({ userID, itemID, items, categories, brands, units }) {
 								<label htmlFor="unitID">
 									Unit: <label className="required"> * </label>
 								</label>
-								<button
-									className="item-icon-button item-add-option-button "
-									type="button"
-									onClick={() => {
-										setModStatus(true);
-										setModName("Select Unit");
-										setModType(unitID);
-										setModID("unitID");
-									}}
-								>
-									✎
-								</button>
 							</div>
 							{/* Insert Modal Here */}
 							<select
