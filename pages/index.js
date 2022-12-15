@@ -163,14 +163,13 @@ export const getServerSideProps = withIronSessionSsr(
 					}
 
 					tempRepData.push({
-						pullDate: dayjs(pull.pullDate).format("MM/DD/YYYY"),
-						itemModel: itemModel,
-						JOnumber: pull.JOnumber,
-						plateNum: pull.plateNum,
+						transactionDate: dayjs(pull.pullDate).format("MM/DD/YYYY"),
 						itemName: itemName,
-						brandName: brandName,
+						itemModel: itemModel,
+						itemName: itemName,
 						quantity: quantity,
 						unit: unitName,
+						transactType: "Pull"
 					});
 				}
 				index--;
