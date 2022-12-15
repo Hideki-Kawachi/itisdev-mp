@@ -6,10 +6,7 @@ import {
   useFilters,
   usePagination,
 } from "react-table";
-import ADDINV_MOCK_DATA from "../ADDINV_MOCK_DATA.json";
 import { COLUMNS } from "./InventoryColumns";
-import GlobalFilter from "../GlobalFilter";
-import Link from "next/link";
 
 export const InventoryTableAdd = ( {InventoryData} ) => {
   const columns = useMemo(() => COLUMNS, []);
@@ -76,7 +73,8 @@ export const InventoryTableAdd = ( {InventoryData} ) => {
             prepareRow(row);
             return (
               <tr id="btable" {...row.getRowProps()}
-              onClick={() => router.push("inventory/" + row.original.addRecordID)}>
+              // onClick={() => router.push("inventory/" + row.original.addRecordID)}
+              >
             {row.cells.map((cell) => {
               return (
                 <td {...cell.getCellProps()}>{cell.render("Cell")}</td>

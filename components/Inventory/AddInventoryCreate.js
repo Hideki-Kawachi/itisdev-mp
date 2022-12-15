@@ -368,7 +368,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                   onChange={(e) => setUnitID(e.target.value)}
                   required
                 >
-                  <option value="">Select Unit</option>
+                  {/* <option value="">Select Unit</option> */}
                   {units.map((unit) => (
                     <option key={unit.unitID} value={unit.unitID}>
                       {unit.unitName}
@@ -432,7 +432,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
                   onChange={(e) => setBrandID(e.target.value)}
                   required
                 >
-                  <option value="">Select Brand</option>
+                  {/* <option value="">Select Brand</option> */}
                   {brands.map((brand) => (
                     <option key={brand.itemBrandID} value={brand.itemBrandID}>
                       {brand.name}
