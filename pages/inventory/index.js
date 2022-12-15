@@ -61,8 +61,8 @@ export const getServerSideProps = withIronSessionSsr(
 			);
 
 			const vehicleList = await Vehicles.find(
-				{ disabled: false },
-				{ plateNum: 1 }
+				{},
+				{ plateNum: 1, disabled : 1}
 			);
 
 			const itemList = await Item.find(

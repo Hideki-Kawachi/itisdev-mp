@@ -477,254 +477,271 @@ function PullInventoryCreate({
 		}
 	}
 	return (
-		<>
-			<div className="container">
-				<div className="content-tabs">
-					<BasicTablePull pullTableData={pullTableData}> </BasicTablePull>
+    <>
+      <div className="container">
+        <div className="content-tabs">
+          <BasicTablePull pullTableData={pullTableData}> </BasicTablePull>
 
-					{/* First Field Group */}
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">Pull-out Date: </label> <br />
-							<input
-								type="date"
-								defaultValue={date}
-								className="form-fields"
-								placeholder="Acquired Date"
-								onChange={(e) => setPullDate(e.target.value)}
-							/>
-						</div>
+          {/* First Field Group */}
+          <div className="form-container">
+            <div className="form-item">
+              <label className="form-labels">Pull-out Date: </label> <br />
+              <input
+                type="date"
+                defaultValue={date}
+                className="form-fields"
+                placeholder="Acquired Date"
+                onChange={(e) => setPullDate(e.target.value)}
+              />
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Job Order Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<label className="label-format"> Format: Numbers only. </label>{" "}
-							<br />
-							<input
-								type="number"
-								className="form-fields"
-								placeholder="Enter Job Order Number"
-								onChange={(e) => setJOnumber(e.target.value)}
-							/>
-							{showJOnumberError()}
-							{JOnumberError == JOnumber && JOnumber.length > 0 ? (
-								<span className="vehicle-create-error">
-									Job Order Number has already been registered.
-								</span>
-							) : (
-								<></>
-							)}
-						</div>
+            <div className="form-item">
+              <label className="form-labels">
+                Job Order Number: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <label className="label-format"> Format: Numbers only. </label>{" "}
+              <br />
+              <input
+                type="number"
+                className="form-fields"
+                placeholder="Enter Job Order Number"
+                onChange={(e) => setJOnumber(e.target.value)}
+              />
+              {showJOnumberError()}
+              {JOnumberError == JOnumber && JOnumber.length > 0 ? (
+                <span className="vehicle-create-error">
+                  Job Order Number has already been registered.
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Plate Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<label className="label-format">
-								{" "}
-								Format: Exclude spaces and dashes.{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Plate Number"
-								onChange={(e) => setPlateNum(e.target.value)}
-							/>
-							{showPlateNumError()}
-							{plateNumError == plateNum && plateNum.length > 0 ? (
-								<span className="vehicle-create-error">
-									Plate Number has already been registered
-								</span>
-							) : (
-								<></>
-							)}
-						</div>
+            <div className="form-item">
+              <label className="form-labels">
+                Plate Number: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <label className="label-format">
+                {" "}
+                Format: Exclude spaces and dashes.{" "}
+              </label>{" "}
+              <br />
+              <select
+                type="text"
+                className="select-form"
+                onChange={(e) => setPlateNum(e.target.value)}
+                required
+              >
+                <option value="" key="00003" defaultValue hidden>
+                  {" "}
+                  Select Plate Number{" "}
+                </option>
+                {vehicleData.map((vehicle) => {
+                  if (vehicle.disabled == false) {
+                    return (
+                      <option
+                        key={vehicle.plateNum}
+                        value={vehicle.plateNum}
+                      >
+                        {vehicle.plateNum}
+                      </option>
+                    );
+                  }
+                })}
+              </select>
+              {showPlateNumError()}
+              {plateNumError == plateNum && plateNum.length > 0 ? (
+                <span className="vehicle-create-error">
+                  Plate Number has already been registered
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">Mechanic Name: </label> <br />
-							<input
-								type="text"
-								className="form-fields"
-								onChange={(e) => setMechanicName(e.target.value)}
-							/>
-						</div>
-					</div>
-					<hr />
+            <div className="form-item">
+              <label className="form-labels">Mechanic Name: </label> <br />
+              <input
+                type="text"
+                className="form-fields"
+                onChange={(e) => setMechanicName(e.target.value)}
+              />
+            </div>
+          </div>
+          <hr />
 
-					<br />
-					{/* PULL OUT DETAILS */}
+          <br />
+          {/* PULL OUT DETAILS */}
 
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Item Code: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<label className="label-format">
-								{" "}
-								Format: Numbers and characters.{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								placeholder="Enter Item Code"
-								name="itemCode"
-								value={details.itemCode.toUpperCase()}
-								onChange={(e) => handleDetails(e)}
-							/>
-							{showItemIDError()}
-						</div>
+          <div className="form-container">
+            <div className="form-item">
+              <label className="form-labels">
+                Item Code: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <label className="label-format">
+                {" "}
+                Format: Numbers and characters.{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                placeholder="Enter Item Code"
+                name="itemCode"
+                value={details.itemCode.toUpperCase()}
+                onChange={(e) => handleDetails(e)}
+              />
+              {showItemIDError()}
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Item Name: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="text"
-								className="form-fields"
-								name="itemName"
-								value={details.itemName}
-								onChange={(e) => handleDetails(e)}
-							/>
-							{showItemNameError()}
-						</div>
-					</div>
-					<br />
+            <div className="form-item">
+              <label className="form-labels">
+                Item Name: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="text"
+                className="form-fields"
+                name="itemName"
+                value={details.itemName}
+                onChange={(e) => handleDetails(e)}
+              />
+              {showItemNameError()}
+            </div>
+          </div>
+          <br />
 
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Brand: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<select
-								className="form-fields"
-								name="brand"
-								value={details.brandID}
-								onChange={(e) => handleDetails(e)}
-								disabled={disableFields()}
-							>
-								{brands.map((brand, index) => (
-									<option key={index} value={brand.brandID}>
-										{brand.brandName}
-									</option>
-								))}
-							</select>
-						</div>
+          <div className="form-container">
+            <div className="form-item">
+              <label className="form-labels">
+                Brand: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <select
+                className="form-fields"
+                name="brand"
+                value={details.brandID}
+                onChange={(e) => handleDetails(e)}
+                disabled={disableFields()}
+              >
+                {brands.map((brand, index) => (
+                  <option key={index} value={brand.brandID}>
+                    {brand.brandName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Part Number: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<select
-								className="form-fields"
-								name="partNum"
-								value={details.partNum}
-								onChange={(e) => handleDetails(e)}
-								disabled={disableFields()}
-							>
-								{brands.map((brand, index) => (
-									<option key={index} value={brand.partNum}>
-										{brand.partNum}
-									</option>
-								))}
-							</select>
-						</div>
-					</div>
-					<br />
+            <div className="form-item">
+              <label className="form-labels">
+                Part Number: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <select
+                className="form-fields"
+                name="partNum"
+                value={details.partNum}
+                onChange={(e) => handleDetails(e)}
+                disabled={disableFields()}
+              >
+                {brands.map((brand, index) => (
+                  <option key={index} value={brand.partNum}>
+                    {brand.partNum}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <br />
 
-					<div className="form-container">
-						<div className="form-item">
-							<label className="form-labels">
-								Quantity: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<input
-								type="number"
-								className="form-fields"
-								name="quantity"
-								value={details.quantity}
-								onChange={(e) => handleDetails(e)}
-								disabled={disableFields()}
-							/>
-							{showQuantityError()}
-						</div>
+          <div className="form-container">
+            <div className="form-item">
+              <label className="form-labels">
+                Quantity: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <input
+                type="number"
+                className="form-fields"
+                name="quantity"
+                value={details.quantity}
+                onChange={(e) => handleDetails(e)}
+                disabled={disableFields()}
+              />
+              {showQuantityError()}
+            </div>
 
-						<div className="form-item">
-							<label className="form-labels">
-								Unit: <label className="required"> * </label>{" "}
-							</label>{" "}
-							<br />
-							<select
-								className="form-fields"
-								name="unit"
-								value={details.unit}
-								onChange={(e) => handleDetails(e)}
-								disabled={disableFields()}
-							>
-								<option key={details.unit} value={details.unit}>
-									{details.unit}
-								</option>
-							</select>
-						</div>
-					</div>
-					<br />
-					{showButton()}
-					<div className="details-right-container">
-						{Object.keys(detailsArray[0]).length == 0 ? (
-							<h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
-						) : (
-							<PullTable detailsArray={detailsArray} isEdit={true}></PullTable>
-						)}
-					</div>
-					<br />
-					<br />
-					<hr />
-					<br />
+            <div className="form-item">
+              <label className="form-labels">
+                Unit: <label className="required"> * </label>{" "}
+              </label>{" "}
+              <br />
+              <select
+                className="form-fields"
+                name="unit"
+                value={details.unit}
+                onChange={(e) => handleDetails(e)}
+                disabled={disableFields()}
+              >
+                <option key={details.unit} value={details.unit}>
+                  {details.unit}
+                </option>
+              </select>
+            </div>
+          </div>
+          <br />
+          {showButton()}
+          <div className="details-right-container">
+            {Object.keys(detailsArray[0]).length == 0 ? (
+              <h1 id="gray-header-text">CURRENTLY NO ITEMS TO SHOW</h1>
+            ) : (
+              <PullTable detailsArray={detailsArray} isEdit={true}></PullTable>
+            )}
+          </div>
+          <br />
+          <br />
+          <hr />
+          <br />
 
-					<div className="form-item">
-						<label className="form-labels">Remarks:</label> <br />
-						<input
-							type="textarea"
-							className="form-fields-remarks"
-							onChange={(e) => setRemarks(e.target.value)}
-						/>
-					</div>
-				</div>
-			</div>
-			<br />
+          <div className="form-item">
+            <label className="form-labels">Remarks:</label> <br />
+            <input
+              type="textarea"
+              className="form-fields-remarks"
+              onChange={(e) => setRemarks(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+      <br />
 
-			{/* Buttons */}
-			<div className="form-container">
-				<span className="required-text">
-					Fields marked with <label className="required"> * </label> are
-					required.
-				</span>
-				<span className="form-item-buttons">
-					<BasicButton
-						label={"Cancel"}
-						color={"gray"}
-						type={"reset"}
-						clickFunction={cancelForm}
-					></BasicButton>
-					<BasicButton
-						label={"Save"}
-						color={"green"}
-						type={"button"}
-						clickFunction={submitForm}
-					></BasicButton>
-					<br />
-					<br />
-					<br />
-					<br />
-				</span>
-			</div>
-		</>
-	);
+      {/* Buttons */}
+      <div className="form-container">
+        <span className="required-text">
+          Fields marked with <label className="required"> * </label> are
+          required.
+        </span>
+        <span className="form-item-buttons">
+          <BasicButton
+            label={"Cancel"}
+            color={"gray"}
+            type={"reset"}
+            clickFunction={cancelForm}
+          ></BasicButton>
+          <BasicButton
+            label={"Save"}
+            color={"green"}
+            type={"button"}
+            clickFunction={submitForm}
+          ></BasicButton>
+          <br />
+          <br />
+          <br />
+          <br />
+        </span>
+      </div>
+    </>
+  );
 }
 
 export default PullInventoryCreate;
