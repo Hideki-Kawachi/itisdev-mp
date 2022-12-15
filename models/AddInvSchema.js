@@ -35,7 +35,7 @@ const AddInventorySchema = new mongoose.Schema({
 	itemID: {
 		type: String,
 		maxlength: 15,
-		unique: true,
+		// unique: true,
 		required: true,
 	},
 	quantity: {
