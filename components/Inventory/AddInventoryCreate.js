@@ -504,15 +504,7 @@ function AddInventoryCreate({ inventories, units, brands, items, suppliers }) {
               </div>
             </div>
             <br />
-            <hr />
-
-            {/*Remarks */}
-
-            <div className="form-item">
-              <label className="form-labels">Remarks:</label> <br />
-              <input type="textarea" className="form-fields-remarks" required />
-            </div>
-
+            <br />
             <br />
             {/* Buttons */}
             <div className="form-container">
