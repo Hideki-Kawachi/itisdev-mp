@@ -243,7 +243,8 @@ export const getServerSideProps = withIronSessionSsr(
 // 	}
 // ];
 
-function TransactionReports({ currentUser }) {
+function TransactionReports({ currentUser, addTableData }) {
+	let ADDDATA = JSON.parse(addTableData);
 
 	return (
 		<>
@@ -251,7 +252,7 @@ function TransactionReports({ currentUser }) {
 			<NavBar user={currentUser}></NavBar>
 			<div id="main-container">
 				<ReportTabs tab="1" roleID={currentUser.roleID}></ReportTabs>
-				<BasicTable COLUMNS={COLUMNS} ADDINV={ADDINV_MOCK_DATA}></BasicTable>
+				<BasicTable COLUMNS={COLUMNS} ADDINV={ADDDATA}></BasicTable>
 			</div>
 		</>
 	);
