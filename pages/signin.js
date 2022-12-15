@@ -8,7 +8,6 @@ import dbConnect from "../lib/dbConnect";
 
 export const getServerSideProps = withIronSessionSsr(
 	async function getServerSideProps({ req }) {
-
 		if (req.session.user) {
 			return {
 				redirect: { destination: "/", permanent: true },
@@ -16,7 +15,7 @@ export const getServerSideProps = withIronSessionSsr(
 			};
 		} else {
 			await dbConnect();
-			
+
 			return {
 				props: {},
 			};
@@ -34,7 +33,6 @@ function SignIn() {
 	// useEffect(()=>console.log(employeeID),[employeeID])
 
 	function submitForm() {
-
 		let userData = {
 			employeeID: employeeID,
 			password: password,
