@@ -53,6 +53,7 @@ export const getServerSideProps = withIronSessionSsr(
 
         let isFound = false;
         let isFound2 = false;
+        let isFound3 = false;
 
         //Item 
         let itemName = "";
@@ -65,27 +66,42 @@ export const getServerSideProps = withIronSessionSsr(
         //User
         let name = "";
 
-        // while (!isFound && ) {
+        while (!isFound && !isFound2 && !isFound3) {
 
           itemList.forEach((item) => {
-            if (auditList.itemID == item.itemID) {
+            if (audit.itemID == item.itemID) {
               itemName = item.itemName;
               itemModel = item.itemModel;
               isFound = true;
             }
-
-
           })
 
-        // } 
+          measureList.forEach((measure) => {
+            if (audit.unitID == measure.unitID) {
+              unitType= measure.unitName;
+              isFound2 = true;
+            } 	
+          });
+
+          userList.forEach((user) => {
+            if (audit.creatorID == user.userID) {
+              name = user.firstName + " " + user.LastName;
+              isFound3 = true;
+
+            }
+          })
+
+
+
+        } 
 
         tempAuditData.push({
           //date, invoice,  item n, item model, quantity, unit name
-          auditDate: dayjs(auditList.auditDate).format("MM/DD/YYYY"),
+          auditDate: dayjs(audit.auditDate).format("MM/DD/YYYY"),
           itemName: itemName,
           itemModel: itemModel,
-          systemCount: auditList.systemCount,
-          physicalcount: auditList.physicalcount,
+          systemCount: audit.systemCount,
+          physicalcount: audit.physicalcount,
           unit: unitType,
           creatorID: name
         });
