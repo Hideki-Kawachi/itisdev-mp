@@ -3,7 +3,7 @@ import React from "react";
 import DashboardCard from "../components/DashboardCard";
 import Header from "../components/Header";
 import NavBar from "../components/NavBar";
-import { BasicTable } from "../components/Reports/BasicTable";
+import { DashboardTable } from "../components/DashboardTable";
 import { ironOptions } from "../lib/config";
 import dbConnect from "../lib/dbConnect";
 import User from "../models/UserSchema";
@@ -16,7 +16,7 @@ import RecordDetails from "../models/RecordDetailsSchema";
 import ItemBrand from "../models/ItemBrandSchema";
 import Measure from "../models/MeasureSchema";
 import Item from "../models/ItemSchema";
-import dayjs from "dayjs"
+import dayjs from "dayjs";
 
 
 export const getServerSideProps = withIronSessionSsr(
@@ -227,7 +227,7 @@ const Index = ({ currentUser, totalUsers, totalVehicles, tempRepData}) => {
 					</div>
 					<div className="dashboard-table-container">
 						<h1>Recent Inventory Records</h1>
-						<BasicTable COLUMNS={COLUMNS} ADDINV={tempRepData}></BasicTable>
+						<DashboardTable COLUMNS={COLUMNS} ADDINV={tempRepData}></DashboardTable>
 					</div>
 				</div>
 				<div className="dashboard-right-container">

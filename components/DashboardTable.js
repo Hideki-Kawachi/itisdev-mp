@@ -2,79 +2,77 @@ import React, { useMemo, useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 import {
-	useTable,
-	useSortBy,
-	useGlobalFilter,
-	usePagination,
-	useFilters,
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
+  useFilters,
 } from "react-table";
 
-import GlobalFilter from "../GlobalFilter";
+export const DashboardTable = (props) => {
+  const columns = useMemo(() => props.COLUMNS, []);
+  const data = useMemo(() => props.ADDINV, []);
 
-export const BasicTable = (props) => {
-	const columns = useMemo(() => props.COLUMNS, []);
-	const data = useMemo(() => props.ADDINV, []);
-
-	const [fromDate, setFromDate] = useState();
-	const [toDate, setToDate] = useState();
-	const {
-		getTableProps,
-		getTableBodyProps,
-		headerGroups,
-		page,
-		nextPage,
-		canNextPage,
-		previousPage,
-		canPreviousPage,
-		gotoPage,
-		pageOptions,
-		pageCount,
-		prepareRow,
-		setPageSize,
-		setFilter,
-		filters,
-		state,
-		setGlobalFilter,
-	} = useTable(
-		{
-			columns,
+  const [fromDate, setFromDate] = useState();
+  const [toDate, setToDate] = useState();
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    nextPage,
+    canNextPage,
+    previousPage,
+    canPreviousPage,
+    gotoPage,
+    pageOptions,
+    pageCount,
+    prepareRow,
+    setPageSize,
+    setFilter,
+    filters,
+    state,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
       initialState: {
         sortBy: [
           {
             id: "date",
-            desc: true
-          }
-        ]
+            desc: true,
+          },
+        ],
+        pageSize : 15,
       },
-			data,
-		},
+      data,
+    },
 
-		useGlobalFilter,
-		useFilters,
-		useSortBy,
-		usePagination
-	);
+    useGlobalFilter,
+    useFilters,
+    useSortBy,
+    usePagination
+  );
 
-	const { globalFilter } = state;
-	const { pageIndex } = state;
+  const { pageIndex, pageSize } = state;
 
-	// const handleFilter = () => {
-	// 	const dateArray = [];
-	// 	var d = dayjs(fromDate);
+  // const handleFilter = () => {
+  // 	const dateArray = [];
+  // 	var d = dayjs(fromDate);
 
-	// 	while (d.isBefore(toDate, "day") || d.isSame(toDate, "day")) {
-	// 		dateArray.push(d.format("MM/DD/YYYY"));
-	// 		d = d.add(1, "day");
-	// 	}
-	// 	filterTable(dateArray);
-	// };
+  // 	while (d.isBefore(toDate, "day") || d.isSame(toDate, "day")) {
+  // 		dateArray.push(d.format("MM/DD/YYYY"));
+  // 		d = d.add(1, "day");
+  // 	}
+  // 	filterTable(dateArray);
+  // };
 
-	const filterTable = (dates) => {
-		//console.log("Dates are:", dates);
-		setFilter("date", dates);
-	};
+  const filterTable = (dates) => {
+    //console.log("Dates are:", dates);
+    setFilter("date", dates);
+  };
 
-	useEffect(() => {
+  useEffect(() => {
     if (fromDate && toDate) {
       const dateArray = [];
       var d = dayjs(fromDate);
@@ -85,27 +83,10 @@ export const BasicTable = (props) => {
       }
       filterTable(dateArray);
     }
-  }, [fromDate,toDate]);
+  }, [fromDate, toDate]);
 
-	return (
+  return (
     <div>
-      <br />
-      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      <div className="calendar-range-container">
-        <input
-          type="date"
-          className="form-fields form-fields-calendar-range"
-          onChange={(e) => setFromDate(dayjs(e.target.value, "MM/DD/YYYY"))}
-        />{" "}
-        to{" "}
-        <input
-          type="date"
-          className="form-fields form-fields-calendar-range"
-          onChange={(e) => setToDate(dayjs(e.target.value, "MM/DD/YYYY"))}
-        />
-        {/* <button onClick={handleFilter}>Check Date</button> */}
-      </div>
-      <br />
       <br />
       <table id="btable" {...getTableProps()}>
         <thead>
