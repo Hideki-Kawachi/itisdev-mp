@@ -81,7 +81,7 @@ export const BrandTable = ({
                 </th>
               ))}
               {isEditable == true ? (<th></th>) : (<></>)}
-              {(isEditable == true || pageType == false) ? (<th></th>) : (<></>)}
+              {(isEditable == false || pageType == false) ? (<th></th>) : (<></>)}
             </tr>
           ))}
         </thead>
@@ -98,8 +98,8 @@ export const BrandTable = ({
                     
                   );
                 })}
-                {isEditable == true ? (<td><button type="button" onClick={() => editFunc(row.original)}>✏️</button></td>) : (<></>)}
-                {(isEditable == true || pageType == false) ? (<td><button type="button" onClick={() => deleteFunc(row.original)}>X</button></td>) : (<></>)}
+                {isEditable == true ? (<td><button type="button" className="item-icon-button item-add-option-button"  onClick={() => editFunc(row.original)}>✎</button></td>) : (<></>)}
+                {(isEditable == false || pageType == false) ? (<td><button type="button" onClick={() => deleteFunc(row.original)}>X</button></td>) : (<></>)}
                 
                 
               </tr>

@@ -109,6 +109,7 @@ function ItemDetails({currentUser, itemData, categoryData, brandData, unitData})
                         categories={categories}
                         brands={brands}
 						units={units}
+						userID={currentUser.userID}
 					>
                     </ItemEdit>
 				</>

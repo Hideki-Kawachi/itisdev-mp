@@ -9,17 +9,9 @@ import Info from "../../components/Pop-up/info";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import BrandTable from "./BrandTable";
+// tempID = "100000000000000"
 
-export async function getServerSideProps() {
-    // Fetch data from external API
-    const res = await fetch(`https://.../data`)
-    const data = await res.json()
-  
-    // Pass data to the page via props
-    return { props: { data } }
-  }
-
-function ItemEdit({itemID, items, categories, brands, units}) {
+function ItemEdit({ userID, itemID, items, categories, brands, units}) {
     // Item Identification
     const [categoryID, setCategoryID] = useState("");
     const [name, setName] = useState("");
@@ -31,13 +23,17 @@ function ItemEdit({itemID, items, categories, brands, units}) {
 
     const [detailsButton, setDetailsButton] = useState("Add");
 
+    const curr = new Date();
+	curr.setDate(curr.getDate());
+	const date = curr.toISOString().substring(0, 10);
+
     // Item Details
     const [details, setDetails] = useState({
         combinationID: "",
         brand: "",
         partNumber: "",
         quantity: 0,
-        // unit: "",
+        unit: "",
         disabled: false,
     })
     const [detailsArray, setDetailsArray] = useState([{}]);
@@ -50,7 +46,6 @@ function ItemEdit({itemID, items, categories, brands, units}) {
         creatorID: "",
         creationDate: "",
     });
-
     const [auditArray, setAuditArray] = useState([{}])
     const [newCombiID, setCombiID] = useState(String(Math.floor(Math.random() * 50000)));
     
@@ -92,11 +87,18 @@ function ItemEdit({itemID, items, categories, brands, units}) {
             setMinQuantity(data.itemInfo.minQuantity);
             setIsDisabled(data.itemInfo.disabled);
             setDetailsArray(data.brandInfo);
+
+            auditTrail["systemCount"] = parseInt(data.itemInfo.quantity);
+            auditTrail["itemID"] = itemID; 
+            auditTrail["creatorID"] = userID;
+            auditTrail["auditDate"] = curr.toISOString();
+            auditTrail["creationDate"] = curr.toISOString();
         })
     }, [itemID])
 
 
     function submitForm(e) {
+        // EDIT ITEM
         if (
             itemID.length == 0 ||
             categoryID.length == 0 ||
@@ -116,42 +118,51 @@ function ItemEdit({itemID, items, categories, brands, units}) {
               minQuantity: minQuantity,
               disabled: isDisabled,
             }
-      
-            fetch("/api/items/updateItem", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({itemData, details:detailsArray}),
-            })
-            .then((res) => res.json())
-            .then((data) => {
-                setNotifResult(data);
-                if (data != "No Fields Edited") {
-                    setTimeout(() => window.location.reload(), 800);
-                }
-            });
 
-            fetch("/api/items/auditTrail", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ auditTrail }),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data == "created") {
-                  console.log("SUCCESS");
-                  setNotifResult("Successfully created!");
-                  setError(false);
-                  window.location.reload();
-                } else {
-                  setError(true);
-                }
-              });
+            console.log(detailsArray)
+
+            // fetch("/api/items/updateItem", {
+            //   method: "POST",
+            //   headers: {
+            //     "Content-Type": "application/json",
+            //   },
+            //   body: JSON.stringify({itemData, details:detailsArray}),
+            // })
+            // .then((res) => res.json())
+            // .then((data) => {
+            //     setNotifResult(data);
+            //     if (data != "No Fields Edited") {
+            //         setTimeout(() => window.location.reload(), 800);
+            //     }
+            // });
+
+            // // AUDIT
+            // auditTrail["physicalCount"] = quantity;
+            // fetch("/api/items/auditTrail", {
+            //   method: "POST",
+            //   headers: {
+            //     "Content-Type": "application/json",
+            //   },
+            //   body: JSON.stringify({ auditTrail }),
+            // })
+            //   .then((res) => res.json())
+            //   .then((data) => {
+            //     if (data == "created") {
+            //       console.log("SUCCESS");
+            //       setNotifResult("Successfully created!");
+            //       setError(false);
+            //       window.location.reload();
+            //     } else {
+            //       setError(true);
+            //     }
+            //   });
             
     }}
+
+    function checkPhysicalCount() {
+        auditTrail["physicalCount"] = quantity;
+        console.log(auditTrail.physicalCount)
+    }
     
     // Handle details input
     function convertDetailsArray (type, arr) {
@@ -184,7 +195,6 @@ function ItemEdit({itemID, items, categories, brands, units}) {
             
             return templateArray;
         }
-
         return arr;
     }
 
@@ -222,6 +232,9 @@ function ItemEdit({itemID, items, categories, brands, units}) {
         if (name == "brand") {
 			setDuplicateError(false)
 		}
+        if (name == "quantity") {
+
+        }
     }
 
     function checkDetails() {
@@ -259,9 +272,7 @@ function ItemEdit({itemID, items, categories, brands, units}) {
         setDuplicateError(checkDuplicate())
         if (!checkDetails() && !checkDuplicate()) {
             setDetailsArray(detailsArray => [...detailsArray, details])
-            // setAuditTrail(auditTrail => [...auditTrail, ])
             setQuantity(quantity+parseInt(details.quantity))    
-            auditTrail[""]
             clearDetails()
         }
     }
@@ -372,7 +383,7 @@ function ItemEdit({itemID, items, categories, brands, units}) {
                 ></Cancel>
             </Modal>
             <form className="item-column-container" id="item-add-main-container">
-                <button type="button" onClick={checkDuplicate}>Test</button>
+                <button type="button" onClick={checkPhysicalCount}>Test</button>
                 <h1>IDENTIFICATION</h1>
     
                 <div id="add-item-form-identification">
@@ -555,7 +566,7 @@ function ItemEdit({itemID, items, categories, brands, units}) {
                     </div>
 
                     <div className="item-input">
-                        <label htmlFor="quantity">Initial Quantity:</label>
+                        <label htmlFor="quantity">New Quantity:</label>
                         <input 
                             type="number"
                             name="quantity"
