@@ -13,6 +13,7 @@ import ADDINV_MOCK_DATA from "../components/Reports/ADD_INV.json";
 import PullInventory from "../models/PullInvSchema";
 import AddInventory from "../models/AddInvSchema";
 import RecordDetails from "../models/RecordDetailsSchema";
+import ItemBrand from "../models/ItemBrandSchema";
 import Measure from "../models/MeasureSchema";
 import Item from "../models/ItemSchema";
 import dayjs from "dayjs"
@@ -66,6 +67,8 @@ export const getServerSideProps = withIronSessionSsr(
 							unitName: 1
 						}
 				);
+				
+				const brandList = await ItemBrand.find({ itemBrandID: 1, name: 1 });
 
 				var tempRepData = [];
 
@@ -105,6 +108,82 @@ export const getServerSideProps = withIronSessionSsr(
 						unit: unitType,
 						transactType: "Add"
 					});
+			let pullData = "";
+			let pullTable = [];
+			let pullTableData;
+			if (pullList) {
+			pullData = JSON.stringify(pullList);
+			pullList.forEach((pull) => {
+				let index = recordList.length - 1;
+				let item = "";
+				let brand = "";
+				let quantity = 0;
+				let unit = "";
+
+				let itemName = "";
+				let itemModel = "";
+				let brandName = "";
+				let unitName = "";
+
+				while (index >= 0) {
+				if (pull.lessRecordID == recordList[index].lessRecordID) {
+					item = recordList[index].itemID;
+					brand = recordList[index].brandID;
+					quantity = recordList[index].quantity;
+					unit = recordList[index].unitID;
+					if (item.length > 0) {
+					let isFound2 = false;
+					let index2 = itemList.length - 1;
+					while (!isFound2 && index2 >= 0) {
+						if (item == itemList[index2].itemID) {
+						isFound2 = true;
+						itemName = itemList[index2].itemName;
+						itemModel = itemList[index2].itemModel;
+						}
+						index2--;
+					}
+					isFound2 = false;
+					index2 = brandList.length - 1;
+					while (!isFound2 && index2 >= 0) {
+						if (brand == brandList[index2].itemBrandID) {
+						isFound2 = true;
+						brandName = brandList[index2].name;
+						}
+						index2--;
+					}
+					isFound2 = false;
+					index2 = measureList.length - 1;
+					while (!isFound2 && index2 >= 0) {
+						if (unit == measureList[index2].unitID) {
+						isFound2 = true;
+						unitName = measureList[index2].unitName;
+						}
+						index2--;
+					}
+					}
+
+					tempRepData.push({
+						pullDate: dayjs(pull.pullDate).format("MM/DD/YYYY"),
+						itemModel: itemModel,
+						JOnumber: pull.JOnumber,
+						plateNum: pull.plateNum,
+						itemName: itemName,
+						brandName: brandName,
+						quantity: quantity,
+						unit: unitName,
+					});
+				}
+				index--;
+				}
+			});
+			pullTableData = JSON.stringify(pullTable);
+			} else {
+			pullData = JSON.stringify({});
+			pullTableData = JSON.stringify({});
+			}
+
+
+
 
 
 				});
