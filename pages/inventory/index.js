@@ -283,15 +283,12 @@ function Inventory({
 								currentUser={currentUser}
 								unitData={units}
 								brandData={brands}
-								supplierData={suppliers}
 								vehicleData={vehicles}
 								itemData={items}
 								itemBrandData={itemBrands}
 								pullData={pullInv}
 								pullTableData={pullTable}
-							>
-								{" "}
-							</PullInventoryCreate>
+							></PullInventoryCreate>
 						</div>
 					</div>
 				</div>
