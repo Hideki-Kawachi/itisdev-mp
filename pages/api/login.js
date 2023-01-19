@@ -9,13 +9,13 @@ dbConnect();
 export default withIronSessionApiRoute(login, ironOptions);
 
 async function login(req, res) {
-	const user = await User.findOne({ userID: "00000001" });
+	// const user = await User.findOne({ userID: "00000001" });
 
 	req.session.user = {
-		userID: user.userID,
-		firstName: user.firstName,
-		lastName: user.lastName,
-		roleID: user.roleID,
+		userID: "00000009",
+		firstName: "Demo",
+		lastName: "User",
+		roleID: "0001",
 	};
 
 	await req.session.save();
