@@ -1,9 +1,7 @@
 import React from "react";
 import { useState, useMemo } from "react";
-import Link from "next/link";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
-import Dropdown from "../../components/Dropdown";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/config";
 import dbConnect from "../../lib/dbConnect";

@@ -7,8 +7,6 @@ import { ironOptions } from "../../lib/config";
 import ReportTabs from "./ReportTabs";
 import { COLUMNS } from "../../components/Reports/AuditColumns";
 
-import AUDIT_MOCK_DATA from "../../components/reports/AUDIT_MOCK_DATA.json";
-
 import Item from "../../models/ItemSchema";
 import Measure from "../../models/MeasureSchema";
 import User from "../../models/UserSchema";
@@ -17,113 +15,107 @@ import Audit from "../../models/AuditSchema";
 import dbConnect from "../../lib/dbConnect";
 import dayjs from "dayjs";
 
-
 export const getServerSideProps = withIronSessionSsr(
-  async function getServerSideProps({ req }) {
-    if (req.session.user) {
-      let currentUser = req.session.user;
-      if (currentUser.roleID === "0002" || currentUser.roleID === "0001") {
-        //if user is only an employee
-        return {
-          redirect: { destination: "/reports", permanent: true },
-          props: {},
-        };
-      } else {
+	async function getServerSideProps({ req }) {
+		if (req.session.user) {
+			let currentUser = req.session.user;
+			if (currentUser.roleID === "0002" || currentUser.roleID === "0001") {
+				//if user is only an employee
+				return {
+					redirect: { destination: "/reports", permanent: true },
+					props: {},
+				};
+			} else {
+				await dbConnect();
 
-			await dbConnect();
+				const measureList = await Measure.find({});
 
-      const measureList = await Measure.find({});
-      
-      const itemList = await Item.find(
-        {},
-        { itemID: 1, itemName: 1, itemModel: 1, unitID: 1, quantity: 1, minQuantity: 1 }
-			);
+				const itemList = await Item.find(
+					{},
+					{
+						itemID: 1,
+						itemName: 1,
+						itemModel: 1,
+						unitID: 1,
+						quantity: 1,
+						minQuantity: 1,
+					}
+				);
 
-      const userList = await User.find({});
-      
-      const auditList = await Audit.find({});
+				const userList = await User.find({});
 
-      // Item: itemName, itemModel 
-      // user: UserID for creatorID - kunin yung name
-      // Unit: Measure (connect sa itemS)
+				const auditList = await Audit.find({});
 
-      var tempAuditData = [];
+				// Item: itemName, itemModel
+				// user: UserID for creatorID - kunin yung name
+				// Unit: Measure (connect sa itemS)
 
-      auditList.forEach((audit) => {
+				var tempAuditData = [];
 
-        let isFound = false;
-        let isFound2 = false;
-        let isFound3 = false;
+				auditList.forEach((audit) => {
+					let isFound = false;
+					let isFound2 = false;
+					let isFound3 = false;
 
-        //Item 
-        let itemName = "";
-        let itemModel = "";
-        let systemCount = audit.systemCount;
-        let physicalCount = audit.physicalCount;
+					//Item
+					let itemName = "";
+					let itemModel = "";
+					let systemCount = audit.systemCount;
+					let physicalCount = audit.physicalCount;
 
-        //Measure
-        let unitType = "";
+					//Measure
+					let unitType = "";
 
-        //User
-        let name = "";
+					//User
+					let name = "";
 
-        while (!isFound && !isFound2 && !isFound3) {
+					while (!isFound && !isFound2 && !isFound3) {
+						itemList.forEach((item) => {
+							if (audit.itemID == item.itemID) {
+								itemName = item.itemName;
+								itemModel = item.itemModel;
+								isFound = true;
+							}
+							measureList.forEach((measure) => {
+								if (item.unitID == measure.unitID) {
+									unitType = measure.unitName;
+									isFound2 = true;
+								}
+							});
+						});
 
-          itemList.forEach((item) => {
-            if (audit.itemID == item.itemID) {
+						userList.forEach((user) => {
+							if (audit.creatorID == user.userID) {
+								name = user.firstName + " " + user.lastName;
+								isFound3 = true;
+							}
+						});
+					}
 
-              itemName = item.itemName;
-              itemModel = item.itemModel;
-              isFound = true;
-            }
-                measureList.forEach((measure) => {
-                  if (item.unitID == measure.unitID) {
-                      unitType = measure.unitName;
-                      isFound2 = true;
-                }
-              });
-          })
+					tempAuditData.push({
+						//date, invoice,  item n, item model, quantity, unit name
+						auditDate: dayjs(audit.auditDate).format("MM/DD/YYYY"),
+						itemName: itemName,
+						itemModel: itemModel,
+						systemCount: systemCount,
+						physicalCount: physicalCount,
+						unit: unitType,
+						creatorID: name,
+					});
+				});
 
+				let auditData = JSON.stringify(tempAuditData);
 
-
-          userList.forEach((user) => {
-            if (audit.creatorID == user.userID) {
-              name = user.firstName + " " + user.lastName;
-              isFound3 = true;
-            }
-          })
-
-        } 
-
-        tempAuditData.push({
-          //date, invoice,  item n, item model, quantity, unit name
-          auditDate: dayjs(audit.auditDate).format("MM/DD/YYYY"),
-          itemName: itemName,
-          itemModel: itemModel,
-          systemCount: systemCount,
-          physicalCount: physicalCount,
-          unit: unitType,
-          creatorID: name
-        });
-
-      });
-
-
-      
-      let auditData = JSON.stringify(tempAuditData);
-      
-
-
-      return { props: { currentUser, auditData} };
-      }
-    } else {
-      return {
-        redirect: { destination: "/signin", permanent: true },
-        props: {},
-      };
-    }
-  },
-  ironOptions
+				return { props: { currentUser, auditData } };
+			}
+		} else {
+			return {
+				redirect: { destination: "/signin", permanent: true },
+				props: {},
+			};
+		}
+	},
+	ironOptions
 );
 
 // const tab = [
@@ -132,19 +124,19 @@ export const getServerSideProps = withIronSessionSsr(
 // 	}
 // ];
 
-function AuditReports({ currentUser,  auditData}) {
-  let TEMPDATA = JSON.parse(auditData);
+function AuditReports({ currentUser, auditData }) {
+	let TEMPDATA = JSON.parse(auditData);
 
-  return (
-    <>
-      <Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
-      <NavBar user={currentUser}></NavBar>
-      <div id="main-container">
-        <ReportTabs tab="4" roleID={currentUser.roleID}></ReportTabs>
-        <BasicTable COLUMNS={COLUMNS} ADDINV={TEMPDATA}></BasicTable>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<Header page={"REPORTS"} subPage={"HOME"} user={currentUser}></Header>
+			<NavBar user={currentUser}></NavBar>
+			<div id="main-container">
+				<ReportTabs tab="4" roleID={currentUser.roleID}></ReportTabs>
+				<BasicTable COLUMNS={COLUMNS} ADDINV={TEMPDATA}></BasicTable>
+			</div>
+		</>
+	);
 }
 
 export default AuditReports;

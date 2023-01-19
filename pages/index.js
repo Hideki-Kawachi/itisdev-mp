@@ -9,7 +9,6 @@ import dbConnect from "../lib/dbConnect";
 import User from "../models/UserSchema";
 import Vehicle from "../models/VehicleSchema";
 import { COLUMNS } from "../components/Dashboard/TransactionColumns";
-import ADDINV_MOCK_DATA from "../components/Reports/ADD_INV.json";
 import PullInventory from "../models/PullInvSchema";
 import AddInventory from "../models/AddInvSchema";
 import RecordDetails from "../models/RecordDetailsSchema";

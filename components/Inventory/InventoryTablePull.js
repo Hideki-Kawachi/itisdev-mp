@@ -3,13 +3,9 @@ import {
 	useTable,
 	useSortBy,
 	useGlobalFilter,
-	useFilters,
 	usePagination,
 } from "react-table";
-import PULLINV_MOCK_DATA from "../PULLINV_MOCK_DATA.json";
 import { COLUMNS } from "./InventoryColumnsPull";
-import GlobalFilter from "../GlobalFilter";
-import Link from "next/link";
 
 export const BasicTablePull = ({ pullTableData }) => {
 	const columns = useMemo(() => COLUMNS, []);

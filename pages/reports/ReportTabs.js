@@ -1,13 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
-import Header from "../../components/Header";
-import NavBar from "../../components/NavBar";
-import Dropdown from "../../components/Dropdown";
-import ToggleSwitch from "../../components/ToggleSwitch";
-import BasicButton from "../../components/BasicButton";
 import React from "react";
-import { withIronSessionSsr } from "iron-session/next";
-import { ironOptions } from "../../lib/config";
 
 function ReportTabs(props) {
 	const [isDisabled, setIsDisabled] = useState(false);
@@ -19,19 +12,17 @@ function ReportTabs(props) {
 	};
 
 	function showAudit() {
-		if (currentRole == "0000"){
+		if (currentRole == "0000") {
 			return (
 				<Link href="/reports/audit">
 					<button
 						className={toggleState == 3 ? "tabs active-tabs" : "tabs"}
-						onClick={() => 
-							toggleTab(3)
-						}
+						onClick={() => toggleTab(3)}
 					>
 						Audit
 					</button>
 				</Link>
-			)
+			);
 		}
 	}
 
@@ -41,9 +32,7 @@ function ReportTabs(props) {
 				<Link href="/reports">
 					<button
 						className={toggleState == 1 ? "tabs active-tabs" : "tabs"}
-						onClick={() => 
-							toggleTab(1)
-						}
+						onClick={() => toggleTab(1)}
 					>
 						Add Inventory
 					</button>
@@ -51,15 +40,14 @@ function ReportTabs(props) {
 				<Link href="/reports/pullRep">
 					<button
 						className={toggleState == 2 ? "tabs active-tabs" : "tabs"}
-						onClick={() => 
-							toggleTab(2)
-						}
-					> Pull-Out Inventory
+						onClick={() => toggleTab(2)}
+					>
+						{" "}
+						Pull-Out Inventory
 					</button>
 				</Link>
 				{showAudit()}
 			</div>
-
 		</div>
 	);
 }
