@@ -33,36 +33,11 @@ function SignIn() {
 	// useEffect(()=>console.log(employeeID),[employeeID])
 
 	function submitForm() {
-		let userData = {
-			employeeID: employeeID,
-			password: password,
-			disabled: isDisabled,
-		};
-
 		fetch("/api/login", {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(userData),
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data === "Logged in") {
-					console.log("SUCCESS");
-					console.log("SESSION IS", data);
-					router.replace("/");
-				} else {
-					console.log("ERROR IS:", data);
-					setError(true);
-				}
-			});
-	}
-
-	function showInvalidCredsError() {
-		if (error) {
-			return <span className="login-error">Invalid credentials</span>;
-		}
+		}).then(() => {
+			router.replace("/");
+		});
 	}
 
 	return (
@@ -74,6 +49,7 @@ function SignIn() {
 					</div>
 					<div className="input-container">Milaor Trading Corporation</div>
 				</h1>
+
 				<div className="input-container">
 					<input
 						className="green-button-container login-size"
