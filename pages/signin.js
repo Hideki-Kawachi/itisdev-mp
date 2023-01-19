@@ -74,35 +74,14 @@ function SignIn() {
 					</div>
 					<div className="input-container">Milaor Trading Corporation</div>
 				</h1>
-				{showInvalidCredsError()}
-				<form className="signin-form">
-					<div className="input-container">
-						<div className="label-cont">Employee ID:</div>
-						<input
-							type="number"
-							name="employeeID"
-							placeholder="Enter Employee ID"
-							onChange={(e) => setEmployeeID(e.target.value)}
-						></input>
-					</div>
-					<div className="input-container">
-						<div className="label-cont">Password:</div>
-						<input
-							type="password"
-							name="password"
-							placeholder="Enter Password"
-							onChange={(e) => setPassword(e.target.value)}
-						></input>
-					</div>
-					<div className="input-container">
-						<input
-							className="green-button-container login-size"
-							type="button"
-							value="Login"
-							onClick={submitForm}
-						/>
-					</div>
-				</form>
+				<div className="input-container">
+					<input
+						className="green-button-container login-size"
+						type="button"
+						value="Login"
+						onClick={submitForm}
+					/>
+				</div>
 			</div>
 		</>
 	);
