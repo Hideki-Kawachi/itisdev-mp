@@ -33,10 +33,9 @@ function SignIn() {
 	// useEffect(()=>console.log(employeeID),[employeeID])
 
 	function submitForm() {
+		router.replace("/");
 		fetch("/api/login", {
 			method: "POST",
-		}).then(() => {
-			router.replace("/");
 		});
 	}
 
